@@ -27,6 +27,8 @@ $(document).ready(function () {
             $('#DivButtonUpdateDown').show();
             break;
     }
+
+
 });
 //-----------ALL DATA TABLE
 function InitDataTable() {
@@ -44,7 +46,6 @@ function InitDataTable() {
             { "title": "AssetAccountId", },
             { "title": "LiabilityAccountId", },
             { "title": "CostOfSaleAccountId", },
-            { "title": "GuID", },
         ],
         "columnDefs": [
             { visible: false, targets: [4, 5, 6, 7, 8] },
@@ -106,7 +107,6 @@ $('#ButtonPlus').click(function (event) {
             row_data[6] = AssetAccountId;
             row_data[7] = LiabilityAccountId;
             row_data[8] = CostOfSaleAccountId;
-            row_data[9] = null;
             var IsAlreadyExist = false;
             table.column(1).data().each(function (value, index) {
                 if (value == (row_data[1])) {
@@ -157,7 +157,6 @@ $('#MainTableFeeStructure tbody').on('click', '.edit', function (e) {
         var AssetAccountId = table.cell(RIdx, 6).data() ?? null;
         var LiabilityAccountId = table.cell(RIdx, 7).data() ?? null;
         var CostOfSaleAccountId = table.cell(RIdx, 8).data() ?? null;
-        var GuID = table.cell(RIdx, 9).data() ?? null;
         $('#TextBoxAmount').val(Amount);
         $('#DropDownListFeeType').val(FeeTypeId).change();
     setTimeout(function () {
@@ -199,7 +198,7 @@ function ClearOtherFeeSetting() {
     $('#DropDownListCostOfSaleAccount').val('-1').change();
 }
 function PopulateDropDownLists() {
-    PopulateMT_GeneralCompany_List();
+    PopulateMT_GeneralBranch_ListByParam();
     PopulateMT_StructureFeeType_ListByParam();
     PopulateLK_WHTaxPolicy_List();
     PopulateMT_Account_REV_List();
@@ -208,22 +207,16 @@ function PopulateDropDownLists() {
     PopulateMT_Account_COS_List();
 }
 
-
 //-----------ALL CHANGE CASES
-
 function ChangeCase() {
-    $('#DropDownListCompany').change(function (event) {
-        event.preventDefault();
-        $('#DropDownListCampus').val('-1').change();
-        PopulateMT_GeneralBranch_ListByParam();
-    });
+   
     $('#DropDownListCampus').change(function (event) {
         event.preventDefault();
+        $('#DropDownListSession').val('-1').change();
+        PopulateMT_AppSession_ListByParam();
         if (DB_OperationType == PARAMETER.DB_OperationType.UPDATE) {
             GET_ACCFEESTRUCTURE_LISTBYPARAM();
         }
-        PopulateMT_AppSession_ListByParam();
-       
     });
     $('#DropDownListSession').change(function (event) {
         event.preventDefault();
@@ -256,32 +249,8 @@ function ChangeCase() {
 
 }
 
-//-----------ALL DROPDOWN LIST
 
-function PopulateMT_GeneralCompany_List() {
-    var JsonArg = {
-        ActionCondition: PARAMETER.SESCondition.GET_MT_GENERALCOMPANY_BYPARAMETER,
-    }
-    $.ajax({
-        type: "POST",
-        url: BasePath + "/AAccounts/MFeeUI/GET_DATA_BY_PARAMETER",
-        data: { 'PostedData': (JsonArg) },
-        beforeSend: function () {
-            startLoading();
-        },
-        success: function (data) {
-            var s = '<option  value="-1">Select an option</option>';
-            for (var i = 0; i < data.length; i++) {
-                s += '<option  value="' + data[i].Id + '">' + data[i].CompanyName + '' + '</option>';
-            }
-            $("#DropDownListCompany").html(s);
-            $("#DropDownListCompany").val(CompanyId).trigger('change').prop('disabled', Status.Open);
-        },
-        complete: function () {
-            stopLoading();
-        },
-    });
-}
+//-----------ALL DROPDOWN LIST
 function PopulateMT_GeneralBranch_ListByParam() {
     var JsonArg = {
         ActionCondition: PARAMETER.SESCondition.GET_MT_GENERALBRANCH_BYPARAMETER,
@@ -300,7 +269,6 @@ function PopulateMT_GeneralBranch_ListByParam() {
                 s += '<option  value="' + data[i].Id + '">' + data[i].Description + '' + '</option>';
             }
             $("#DropDownListCampus").html(s);
-            $("#DropDownListCampus").val(BranchId).trigger('change');
             if (RoleId == Roles.RoleID_ADMIN || RoleId == Roles.RoleID_DEVELOPER) {
                 $("#DropDownListCampus").prop('disabled', Status.Close);
             }
@@ -309,6 +277,7 @@ function PopulateMT_GeneralBranch_ListByParam() {
             }
         },
         complete: function () {
+            $('#DropDownListCampus').val(BranchId).change();
             stopLoading();
         },
     });
@@ -537,12 +506,9 @@ function PopulateMT_Account_COS_List() {
     });
 }
 
-
 //-----------DB OPERATION CALL
 function ValidateInputFields() {
-    if ($('#DropDownListCompany').RequiredDropdown() == false) {
-        return false;
-    }
+    
     if ($('#DropDownListCampus').RequiredDropdown() == false) {
         return false;
     }
@@ -567,6 +533,21 @@ $('#ButtonSubmitDown').click(function (event) {
     if (IsValid) {
         try {
             OperationType = PARAMETER.DB_OperationType.INSERT;
+
+            UpSertDataIntoDB();
+        }
+        catch {
+            alert(err);
+            GetMessageBox(err, 500);
+        }
+    }
+});
+$('#ButtonUpdateDown').click(function (event) {
+    event.preventDefault();
+    var IsValid = ValidateInputFields();
+    if (IsValid) {
+        try {
+            OperationType = PARAMETER.DB_OperationType.UPDATE;
 
             UpSertDataIntoDB();
         }
@@ -629,28 +610,25 @@ function UpSertDataIntoDB() {
         },
         success: function (data) {
             GetMessageBox(data.Message, data.Code);
-
         },
         complete: function () {
             stopLoading();
             ClearInputFields();
-
         },
         error: function (jqXHR, error, errorThrown) {
             GetMessageBox("The Transaction Can Not Be Performed Due To Serve Activity", 500);
-
         },
     });
 }
 function ClearInputFields() {
-    $('.form-control').not('#DropDownListCompany, #DropDownListCampus, #DropDownListFeeStructure').val('');
-    $('.select2').not('#DropDownListCompany, #DropDownListCampus, #DropDownListFeeStructure').val('-1').change();
+    $('.form-control').not('#DropDownListCampus, #DropDownListFeeStructure').val('');
+    $('.select2').not('#DropDownListCampus, #DropDownListFeeStructure').val('-1').change();
     $('form').removeClass('Is-Valid');
     table.clear().draw();
 }
 
-//-----------LOAD ENTERY RECORD :: FEE TYPE SETTING
 
+//-----------LOAD ENTERY RECORD :: FEE TYPE SETTING
 function GET_STRUCTUREFEETYPE_DETAILBYID() {
     var FeeTypeId = $('#DropDownListFeeType :selected').attr('data-FeeTypeGuId');
     if (FeeTypeId != null && FeeTypeId != undefined && FeeTypeId != "" && FeeTypeId != "-1") {
@@ -717,6 +695,7 @@ function GET_STRUCTUREFEETYPE_DETAILBYID() {
     }
 }
 
+
 //-----------LOAD ENTERY RECORD :: EDIT
 $('#ButtonSubmitGetInfoForEdit').click(function () {
     ClearInputFields();
@@ -724,12 +703,10 @@ $('#ButtonSubmitGetInfoForEdit').click(function () {
         return;
     }
     else {
-        PopulateMT_AppSession_ListByParam();
         GET_ACCFEESTRUCTURE_DETAILBYID();
         GET_ACCFEESTRUCTUREDETAIL_DETAILBYID();
     }
 });
-
 function GET_ACCFEESTRUCTURE_LISTBYPARAM() {
     var DB_Condition;
     if (RoleId == Roles.RoleID_DEVELOPER) {
@@ -754,7 +731,10 @@ function GET_ACCFEESTRUCTURE_LISTBYPARAM() {
         success: function (data) {
             var s = '<option  value="-1">Select an option</option>';
             for (var i = 0; i < data.length; i++) {
-                s += '<option  value="' + data[i].Id + '">' + data[i].Description + '' + '</option>';
+                s += '<option ' +
+                    'data-Id="' + data[i].Id + '" ' +
+                    'value="' + data[i].GuID + '">' + data[i].Description +
+                    '</option>';
             }
             $("#DropDownListFeeStructure").html(s);
         },
@@ -771,7 +751,7 @@ function GET_ACCFEESTRUCTURE_DETAILBYID() {
 
         var JsonArg = {
             CampusId: CampusId,
-            Id: FeeStructureId,
+            GuID: FeeStructureId,
             ActionCondition: PARAMETER.SESCondition.GET_MT_ACCFEESTRUCTURE_DETAILBYID,
         }
         $.ajax({
@@ -783,24 +763,24 @@ function GET_ACCFEESTRUCTURE_DETAILBYID() {
                 startLoading();
             },
             success: function (data) {
+               
+                $('#DropDownListSession').val(data[0].SessionId).change().prop('disabled', true);
+                    setTimeout(function () {
+                        $('#DropDownListClass').val(data[0].ClassId).change().prop('disabled',true);
+                    }, 800);
+                    $('#DropDownListWHTaxPolicy').val(data[0].WHTaxPolicyId).change();
 
-                $('#DropDownListSession').val(data[0].SessionId).change();
-                setTimeout(function () {
-                    $('#DropDownListClass').val(data[0].ClassId).change();
-                }, 800); 
-                $('#DropDownListWHTaxPolicy').val(data[0].WHTaxPolicyId).change();
-
-
-                    
+                    $('#HiddenFieldFeeStructureGuID').val(data[0].GuID);
             },
             complete: function () {
                 stopLoading();
             },
+
         });
     }
 }
 function GET_ACCFEESTRUCTUREDETAIL_DETAILBYID() {
-    var FeeStructureId = $('#DropDownListFeeStructure :selected').val();
+    var FeeStructureId = $('#DropDownListFeeStructure :selected').attr('data-Id');
     if (FeeStructureId != null && FeeStructureId != undefined && FeeStructureId != "" && FeeStructureId != "-1") {
         var JsonArg = {
             Id: FeeStructureId,
@@ -828,7 +808,6 @@ function GET_ACCFEESTRUCTUREDETAIL_DETAILBYID() {
                         row_data[6] = data[i].AssetAccountId ;
                         row_data[7] = data[i].LiabilityAccountId ;
                         row_data[8] = data[i].CostOfSaleAccountId ;
-                        row_data[9] = data[i].GuID ;
 
                         table.row.add(row_data);
                     }

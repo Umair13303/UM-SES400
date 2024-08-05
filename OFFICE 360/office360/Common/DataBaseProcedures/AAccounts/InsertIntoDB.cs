@@ -97,48 +97,50 @@ namespace office360.Common.DataBaseProcedures.AAccounts
                     {
                         int? Response = HttpStatus.HttpResponses.CODE_INTERNAL_SERVER_ERROR.ToInt();
 
+                        var FeeStructureParentGuID = Uttility.fn_GetHashGuid();
 
-
-                        #region COUNT CHECK FEE STRUCTURE CLASS WISE
-                        var FeeStructureCount= db.AccFeeStructure.Where(x =>
-                                                                        x.DocumentStatus== (int?)DocStatus.Active_FEE_STRUCTURE 
-                                                                        && x.Status ==true 
-                                                                        && x.SessionId == PostedData.SessionId 
-                                                                        && x.ClassId == PostedData.ClassId 
-                                                                        && x.BranchId== PostedData.CampusId 
-                                                                        && x.CompanyId==Session_Manager.CompanyId).Select(x => new _SqlParameters { Id = x.Id }).ToList();
-                        #endregion
 
 
                         #region DESCRIPTIONAL VARIABLE
                         var Code = (DateTime.Now.ToString("ddMMyy") + "-000" + (db.AccFeeStructure.ToList().Count() + 1)).ToSafeString();
-                        var SessionName = db.AppSession.Where(x => x.Id == PostedData.SessionId).Select(x => new _SqlParameters { Description = x.Description, EffectiveFrom = x.EffectiveFrom, ExpiredOn = x.ExpiredOn }).FirstOrDefault();
-                        var ClassName = db.AppClass.Where(x => x.Id == PostedData.ClassId).Select(x => new _SqlParameters { Description = x.Description }).FirstOrDefault();
+                        var SessionName = db.AppSession.Where(x => x.Id == PostedData.SessionId).Select(x => new _SqlParameters { Code = x.Code, EffectiveFrom = x.EffectiveFrom, ExpiredOn = x.ExpiredOn }).FirstOrDefault();
+                        var ClassName = db.AppClass.Where(x => x.Id == PostedData.ClassId).Select(x => new _SqlParameters { Code = x.Code }).FirstOrDefault();
+                        #endregion
+                        #region COUNT CHECK FEE STRUCTURE CLASS WISE
+                        var FeeStructureCount = db.AccFeeStructure.Where(x =>
+                                                                        
+                                                                         x.Status == true
+                                                                        && x.SessionId == PostedData.SessionId
+                                                                        && x.ClassId == PostedData.ClassId
+                                                                        && x.BranchId == PostedData.CampusId
+                                                                        && x.CompanyId == Session_Manager.CompanyId).Select(x => new _SqlParameters { Id = x.Id }).ToList();
                         #endregion
 
                         switch (PostedData.OperationType)
                         {
                             #region INSERT DATA INTO DB:: ACCFEESTRUCTURE AND ACCFEESTRUCTUREDETAIL
                             case nameof(DB_OperationType.INSERT_DATA_INTO_DB):
+                               
+
                                 // DUPLICATE RECORD DOES NOT EXIST :: PROCEED INSERT DATA
                                 if (FeeStructureCount.Count == 0)
                                 {
 
-                                    var FacultyParentGuID = Uttility.fn_GetHashGuid();
+                                  
 
                                     #region EXECUTE STORE PROCEDURE PARENT ::ACCFEESTRUCTURE
                                     var NewFeeStructureParent = new AccFeeStructure
                                     {
-                                        GuID = FacultyParentGuID,
+                                        GuID = FeeStructureParentGuID,
                                         Code = Code,
                                         CampusId = PostedData.CampusId,
-                                        Description = ("Fee Structure Generated For :" + ClassName.Description + " Applicable For Academic Session of: " + SessionName.Description).ToSafeString(),
+                                        Description = (("FS-" + ClassName.Code +"-"+SessionName.Code)+ (db.AccFeeStructure.ToList().Count() + 1)).ToSafeString(),
                                         SessionId = PostedData.SessionId,
                                         ClassId = PostedData.ClassId,
                                         WHTaxPolicyId = PostedData.WHTaxPolicyId,
                                         TotalFeeExclusive = PostedData.TotalFeeExclusive,
                                         WHTAmount = PostedData.WHTAmount,
-                                        TotalFee = PostedData.TotalFeeExclusive,
+                                        TotalFee = PostedData.TotalFee,
                                         EffectiveFrom = SessionName.EffectiveFrom,
                                         ExpiredOn = SessionName.ExpiredOn,
                                         CreatedOn = DateTime.Now,
@@ -152,7 +154,7 @@ namespace office360.Common.DataBaseProcedures.AAccounts
                                     db.AccFeeStructure.Add(NewFeeStructureParent);
                                     db.SaveChanges();
 
-                                    var InsertedFeeStructureId = db.AccFeeStructure.Where(x => x.GuID == FacultyParentGuID).Select(x => new _SqlParameters { Id = x.Id }).ToList();
+                                    var InsertedFeeStructureId = db.AccFeeStructure.Where(x => x.GuID == FeeStructureParentGuID).Select(x => new _SqlParameters { Id = x.Id }).ToList();
 
                                     #endregion
 
@@ -197,9 +199,63 @@ namespace office360.Common.DataBaseProcedures.AAccounts
                             case nameof(DB_OperationType.UPDATE_DATA_INTO_DB):
                                 try
                                 {
+                                    #region UPDATE THE FEE STRUCTURE BY GUID STATUS :: INACTIVE
+                                    var ExistingFeeStructure = db.AccFeeStructure.Where(FS => FS.SessionId == PostedData.SessionId && FS.ClassId == PostedData.ClassId).ToList();
+                                        ExistingFeeStructure.ForEach(FS => FS.DocumentStatus = (int?)DocStatus.InActive_FEE_STRUCTURE);
+                                    db.SaveChanges();
+                                    #endregion
+                                    #region EXECUTE STORE PROCEDURE PARENT ::ACCFEESTRUCTURE
+                                    var NewFeeStructureParent = new AccFeeStructure
+                                    {
+                                        GuID = FeeStructureParentGuID,
+                                        Code = Code,
+                                        CampusId = PostedData.CampusId,
+                                        Description = (("FS-" + ClassName.Code + "-" + SessionName.Code) + (db.AccFeeStructure.ToList().Count() + 1)).ToSafeString(),
+                                        SessionId = PostedData.SessionId,
+                                        ClassId = PostedData.ClassId,
+                                        WHTaxPolicyId = PostedData.WHTaxPolicyId,
+                                        TotalFeeExclusive = PostedData.TotalFeeExclusive,
+                                        WHTAmount = PostedData.WHTAmount,
+                                        TotalFee = PostedData.TotalFeeExclusive,
+                                        EffectiveFrom = SessionName.EffectiveFrom,
+                                        ExpiredOn = SessionName.ExpiredOn,
+                                        CreatedOn = DateTime.Now,
+                                        CreatedBy = Session_Manager.UserId,
+                                        DocType = (int?)DocType.FEE_STRUCTURE,
+                                        DocumentStatus = (int?)DocStatus.Active_FEE_STRUCTURE,
+                                        Status = true,
+                                        BranchId = Session_Manager.BranchId,
+                                        CompanyId = Session_Manager.CompanyId,
+                                    };
+                                    db.AccFeeStructure.Add(NewFeeStructureParent);
+                                    db.SaveChanges();
+                                    #endregion
 
+                                    var InsertedFeeStructureId = db.AccFeeStructure.Where(x => x.GuID == FeeStructureParentGuID).Select(x => new _SqlParameters { Id = x.Id }).ToList();
 
-
+                                    #region EXECUTE STORE PROCEDURE DETAIL ::ACCFEESTRUCTUREDETAIL
+                                    if (InsertedFeeStructureId.Count > 0)
+                                    {
+                                        var NewFeeStructureDetail = PostedDataDetail.Select(FeeStructureDetailList => new AccFeeStructureDetail
+                                        {
+                                            GuID = Uttility.fn_GetHashGuid(),
+                                            FeeStructureId = InsertedFeeStructureId.FirstOrDefault().Id,
+                                            FeeTypeId = FeeStructureDetailList.FeeTypeId,
+                                            RevenueAccountId = FeeStructureDetailList.RevenueAccountId,
+                                            AssetAccountId = FeeStructureDetailList.AssetAccountId,
+                                            LiabilityAccountId = FeeStructureDetailList.LiabilityAccountId,
+                                            CostOfSaleAccountId = FeeStructureDetailList.CostOfSaleAccountId,
+                                            Amount = FeeStructureDetailList.FeeAmount,
+                                            Status = true,
+                                        }).ToList();
+                                        db.AccFeeStructureDetail.AddRange(NewFeeStructureDetail);
+                                        Response = (int?)HttpResponses.CODE_SUCCESS;
+                                    }
+                                    else
+                                    {
+                                        Response = HttpStatus.HttpResponses.CODE_INTERNAL_SERVER_ERROR.ToInt();
+                                    }
+                                    #endregion
 
                                     Response = (int?)HttpResponses.CODE_DATA_UPDATED;
                                 }

@@ -159,7 +159,7 @@ namespace office360.Common.DataBaseProcedures.AAccounts
                        ((List<_SqlParameters>)
                        (from AFS in db.AccFeeStructure
                             where
-                                AFS.CompanyId == Session_Manager.CompanyId && AFS.BranchId == PostedData.CampusId && AFS.Id==PostedData.Id
+                                AFS.CompanyId == Session_Manager.CompanyId && AFS.BranchId == PostedData.CampusId && AFS.GuID == PostedData.GuID
                         select new _SqlParameters
                         {
                             Id = AFS.Id,

@@ -21,7 +21,6 @@ $(document).ready(function () {
     }
 });
 function PopulateDropDownLists() {
-    PopulateMT_GeneralCompany_List();
     PopulateLK_CampusType_List();
     PopulateLK_OrganizationType_List();
     PopulateLK_Country_List();
@@ -68,30 +67,6 @@ function ChangeCase() {
 }
 
 //-----------ALL DROPDOWN LIST
-function PopulateMT_GeneralCompany_List() {
-    var JsonArg = {
-        ActionCondition: PARAMETER.SESCondition.GET_MT_GENERALCOMPANY_BYPARAMETER,
-    }
-    $.ajax({
-        type: "POST",
-        url: BasePath + "/ACompany/MBranchUI/GET_DATA_BY_PARAMETER",
-        data: { 'PostedData': (JsonArg) },
-        beforeSend: function () {
-            startLoading();
-        },
-        success: function (data) {
-            var s = '<option  value="-1">Select an option</option>';
-            for (var i = 0; i < data.length; i++) {
-                s += '<option  value="' + data[i].Id + '">' + data[i].CompanyName + '' + '</option>';
-            }
-            $("#DropDownListCompany").html(s);
-            $("#DropDownListCompany").val(CompanyId).trigger('change').prop('disabled', Status.Open);
-        },
-        complete: function () {
-            stopLoading();
-        },
-    });
-}
 function PopulateLK_CampusType_List() {
     var JsonArg = {
         ActionCondition: PARAMETER.LookUpCondition.GET_LK1_CAMPUSTYPE,
@@ -333,9 +308,7 @@ function PopulateLK_StudyGroup_List() {
 
 //-----------DB OPERATION CALL
 function ValidateInputFields() {
-    if ($('#DropDownListCompany').RequiredDropdown() == false) {
-        return false;
-    }
+
     if ($('#TextBoxDescription').RequiredTextBoxInputGroup() == false) {
         return false;
     }
@@ -415,7 +388,6 @@ $('#ButtonUpdateDown').click(function (event) {
     }
 });
 function UpSertDataIntoDB() {
-    var CompanyId = $('#DropDownListCompany :selected').val();
     var Description = $('#TextBoxDescription').val();
     var CampusTypeId = $('#DropDownListCampusType :selected').val();
     var OrganizationTypeId = $('#DropDownListOrganizationType :selected').val();
@@ -476,8 +448,8 @@ function UpSertDataIntoDB() {
 }
 function ClearInputFields() {    
     //-----------NOT CLEARING REQUIRED FIELD
-    $('.form-control').not('#DropDownListCompany,#DropDownListCampus').val('');
-    $('.select2').not('#DropDownListCompany,#DropDownListCampus').val('-1').change();
+    $('.form-control').not('#DropDownListCampus').val('');
+    $('.select2').not('#DropDownListCampus').val('-1').change();
     $('form').removeClass('Is-Valid');
 }
 
@@ -511,7 +483,6 @@ function GET_GENERALBRACH_LISTBYPARAM() {
                 s += '<option  value="' + data[i].Id + '">' + data[i].Description + '' + '</option>';
             }
             $("#DropDownListCampus").html(s);
-            $("#DropDownListCampus").val(BranchId).change();
             if (RoleId == Roles.RoleID_ADMIN || RoleId == Roles.RoleID_DEVELOPER) {
                 $("#DropDownListCampus").prop('disabled', Status.Close);
             }
@@ -520,6 +491,8 @@ function GET_GENERALBRACH_LISTBYPARAM() {
             }
         },
         complete: function () {
+            $("#DropDownListCampus").val(BranchId).change();
+
             stopLoading();
         },
     });

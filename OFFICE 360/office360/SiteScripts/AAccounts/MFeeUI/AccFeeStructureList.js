@@ -44,16 +44,7 @@ function InitDateTable() {
             {
                 "data": null, "title": "Action(s)", "defaultContent": "",
                 "render": function (data, type, full, meta) {
-                    var UpdateDocumentStatus;
-                    var DocumentStatus = parseInt(data["DocumentStatus"], 10); // Convert to integer
-                    if (DocumentStatus == (PARAMETER.DocStatus.Active_FEE_STRUCTURE)) {
-                        UpdateDocumentStatus = PARAMETER.DocStatus.InActive_FEE_STRUCTURE;
-                    }
-                    else if (DocumentStatus == (PARAMETER.DocStatus.InActive_FEE_STRUCTURE)) {
-                        UpdateDocumentStatus = PARAMETER.DocStatus.Active_FEE_STRUCTURE;
-                    }
-                       return GetEditbtn("AccFeeStructureUpdateStatus('" + data["GuID"] + "','" + UpdateDocumentStatus + "')","Fee Structure","Edit");
-
+                    return GetViewbtn("AccFeeStructureUpdateStatus('" + data["GuID"] + "')", "Fee Structure", "Edit");
                 }
             },
             { "data": "Id", "title": "Id" },

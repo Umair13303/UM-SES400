@@ -4,16 +4,14 @@ $(document).ready(function () {
     ChangeCase();
 });
 function PopulateDropDownLists() {
+    PopulateMT_GeneralBranch_ListByParam();
     PopulateLK_EnrollmentType_List();
 
-    PopulateMT_GeneralCompany_List();
 }
 
 //-----------ALL CHANGE CASES
 function ChangeCase() {
-    $('#DropDownListCompany').change(function () {
-        PopulateMT_GeneralBranch_ListByParam();
-    });
+   
     $('#DropDownListCampus').change(function () {
         PopulateMT_AppClass_ListByParam();
     });
@@ -51,30 +49,6 @@ function PopulateLK_EnrollmentType_List() {
         },
     });
 }
-function PopulateMT_GeneralCompany_List() {
-    var JsonArg = {
-        ActionCondition: PARAMETER.SESCondition.GET_MT_GENERALCOMPANY_BYPARAMETER,
-    }
-    $.ajax({
-        type: "POST",
-        url: BasePath + "/ACompany/MAcademicSessionUI/GET_DATA_BY_PARAMETER",
-        data: { 'PostedData': (JsonArg) },
-        beforeSend: function () {
-            startLoading();
-        },
-        success: function (data) {
-            var s = '<option  value="(-1)">Select an option</option>';
-            for (var i = 0; i < data.length; i++) {
-                s += '<option  value="' + data[i].Id + '">' + data[i].CompanyName + '' + '</option>';
-            }
-            $("#DropDownListCompany").html(s);
-            $("#DropDownListCompany").val(CompanyId).trigger('change').prop('disabled', Status.Open);
-        },
-        complete: function () {
-            stopLoading();
-        },
-    });
-}
 function PopulateMT_GeneralBranch_ListByParam() {
     var JsonArg = {
         ActionCondition: PARAMETER.SESCondition.GET_MT_GENERALBRANCH_BYPARAMETER,
@@ -95,6 +69,8 @@ function PopulateMT_GeneralBranch_ListByParam() {
             $("#DropDownListCampus").html(s);
         },
         complete: function () {
+            $("#DropDownListCampus").val(BranchId).change();
+
             stopLoading();
         },
     });
@@ -144,9 +120,7 @@ $('#ButtonSubmitDown').click(function (event) {
 });
 
 function ValidateInputFields() {
-    if ($('#DropDownListCompany').RequiredDropdown() == false) {
-        return false;
-    }
+
     if ($('#DropDownListCampus').RequiredDropdown() == false) {
         return false;
     }
@@ -210,6 +184,5 @@ function ClearInputFields() {
     $('.form-control').val('');
     $('.select2').val('-1').change();
     $('form').removeClass('Is-Valid');
-    var CompanyIdUC = $('#DropDownListCompany :selected').val();
-    $('#DropDownListCompany').val(CompanyIdUC).change();
+   
 }
