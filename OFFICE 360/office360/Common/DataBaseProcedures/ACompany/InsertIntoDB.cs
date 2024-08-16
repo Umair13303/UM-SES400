@@ -177,13 +177,15 @@ namespace office360.Common.DataBaseProcedures.ACompany
                         if (IsAlreadyActiveSession.Count == 0)
                         {
 
+
                             #region VARIABLES
                             DateTime? EffectiveFrom = PostedData.SessionStartDate;
-                            DateTime ? ExpiredOn = PostedData.SessionEndDate;
+                            DateTime? ExpiredOn = PostedData.SessionEndDate;
                             #endregion
                             #region OUTPUT VARIABLES
                             var CodeParameter = new ObjectParameter("Code_", typeof(string));
                             var ResponseParameter = new ObjectParameter("Response", typeof(string));
+                            var ParentSessionIdParameter = new ObjectParameter("Id", typeof(string));
                             #endregion
                             #region EXECUTION OF STORE PROCEDURE AppSession_Insert
                             var data = db.AppSession_Insert(
@@ -200,9 +202,13 @@ namespace office360.Common.DataBaseProcedures.ACompany
                                                 EffectiveFrom,
                                                 ExpiredOn,
                                                 ResponseParameter,
-                                                CodeParameter
+                                                CodeParameter,
+                                                ParentSessionIdParameter
                                 );
+                            int? ParentSessionId = ParentSessionIdParameter.Value.ToInt();
                             #endregion
+
+
                             #region RESPONSE VALUES IN VARIABLE
                             Response = (int)ResponseParameter.Value;
                             string code = CodeParameter.Value.ToString();
@@ -214,7 +220,58 @@ namespace office360.Common.DataBaseProcedures.ACompany
                             }
                             else if (Response == (int?)HttpResponses.CODE_SUCCESS)
                             {
-                                dbTran.Commit();
+                                try
+                                {
+                                    #region  EXECUTION OF STORE PROCEDURE AppSessionDetail_Insert
+
+                                    #region GET CHALLAN SETTING FOR SELECTED CAMPUS ID
+                                    var ChallanMethodId = db.GeneralBranchSetting.Where(x => x.Id == PostedData.CampusId).Select(x => new _SqlParameters { Id = x.ChallanMethodId, }).FirstOrDefault();
+                                    var ChallanMethodDetail = db.ChallanMethod.Where(x => x.Id == ChallanMethodId.Id).Select(x => new _SqlParameters { Code = x.Code, ChallanNo = x.ChallanNo, MonthsNo = x.MonthsNo }).FirstOrDefault();
+                                    #endregion
+
+                                    #region GET SESSION PERIOD AUTO
+                                    DateTime StartDate = (DateTime)PostedData.SessionStartDate;
+                                    DateTime EndDate = (DateTime)PostedData.SessionEndDate;
+                                    int NoOfInterval = (int)ChallanMethodDetail.ChallanNo;
+                                    double TotalDayInSession = (EndDate - StartDate).TotalDays;
+                                    double intervalLength = TotalDayInSession / NoOfInterval;
+                                    #endregion
+
+                                    #region PRE-PARE :: APP SESSION DETAIL
+
+                                    List<AppSessionDetail> PostedDataDetail = new List<AppSessionDetail>();
+                                    for (int i = 0; i < NoOfInterval; i++)
+                                    {
+                                        DateTime IntervalPeriodStartDate = StartDate.AddDays(i * intervalLength);
+                                        DateTime IntervalPeriodEndDate = (i == NoOfInterval - 1) ? EndDate : StartDate.AddDays((i + 1) * intervalLength - 1);
+
+                                        var AppSessionDetail = new AppSessionDetail
+                                        {
+                                            SessionId = ParentSessionId,
+                                            GuID = Uttility.fn_GetHashGuid(),
+                                            Description = "Session Interval No: " + (i + 1),
+                                            IntervalStartDate = IntervalPeriodStartDate,
+                                            IntervalEnd = IntervalPeriodStartDate,
+                                            Status = true
+                                        };
+                                        db.AppSessionDetail.Add(AppSessionDetail);
+                                        db.SaveChanges();
+
+                                    }
+                                    #endregion
+
+
+
+                                    dbTran.Commit();
+
+                                    #endregion
+
+                                }
+                                catch
+                                {
+                                    dbTran.Rollback();
+                                    return HttpStatus.HttpResponses.CODE_INTERNAL_SERVER_ERROR.ToInt();
+                                }
                             }
                             #endregion
                         }

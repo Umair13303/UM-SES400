@@ -1,5 +1,4 @@
-﻿
-$.fn.RequiredTextBoxInputGroup = function () {
+﻿$.fn.RequiredTextBoxInputGroup = function () {
     $(this).removeClass('is-invalid is-valid');
     $(this).css('border', ''); // Reset the border
     var labelText = '';
@@ -444,3 +443,13 @@ function AppendTableFooterTotals(TableId, ColumnSpan, TableDivId, Header) {
     return Footer;
 }
 
+var fullInitDefaults = {
+
+};
+
+function initializeFullInitTables() {
+    $('.fullInit').each(function () {
+        var tableSettings = $.extend(true, {}, fullInitDefaults, $(this).data('settings'));
+        $(this).DataTable(tableSettings);
+    });
+}

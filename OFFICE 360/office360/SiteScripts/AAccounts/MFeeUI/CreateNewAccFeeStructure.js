@@ -197,6 +197,7 @@ function ClearOtherFeeSetting() {
     $('#DropDownListLiabilityAccount').val('-1').change();
     $('#DropDownListCostOfSaleAccount').val('-1').change();
 }
+
 function PopulateDropDownLists() {
     PopulateMT_GeneralBranch_ListByParam();
     PopulateMT_StructureFeeType_ListByParam();
@@ -708,13 +709,8 @@ $('#ButtonSubmitGetInfoForEdit').click(function () {
     }
 });
 function GET_ACCFEESTRUCTURE_LISTBYPARAM() {
-    var DB_Condition;
-    if (RoleId == Roles.RoleID_DEVELOPER) {
-        DB_Condition = PARAMETER.DB_IF_Condition.ACCFEESTRUCTURE_BY_GENERALBRANCH_FOR_DEVELOPER
-    }
-    else {
-        DB_Condition = PARAMETER.DB_IF_Condition.ACCFEESTRUCTURE_BY_GENERALBRANCH_FOR_OTHERROLE
-    }
+    var DB_Condition = PARAMETER.DB_IF_Condition.ACCFEESTRUCTURE_BY_GENERALBRANCH
+
     var CampusId = $('#DropDownListCampus :selected').val() ?? BranchId;
     var JsonArg = {
         CampusId: CampusId,

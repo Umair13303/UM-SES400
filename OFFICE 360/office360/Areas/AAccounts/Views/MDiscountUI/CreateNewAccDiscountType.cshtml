@@ -1,0 +1,90 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    <div class="statbox widget box box-shadow">
+        <div class="widget-header">
+            <div class="row">
+                <div class="col-xl-12 col-md-12 col-sm-12 col-12 d-flex justify-content-between align-items-center">
+                    <h4>@ViewBag.Title</h4>
+
+                </div>
+            </div>
+            <nav class="breadcrumb-one" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">Account</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">Discount</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><span>@ViewBag.Title</span></li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="card" style="margin-top:1%;width:100%">
+        <div class="card-body">
+            <form>
+                @if (ViewBag.DB_OperationType == nameof(office360.Models.General.DBListCondition.DB_OperationType.UPDATE_DATA_INTO_DB))
+                {
+                    <div class="row mb-0">
+                        <div class="col-sm-12 col-md-8">
+                            <div class="form-group">
+                                @Html.Label("Discount Type ( For Edit )", new { @class = "col-form-label", @for = "DropDownListDiscountType" })
+                                @Html.DropDownList("DropDownListDiscountType", Enumerable.Empty<SelectListItem>(), new { @class = "form-control select2", @data_toggle = "select2", id = "DropDownListDiscountType" })
+                                <button type="button" class="btn btn-info" id="ButtonSubmitGetInfoForEdit">
+                                    <i class="fa fa-sync-alt"></i> Load Information
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div class="col-sm-12 col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Short Code", new { @class = "col-form-label", @for = "TextBoxShortCode" })
+                        <div class="input-group">
+                            @Html.TextBox("TextBoxShortCode", null, new { @class = "form-control", placeholder = "Please Enter Short Code Here!", @id = "TextBoxShortCode" })
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button" id="ButtonCheckDuplicate">Check Duplicate</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-8">
+                    <div class="form-group">
+                        @Html.Label("Description", new { @class = "col-form-label", @for = "TextBoxDescription" })
+                        @Html.TextBox("TextBoxDescription", null, new { @class = "form-control", placeholder = "Please Enter Discount Name Here!", @id = "TextBoxDescription" })
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-8">
+                    <div class="form-group">
+                        @Html.Label("Remarks", new { @class = "col-form-label", @for = "TextBoxRemarks" })
+                        @Html.TextBox("TextBoxRemarks", null, new { @class = "form-control", placeholder = "Please Enter Discount Name Here!", @id = "TextBoxRemarks" })
+                    </div>
+                </div>
+
+            </form>
+            @Html.TextBox("HiddenFieldFeeTypeGuID", null, new { @class = "form-control", Value = ViewBag.FeeTypeGuID, hidden = true, @id = "HiddenFieldFeeTypeGuID" })
+            @Html.TextBox("HiddenFieldDB_OperationType", null, new { @class = "form-control", Value = ViewBag.DB_OperationType, hidden = true, @id = "HiddenFieldDB_OperationType" })
+
+        </div>
+        <div class="card-footer">
+            <div class="col-sm-12 form-group">
+                <div class="card-heading" id="DivButtonSubmitDown" style="display:none">
+                    <input type="button" class="btn btn-info" id="ButtonSubmitDown" value="Sumbit" />
+                    <i class="fa fa-arrow-up"></i>
+                </div>
+                <div class="card-heading" id="DivButtonUpdateDown" style="display:none">
+                    <input type="button" class="btn btn-warning" id="ButtonUpdateDown" value="Update" />
+                    <i class="fa fa-arrow-up"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script src="~/SiteScripts/AAccounts/MDiscountUI/CreateNewAccDiscountType.js"></script>
+

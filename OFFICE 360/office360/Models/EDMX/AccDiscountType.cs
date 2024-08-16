@@ -12,14 +12,19 @@ namespace office360.Models.EDMX
     using System;
     using System.Collections.Generic;
     
-    public partial class WHTaxPolicy
+    public partial class AccDiscountType
     {
         public int Id { get; set; }
+        public Nullable<System.Guid> GuID { get; set; }
+        public string Code { get; set; }
         public string Description { get; set; }
-        public Nullable<decimal> Percentage { get; set; }
-        public string Section { get; set; }
-        public Nullable<decimal> SlabAmount { get; set; }
-        public Nullable<decimal> FixedCharges { get; set; }
-        public Nullable<bool> IsOnExceedingAmount { get; set; }
+        public string Remarks { get; set; }
+        public Nullable<bool> Status { get; set; }
+        public Nullable<System.DateTime> CreatedOn { get; set; }
+        public Nullable<int> CreatedBy { get; set; }
+        public Nullable<System.DateTime> UpdatedOn { get; set; }
+        public Nullable<int> UpdatedBy { get; set; }
+        public Nullable<int> BranchId { get; set; }
+        public Nullable<int> CompanyId { get; set; }
     }
 }
