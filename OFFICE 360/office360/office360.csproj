@@ -821,6 +821,7 @@
     <Content Include="Scripts\jquery.dataTables.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="SiteAssets\Uttility\Wizard_Stepper.js" />
     <Content Include="SiteAssets\Uttility\Uttility.css" />
     <Content Include="SiteScripts\AAccounts\MChallanUI\CreateNewAccFeeChallan.js" />
     <Content Include="SiteScripts\AAccounts\MDiscountUI\AccDiscountTypeList.js" />

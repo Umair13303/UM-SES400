@@ -2,20 +2,11 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<link href="~/_Theme2/plugins/jquery-step/jquery.steps.css" rel="stylesheet" />
-<style>
-    #formValidate .wizard > .content {
-        min-height: 25em;
-    }
-
-    #example-vertical.wizard > .content {
-        min-height: 24.5em;
-    }
-</style>
-
 
 @using (Html.BeginForm())
 {
+
+
     <div class="statbox widget box box-shadow">
         <div class="widget-header">
             <div class="row">
@@ -26,37 +17,89 @@
             <nav class="breadcrumb-one" aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></a></li>
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">Branches</a></li>
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">Setup</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">Admission</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">Enrollment(s)</a></li>
                     <li class="breadcrumb-item active" aria-current="page"><span>@ViewBag.Title</span></li>
                 </ol>
             </nav>
         </div>
     </div>
 
-
     <div class="card" style="margin-top:1%;width:100%">
-        <div class="card-body">
-            <form>
+        <div class="card-header">
+            <nav class="nav nav-pills nav-fill">
+                <a class="nav-link tab-pills" href="#">Personal Details</a>
+                <a class="nav-link tab-pills" href="#">Address Details</a>
+                <a class="nav-link tab-pills" href="#">Company Details</a>
+                <a class="nav-link tab-pills" href="#">Finish</a>
+            </nav>
+        </div>
 
-                @if (ViewBag.DB_OperationType == nameof(office360.Models.General.DBListCondition.DB_OperationType.UPDATE_DATA_INTO_DB))
-                {
-                    <div class="row mb-0">
-                        <div class="col-sm-12 col-md-8">
-                            <div class="form-group">
-                                @Html.Label("Student ( For Edit )", new { @class = "col-form-label", @for = "DropDownListStudent" })
-                                @Html.DropDownList("DropDownListStudent", Enumerable.Empty<SelectListItem>(), new { @class = "form-control select2", @data_toggle = "select2", id = "DropDownListStudent" })
-                                <input type="button" class="btn btn-info" id="ButtonSubmitGetInfoForEdit" value="Load Information" />
-                            </div>
+        <div class="card-body">
+            <div class="card-body">
+                <div class="tab d-none">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" name="name" id="name" placeholder="Please enter name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email" id="email" placeholder="Please enter email">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" name="password" id="password" placeholder="Please enter password">
+                    </div>
+                </div>
+
+                <div class="tab d-none">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Address 1</label>
+                        <input type="text" class="form-control" name="name" id="name" placeholder="Please enter address 1">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Address 2</label>
+                        <input type="email" class="form-control" name="email" id="email" placeholder="Please enter address 2">
+                    </div>
+                    <div class="row">
+                        <div class="mb-3 col-md-6">
+                            <label for="city" class="form-label">City</label>
+                            <input type="text" class="form-control" name="city" id="city" placeholder="Please enter city">
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="state" class="form-label">State</label>
+                            <input type="state" class="form-control" name="state" id="state" placeholder="Please enter state">
                         </div>
                     </div>
-                }
-            </form>
+                </div>
+
+                <div class="tab d-none">
+                    <div class="mb-3">
+                        <label for="company_name" class="form-label">Company Name</label>
+                        <input type="text" class="form-control" name="company_name" id="company_name" placeholder="Please enter company name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="company_address" class="form-label">Company Address</label>
+                        <textarea class="form-control" name="company_address" id="company_address" placeholder="Please enter company address"></textarea>
+                    </div>
+                </div>
+
+                <div class="tab d-none">
+                    <p>All Set! Please submit to continue. Thank you</p>
+                </div>
+            </div>
+
+        </div>
+        <div class="card-footer text-end">
+            <div class="d-flex">
+                <button type="button" id="back_button" class="btn btn-link" onclick="back()">Back</button>
+                <button type="button" id="next_button" class="btn btn-primary ms-auto" onclick="next()">Next</button>
+            </div>
         </div>
     </div>
+
+  
 }
 
-
-    <script src="~/_Theme2/plugins/jquery-step/jquery.steps.min.js"></script>
-    <script src="~/_Theme2/plugins/jquery-step/custom-jquery.steps.js"></script>
-    <script src="~/SiteScripts/AStudent/MEnrollmentUI/CreateNewEnrollment.js"></script>
+<script src="~/SiteAssets/Uttility/Wizard_Stepper.js"></script>
+<script src="~/SiteScripts/AStudent/MEnrollmentUI/CreateNewEnrollment.js"></script>
