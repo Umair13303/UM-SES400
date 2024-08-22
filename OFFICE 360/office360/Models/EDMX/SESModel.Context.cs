@@ -27,19 +27,10 @@ namespace office360.Models.EDMX
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<AccDiscountType> AccDiscountType { get; set; }
-        public virtual DbSet<AccFeeChallan> AccFeeChallan { get; set; }
-        public virtual DbSet<AccFeeChallanDetail> AccFeeChallanDetail { get; set; }
         public virtual DbSet<AccFeeStructure> AccFeeStructure { get; set; }
         public virtual DbSet<AccFeeStructureDetail> AccFeeStructureDetail { get; set; }
-        public virtual DbSet<AccJournal> AccJournal { get; set; }
-        public virtual DbSet<AccLedgerFee> AccLedgerFee { get; set; }
-        public virtual DbSet<AccStudentOB> AccStudentOB { get; set; }
         public virtual DbSet<AppClass> AppClass { get; set; }
-        public virtual DbSet<AppClassRegistration> AppClassRegistration { get; set; }
         public virtual DbSet<AppSession> AppSession { get; set; }
-        public virtual DbSet<AppSessionDetail> AppSessionDetail { get; set; }
-        public virtual DbSet<AppStudent> AppStudent { get; set; }
         public virtual DbSet<GeneralBranch> GeneralBranch { get; set; }
         public virtual DbSet<GeneralBranchSetting> GeneralBranchSetting { get; set; }
         public virtual DbSet<GeneralCompany> GeneralCompany { get; set; }
@@ -48,6 +39,7 @@ namespace office360.Models.EDMX
         public virtual DbSet<GeneralUser> GeneralUser { get; set; }
         public virtual DbSet<GeneralUserRight> GeneralUserRight { get; set; }
         public virtual DbSet<StructureCOAAccount> StructureCOAAccount { get; set; }
+        public virtual DbSet<StructureDiscountType> StructureDiscountType { get; set; }
         public virtual DbSet<StructureFeeType> StructureFeeType { get; set; }
         public virtual DbSet<BillingMethod> BillingMethod { get; set; }
         public virtual DbSet<CampusType> CampusType { get; set; }
@@ -109,186 +101,6 @@ namespace office360.Models.EDMX
             return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<fn_GetCommaSepratedValuesInList_Result>("[SESEntities].[fn_GetCommaSepratedValuesInList](@psCSString)", psCSStringParameter);
         }
     
-        public virtual ObjectResult<AccDiscountType_GetListByParam_Result> AccDiscountType_GetListByParam(string dB_IF_PARAM, Nullable<int> branchId, Nullable<int> companyId, Nullable<int> id)
-        {
-            var dB_IF_PARAMParameter = dB_IF_PARAM != null ?
-                new ObjectParameter("DB_IF_PARAM", dB_IF_PARAM) :
-                new ObjectParameter("DB_IF_PARAM", typeof(string));
-    
-            var branchIdParameter = branchId.HasValue ?
-                new ObjectParameter("BranchId", branchId) :
-                new ObjectParameter("BranchId", typeof(int));
-    
-            var companyIdParameter = companyId.HasValue ?
-                new ObjectParameter("CompanyId", companyId) :
-                new ObjectParameter("CompanyId", typeof(int));
-    
-            var idParameter = id.HasValue ?
-                new ObjectParameter("Id", id) :
-                new ObjectParameter("Id", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<AccDiscountType_GetListByParam_Result>("AccDiscountType_GetListByParam", dB_IF_PARAMParameter, branchIdParameter, companyIdParameter, idParameter);
-        }
-    
-        public virtual int AccDiscountType_Upsert(string dB_OperationType, Nullable<System.Guid> guID, string code, string description, string remarks, Nullable<bool> status, Nullable<System.DateTime> createdOn, Nullable<int> createdBy, Nullable<System.DateTime> updatedOn, Nullable<int> updatedBy, Nullable<int> branchId, Nullable<int> companyId, ObjectParameter response)
-        {
-            var dB_OperationTypeParameter = dB_OperationType != null ?
-                new ObjectParameter("DB_OperationType", dB_OperationType) :
-                new ObjectParameter("DB_OperationType", typeof(string));
-    
-            var guIDParameter = guID.HasValue ?
-                new ObjectParameter("GuID", guID) :
-                new ObjectParameter("GuID", typeof(System.Guid));
-    
-            var codeParameter = code != null ?
-                new ObjectParameter("Code", code) :
-                new ObjectParameter("Code", typeof(string));
-    
-            var descriptionParameter = description != null ?
-                new ObjectParameter("Description", description) :
-                new ObjectParameter("Description", typeof(string));
-    
-            var remarksParameter = remarks != null ?
-                new ObjectParameter("Remarks", remarks) :
-                new ObjectParameter("Remarks", typeof(string));
-    
-            var statusParameter = status.HasValue ?
-                new ObjectParameter("Status", status) :
-                new ObjectParameter("Status", typeof(bool));
-    
-            var createdOnParameter = createdOn.HasValue ?
-                new ObjectParameter("CreatedOn", createdOn) :
-                new ObjectParameter("CreatedOn", typeof(System.DateTime));
-    
-            var createdByParameter = createdBy.HasValue ?
-                new ObjectParameter("CreatedBy", createdBy) :
-                new ObjectParameter("CreatedBy", typeof(int));
-    
-            var updatedOnParameter = updatedOn.HasValue ?
-                new ObjectParameter("UpdatedOn", updatedOn) :
-                new ObjectParameter("UpdatedOn", typeof(System.DateTime));
-    
-            var updatedByParameter = updatedBy.HasValue ?
-                new ObjectParameter("UpdatedBy", updatedBy) :
-                new ObjectParameter("UpdatedBy", typeof(int));
-    
-            var branchIdParameter = branchId.HasValue ?
-                new ObjectParameter("BranchId", branchId) :
-                new ObjectParameter("BranchId", typeof(int));
-    
-            var companyIdParameter = companyId.HasValue ?
-                new ObjectParameter("CompanyId", companyId) :
-                new ObjectParameter("CompanyId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AccDiscountType_Upsert", dB_OperationTypeParameter, guIDParameter, codeParameter, descriptionParameter, remarksParameter, statusParameter, createdOnParameter, createdByParameter, updatedOnParameter, updatedByParameter, branchIdParameter, companyIdParameter, response);
-        }
-    
-        public virtual int AccFeeChallan_Insert(Nullable<System.Guid> guId, string description, Nullable<int> sessionId, Nullable<int> classId, Nullable<int> registrationTypeId, Nullable<int> classRegistrationId, Nullable<System.DateTime> transactionDate, Nullable<System.DateTime> dueDate, Nullable<System.DateTime> expiryDate, Nullable<int> feeStructureId, Nullable<decimal> grossRecievable, Nullable<decimal> lateFee, Nullable<decimal> discount, Nullable<decimal> netRecievable, Nullable<int> createdBy, Nullable<int> documentStatus, Nullable<int> docType, Nullable<int> branchId, Nullable<int> companyId, ObjectParameter response)
-        {
-            var guIdParameter = guId.HasValue ?
-                new ObjectParameter("GuId", guId) :
-                new ObjectParameter("GuId", typeof(System.Guid));
-    
-            var descriptionParameter = description != null ?
-                new ObjectParameter("Description", description) :
-                new ObjectParameter("Description", typeof(string));
-    
-            var sessionIdParameter = sessionId.HasValue ?
-                new ObjectParameter("SessionId", sessionId) :
-                new ObjectParameter("SessionId", typeof(int));
-    
-            var classIdParameter = classId.HasValue ?
-                new ObjectParameter("ClassId", classId) :
-                new ObjectParameter("ClassId", typeof(int));
-    
-            var registrationTypeIdParameter = registrationTypeId.HasValue ?
-                new ObjectParameter("RegistrationTypeId", registrationTypeId) :
-                new ObjectParameter("RegistrationTypeId", typeof(int));
-    
-            var classRegistrationIdParameter = classRegistrationId.HasValue ?
-                new ObjectParameter("ClassRegistrationId", classRegistrationId) :
-                new ObjectParameter("ClassRegistrationId", typeof(int));
-    
-            var transactionDateParameter = transactionDate.HasValue ?
-                new ObjectParameter("TransactionDate", transactionDate) :
-                new ObjectParameter("TransactionDate", typeof(System.DateTime));
-    
-            var dueDateParameter = dueDate.HasValue ?
-                new ObjectParameter("DueDate", dueDate) :
-                new ObjectParameter("DueDate", typeof(System.DateTime));
-    
-            var expiryDateParameter = expiryDate.HasValue ?
-                new ObjectParameter("ExpiryDate", expiryDate) :
-                new ObjectParameter("ExpiryDate", typeof(System.DateTime));
-    
-            var feeStructureIdParameter = feeStructureId.HasValue ?
-                new ObjectParameter("FeeStructureId", feeStructureId) :
-                new ObjectParameter("FeeStructureId", typeof(int));
-    
-            var grossRecievableParameter = grossRecievable.HasValue ?
-                new ObjectParameter("GrossRecievable", grossRecievable) :
-                new ObjectParameter("GrossRecievable", typeof(decimal));
-    
-            var lateFeeParameter = lateFee.HasValue ?
-                new ObjectParameter("LateFee", lateFee) :
-                new ObjectParameter("LateFee", typeof(decimal));
-    
-            var discountParameter = discount.HasValue ?
-                new ObjectParameter("Discount", discount) :
-                new ObjectParameter("Discount", typeof(decimal));
-    
-            var netRecievableParameter = netRecievable.HasValue ?
-                new ObjectParameter("NetRecievable", netRecievable) :
-                new ObjectParameter("NetRecievable", typeof(decimal));
-    
-            var createdByParameter = createdBy.HasValue ?
-                new ObjectParameter("CreatedBy", createdBy) :
-                new ObjectParameter("CreatedBy", typeof(int));
-    
-            var documentStatusParameter = documentStatus.HasValue ?
-                new ObjectParameter("DocumentStatus", documentStatus) :
-                new ObjectParameter("DocumentStatus", typeof(int));
-    
-            var docTypeParameter = docType.HasValue ?
-                new ObjectParameter("DocType", docType) :
-                new ObjectParameter("DocType", typeof(int));
-    
-            var branchIdParameter = branchId.HasValue ?
-                new ObjectParameter("BranchId", branchId) :
-                new ObjectParameter("BranchId", typeof(int));
-    
-            var companyIdParameter = companyId.HasValue ?
-                new ObjectParameter("CompanyId", companyId) :
-                new ObjectParameter("CompanyId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AccFeeChallan_Insert", guIdParameter, descriptionParameter, sessionIdParameter, classIdParameter, registrationTypeIdParameter, classRegistrationIdParameter, transactionDateParameter, dueDateParameter, expiryDateParameter, feeStructureIdParameter, grossRecievableParameter, lateFeeParameter, discountParameter, netRecievableParameter, createdByParameter, documentStatusParameter, docTypeParameter, branchIdParameter, companyIdParameter, response);
-        }
-    
-        public virtual int AccFeeChallanDetail_Insert(Nullable<int> feeChallanId, Nullable<int> feeTypeId, Nullable<decimal> actualAmount, Nullable<decimal> chargedAmount, Nullable<decimal> difference)
-        {
-            var feeChallanIdParameter = feeChallanId.HasValue ?
-                new ObjectParameter("FeeChallanId", feeChallanId) :
-                new ObjectParameter("FeeChallanId", typeof(int));
-    
-            var feeTypeIdParameter = feeTypeId.HasValue ?
-                new ObjectParameter("FeeTypeId", feeTypeId) :
-                new ObjectParameter("FeeTypeId", typeof(int));
-    
-            var actualAmountParameter = actualAmount.HasValue ?
-                new ObjectParameter("ActualAmount", actualAmount) :
-                new ObjectParameter("ActualAmount", typeof(decimal));
-    
-            var chargedAmountParameter = chargedAmount.HasValue ?
-                new ObjectParameter("ChargedAmount", chargedAmount) :
-                new ObjectParameter("ChargedAmount", typeof(decimal));
-    
-            var differenceParameter = difference.HasValue ?
-                new ObjectParameter("Difference", difference) :
-                new ObjectParameter("Difference", typeof(decimal));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AccFeeChallanDetail_Insert", feeChallanIdParameter, feeTypeIdParameter, actualAmountParameter, chargedAmountParameter, differenceParameter);
-        }
-    
         public virtual ObjectResult<AccFeeStructure_GetListByParam_Result> AccFeeStructure_GetListByParam(string dB_IF_PARAM, Nullable<int> companyId, Nullable<int> branchId, string allowedCampusIds)
         {
             var dB_IF_PARAMParameter = dB_IF_PARAM != null ?
@@ -331,67 +143,6 @@ namespace office360.Models.EDMX
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<AccFeeStructure_GetListBySearch_Result>("AccFeeStructure_GetListBySearch", companyIdParameter, branchIdParameter, inputTypeIdParameter, inputTextParameter);
         }
     
-        public virtual int AccJournal_Insert(string code, Nullable<System.DateTime> transactionDate, string folioNo, string reference, string description, Nullable<int> debitAccountId, Nullable<decimal> debitAmount, Nullable<int> creditAccountId, Nullable<decimal> creditAmount, Nullable<decimal> balanceAmount, Nullable<int> createdBy, Nullable<int> docType, Nullable<int> branchId, Nullable<int> companyId)
-        {
-            var codeParameter = code != null ?
-                new ObjectParameter("Code", code) :
-                new ObjectParameter("Code", typeof(string));
-    
-            var transactionDateParameter = transactionDate.HasValue ?
-                new ObjectParameter("TransactionDate", transactionDate) :
-                new ObjectParameter("TransactionDate", typeof(System.DateTime));
-    
-            var folioNoParameter = folioNo != null ?
-                new ObjectParameter("FolioNo", folioNo) :
-                new ObjectParameter("FolioNo", typeof(string));
-    
-            var referenceParameter = reference != null ?
-                new ObjectParameter("Reference", reference) :
-                new ObjectParameter("Reference", typeof(string));
-    
-            var descriptionParameter = description != null ?
-                new ObjectParameter("Description", description) :
-                new ObjectParameter("Description", typeof(string));
-    
-            var debitAccountIdParameter = debitAccountId.HasValue ?
-                new ObjectParameter("DebitAccountId", debitAccountId) :
-                new ObjectParameter("DebitAccountId", typeof(int));
-    
-            var debitAmountParameter = debitAmount.HasValue ?
-                new ObjectParameter("DebitAmount", debitAmount) :
-                new ObjectParameter("DebitAmount", typeof(decimal));
-    
-            var creditAccountIdParameter = creditAccountId.HasValue ?
-                new ObjectParameter("CreditAccountId", creditAccountId) :
-                new ObjectParameter("CreditAccountId", typeof(int));
-    
-            var creditAmountParameter = creditAmount.HasValue ?
-                new ObjectParameter("CreditAmount", creditAmount) :
-                new ObjectParameter("CreditAmount", typeof(decimal));
-    
-            var balanceAmountParameter = balanceAmount.HasValue ?
-                new ObjectParameter("BalanceAmount", balanceAmount) :
-                new ObjectParameter("BalanceAmount", typeof(decimal));
-    
-            var createdByParameter = createdBy.HasValue ?
-                new ObjectParameter("CreatedBy", createdBy) :
-                new ObjectParameter("CreatedBy", typeof(int));
-    
-            var docTypeParameter = docType.HasValue ?
-                new ObjectParameter("DocType", docType) :
-                new ObjectParameter("DocType", typeof(int));
-    
-            var branchIdParameter = branchId.HasValue ?
-                new ObjectParameter("BranchId", branchId) :
-                new ObjectParameter("BranchId", typeof(int));
-    
-            var companyIdParameter = companyId.HasValue ?
-                new ObjectParameter("CompanyId", companyId) :
-                new ObjectParameter("CompanyId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AccJournal_Insert", codeParameter, transactionDateParameter, folioNoParameter, referenceParameter, descriptionParameter, debitAccountIdParameter, debitAmountParameter, creditAccountIdParameter, creditAmountParameter, balanceAmountParameter, createdByParameter, docTypeParameter, branchIdParameter, companyIdParameter);
-        }
-    
         public virtual ObjectResult<AppClass_GetListByParam_Result> AppClass_GetListByParam(string dB_IF_PARAM, Nullable<int> companyId, Nullable<int> branchId, Nullable<int> appSessionId, string classIds)
         {
             var dB_IF_PARAMParameter = dB_IF_PARAM != null ?
@@ -417,23 +168,19 @@ namespace office360.Models.EDMX
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<AppClass_GetListByParam_Result>("AppClass_GetListByParam", dB_IF_PARAMParameter, companyIdParameter, branchIdParameter, appSessionIdParameter, classIdsParameter);
         }
     
-        public virtual int AppClass_Insert(string description, Nullable<int> branchId, Nullable<int> companyId, Nullable<int> createdBy, Nullable<int> studyLevelId, Nullable<int> studyGroupId, ObjectParameter code_, ObjectParameter response)
+        public virtual int AppClass_UpSert(string dB_OperationType, Nullable<System.Guid> guID, string description, Nullable<int> studyLevelId, Nullable<int> studyGroupId, Nullable<System.DateTime> createdOn, Nullable<int> createdBy, Nullable<System.DateTime> updatedOn, Nullable<int> updatedBy, Nullable<int> docType, Nullable<int> documentStatus, Nullable<bool> status, Nullable<int> branchId, Nullable<int> companyId, ObjectParameter response)
         {
+            var dB_OperationTypeParameter = dB_OperationType != null ?
+                new ObjectParameter("DB_OperationType", dB_OperationType) :
+                new ObjectParameter("DB_OperationType", typeof(string));
+    
+            var guIDParameter = guID.HasValue ?
+                new ObjectParameter("GuID", guID) :
+                new ObjectParameter("GuID", typeof(System.Guid));
+    
             var descriptionParameter = description != null ?
                 new ObjectParameter("Description", description) :
                 new ObjectParameter("Description", typeof(string));
-    
-            var branchIdParameter = branchId.HasValue ?
-                new ObjectParameter("BranchId", branchId) :
-                new ObjectParameter("BranchId", typeof(int));
-    
-            var companyIdParameter = companyId.HasValue ?
-                new ObjectParameter("CompanyId", companyId) :
-                new ObjectParameter("CompanyId", typeof(int));
-    
-            var createdByParameter = createdBy.HasValue ?
-                new ObjectParameter("CreatedBy", createdBy) :
-                new ObjectParameter("CreatedBy", typeof(int));
     
             var studyLevelIdParameter = studyLevelId.HasValue ?
                 new ObjectParameter("StudyLevelId", studyLevelId) :
@@ -443,7 +190,43 @@ namespace office360.Models.EDMX
                 new ObjectParameter("StudyGroupId", studyGroupId) :
                 new ObjectParameter("StudyGroupId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AppClass_Insert", descriptionParameter, branchIdParameter, companyIdParameter, createdByParameter, studyLevelIdParameter, studyGroupIdParameter, code_, response);
+            var createdOnParameter = createdOn.HasValue ?
+                new ObjectParameter("CreatedOn", createdOn) :
+                new ObjectParameter("CreatedOn", typeof(System.DateTime));
+    
+            var createdByParameter = createdBy.HasValue ?
+                new ObjectParameter("CreatedBy", createdBy) :
+                new ObjectParameter("CreatedBy", typeof(int));
+    
+            var updatedOnParameter = updatedOn.HasValue ?
+                new ObjectParameter("UpdatedOn", updatedOn) :
+                new ObjectParameter("UpdatedOn", typeof(System.DateTime));
+    
+            var updatedByParameter = updatedBy.HasValue ?
+                new ObjectParameter("UpdatedBy", updatedBy) :
+                new ObjectParameter("UpdatedBy", typeof(int));
+    
+            var docTypeParameter = docType.HasValue ?
+                new ObjectParameter("DocType", docType) :
+                new ObjectParameter("DocType", typeof(int));
+    
+            var documentStatusParameter = documentStatus.HasValue ?
+                new ObjectParameter("DocumentStatus", documentStatus) :
+                new ObjectParameter("DocumentStatus", typeof(int));
+    
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(bool));
+    
+            var branchIdParameter = branchId.HasValue ?
+                new ObjectParameter("BranchId", branchId) :
+                new ObjectParameter("BranchId", typeof(int));
+    
+            var companyIdParameter = companyId.HasValue ?
+                new ObjectParameter("CompanyId", companyId) :
+                new ObjectParameter("CompanyId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AppClass_UpSert", dB_OperationTypeParameter, guIDParameter, descriptionParameter, studyLevelIdParameter, studyGroupIdParameter, createdOnParameter, createdByParameter, updatedOnParameter, updatedByParameter, docTypeParameter, documentStatusParameter, statusParameter, branchIdParameter, companyIdParameter, response);
         }
     
         public virtual int AppClassRegistration_Insert(Nullable<int> sessionId, Nullable<int> studentId, Nullable<int> classId, Nullable<int> documentStatus, Nullable<int> docType, Nullable<int> createdBy, Nullable<int> branchId, Nullable<int> companyId, ObjectParameter response)
@@ -483,8 +266,16 @@ namespace office360.Models.EDMX
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AppClassRegistration_Insert", sessionIdParameter, studentIdParameter, classIdParameter, documentStatusParameter, docTypeParameter, createdByParameter, branchIdParameter, companyIdParameter, response);
         }
     
-        public virtual int AppSession_Insert(string description, Nullable<int> campusId, Nullable<System.DateTime> sessionStartOn, Nullable<System.DateTime> sessionEndOn, Nullable<int> documentStatus, Nullable<int> companyId, Nullable<int> branchId, Nullable<int> createdBy, string classIds, Nullable<int> enrollmentTypeId, Nullable<System.DateTime> effectiveFrom, Nullable<System.DateTime> expiredOn, ObjectParameter response, ObjectParameter code_, ObjectParameter id)
+        public virtual int AppSession_UpSert(string dB_OperationType, Nullable<System.Guid> guID, string description, Nullable<int> campusId, Nullable<System.DateTime> sessionStartOn, Nullable<System.DateTime> sessionEndOn, Nullable<int> enrollmentTypeId, string classIds, Nullable<System.DateTime> createdOn, Nullable<int> createdBy, Nullable<System.DateTime> updatedOn, Nullable<int> updatedBy, Nullable<int> docType, Nullable<int> documentStatus, Nullable<bool> status, Nullable<int> branchId, Nullable<int> companyId, ObjectParameter response)
         {
+            var dB_OperationTypeParameter = dB_OperationType != null ?
+                new ObjectParameter("DB_OperationType", dB_OperationType) :
+                new ObjectParameter("DB_OperationType", typeof(string));
+    
+            var guIDParameter = guID.HasValue ?
+                new ObjectParameter("GuID", guID) :
+                new ObjectParameter("GuID", typeof(System.Guid));
+    
             var descriptionParameter = description != null ?
                 new ObjectParameter("Description", description) :
                 new ObjectParameter("Description", typeof(string));
@@ -501,122 +292,41 @@ namespace office360.Models.EDMX
                 new ObjectParameter("SessionEndOn", sessionEndOn) :
                 new ObjectParameter("SessionEndOn", typeof(System.DateTime));
     
-            var documentStatusParameter = documentStatus.HasValue ?
-                new ObjectParameter("DocumentStatus", documentStatus) :
-                new ObjectParameter("DocumentStatus", typeof(int));
-    
-            var companyIdParameter = companyId.HasValue ?
-                new ObjectParameter("CompanyId", companyId) :
-                new ObjectParameter("CompanyId", typeof(int));
-    
-            var branchIdParameter = branchId.HasValue ?
-                new ObjectParameter("BranchId", branchId) :
-                new ObjectParameter("BranchId", typeof(int));
-    
-            var createdByParameter = createdBy.HasValue ?
-                new ObjectParameter("CreatedBy", createdBy) :
-                new ObjectParameter("CreatedBy", typeof(int));
+            var enrollmentTypeIdParameter = enrollmentTypeId.HasValue ?
+                new ObjectParameter("EnrollmentTypeId", enrollmentTypeId) :
+                new ObjectParameter("EnrollmentTypeId", typeof(int));
     
             var classIdsParameter = classIds != null ?
                 new ObjectParameter("ClassIds", classIds) :
                 new ObjectParameter("ClassIds", typeof(string));
     
-            var enrollmentTypeIdParameter = enrollmentTypeId.HasValue ?
-                new ObjectParameter("EnrollmentTypeId", enrollmentTypeId) :
-                new ObjectParameter("EnrollmentTypeId", typeof(int));
+            var createdOnParameter = createdOn.HasValue ?
+                new ObjectParameter("CreatedOn", createdOn) :
+                new ObjectParameter("CreatedOn", typeof(System.DateTime));
     
-            var effectiveFromParameter = effectiveFrom.HasValue ?
-                new ObjectParameter("EffectiveFrom", effectiveFrom) :
-                new ObjectParameter("EffectiveFrom", typeof(System.DateTime));
+            var createdByParameter = createdBy.HasValue ?
+                new ObjectParameter("CreatedBy", createdBy) :
+                new ObjectParameter("CreatedBy", typeof(int));
     
-            var expiredOnParameter = expiredOn.HasValue ?
-                new ObjectParameter("ExpiredOn", expiredOn) :
-                new ObjectParameter("ExpiredOn", typeof(System.DateTime));
+            var updatedOnParameter = updatedOn.HasValue ?
+                new ObjectParameter("UpdatedOn", updatedOn) :
+                new ObjectParameter("UpdatedOn", typeof(System.DateTime));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AppSession_Insert", descriptionParameter, campusIdParameter, sessionStartOnParameter, sessionEndOnParameter, documentStatusParameter, companyIdParameter, branchIdParameter, createdByParameter, classIdsParameter, enrollmentTypeIdParameter, effectiveFromParameter, expiredOnParameter, response, code_, id);
-        }
+            var updatedByParameter = updatedBy.HasValue ?
+                new ObjectParameter("UpdatedBy", updatedBy) :
+                new ObjectParameter("UpdatedBy", typeof(int));
     
-        public virtual int AppStudent_Insert(Nullable<int> sessionId, string firstName, string lastName, string cnicNo_FormBNo, Nullable<int> genderId, Nullable<System.DateTime> dOB, Nullable<int> martialStatusId, Nullable<int> religionId, Nullable<int> nationalityId, string resedenitalAddress, string mobileNumber, string emailAddress, string parentName, string parentCnic, Nullable<int> parentStudyLevelId, Nullable<int> occupationId, Nullable<int> relationshipId, Nullable<decimal> monthlyIncome, Nullable<int> documentStatus, Nullable<int> createdBy, Nullable<int> branchId, Nullable<int> companyId, Nullable<int> docType, ObjectParameter code_, ObjectParameter response, ObjectParameter studentId)
-        {
-            var sessionIdParameter = sessionId.HasValue ?
-                new ObjectParameter("SessionId", sessionId) :
-                new ObjectParameter("SessionId", typeof(int));
-    
-            var firstNameParameter = firstName != null ?
-                new ObjectParameter("FirstName", firstName) :
-                new ObjectParameter("FirstName", typeof(string));
-    
-            var lastNameParameter = lastName != null ?
-                new ObjectParameter("LastName", lastName) :
-                new ObjectParameter("LastName", typeof(string));
-    
-            var cnicNo_FormBNoParameter = cnicNo_FormBNo != null ?
-                new ObjectParameter("CnicNo_FormBNo", cnicNo_FormBNo) :
-                new ObjectParameter("CnicNo_FormBNo", typeof(string));
-    
-            var genderIdParameter = genderId.HasValue ?
-                new ObjectParameter("GenderId", genderId) :
-                new ObjectParameter("GenderId", typeof(int));
-    
-            var dOBParameter = dOB.HasValue ?
-                new ObjectParameter("DOB", dOB) :
-                new ObjectParameter("DOB", typeof(System.DateTime));
-    
-            var martialStatusIdParameter = martialStatusId.HasValue ?
-                new ObjectParameter("MartialStatusId", martialStatusId) :
-                new ObjectParameter("MartialStatusId", typeof(int));
-    
-            var religionIdParameter = religionId.HasValue ?
-                new ObjectParameter("ReligionId", religionId) :
-                new ObjectParameter("ReligionId", typeof(int));
-    
-            var nationalityIdParameter = nationalityId.HasValue ?
-                new ObjectParameter("NationalityId", nationalityId) :
-                new ObjectParameter("NationalityId", typeof(int));
-    
-            var resedenitalAddressParameter = resedenitalAddress != null ?
-                new ObjectParameter("ResedenitalAddress", resedenitalAddress) :
-                new ObjectParameter("ResedenitalAddress", typeof(string));
-    
-            var mobileNumberParameter = mobileNumber != null ?
-                new ObjectParameter("MobileNumber", mobileNumber) :
-                new ObjectParameter("MobileNumber", typeof(string));
-    
-            var emailAddressParameter = emailAddress != null ?
-                new ObjectParameter("EmailAddress", emailAddress) :
-                new ObjectParameter("EmailAddress", typeof(string));
-    
-            var parentNameParameter = parentName != null ?
-                new ObjectParameter("ParentName", parentName) :
-                new ObjectParameter("ParentName", typeof(string));
-    
-            var parentCnicParameter = parentCnic != null ?
-                new ObjectParameter("ParentCnic", parentCnic) :
-                new ObjectParameter("ParentCnic", typeof(string));
-    
-            var parentStudyLevelIdParameter = parentStudyLevelId.HasValue ?
-                new ObjectParameter("ParentStudyLevelId", parentStudyLevelId) :
-                new ObjectParameter("ParentStudyLevelId", typeof(int));
-    
-            var occupationIdParameter = occupationId.HasValue ?
-                new ObjectParameter("OccupationId", occupationId) :
-                new ObjectParameter("OccupationId", typeof(int));
-    
-            var relationshipIdParameter = relationshipId.HasValue ?
-                new ObjectParameter("RelationshipId", relationshipId) :
-                new ObjectParameter("RelationshipId", typeof(int));
-    
-            var monthlyIncomeParameter = monthlyIncome.HasValue ?
-                new ObjectParameter("MonthlyIncome", monthlyIncome) :
-                new ObjectParameter("MonthlyIncome", typeof(decimal));
+            var docTypeParameter = docType.HasValue ?
+                new ObjectParameter("DocType", docType) :
+                new ObjectParameter("DocType", typeof(int));
     
             var documentStatusParameter = documentStatus.HasValue ?
                 new ObjectParameter("DocumentStatus", documentStatus) :
                 new ObjectParameter("DocumentStatus", typeof(int));
     
-            var createdByParameter = createdBy.HasValue ?
-                new ObjectParameter("CreatedBy", createdBy) :
-                new ObjectParameter("CreatedBy", typeof(int));
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(bool));
     
             var branchIdParameter = branchId.HasValue ?
                 new ObjectParameter("BranchId", branchId) :
@@ -626,11 +336,7 @@ namespace office360.Models.EDMX
                 new ObjectParameter("CompanyId", companyId) :
                 new ObjectParameter("CompanyId", typeof(int));
     
-            var docTypeParameter = docType.HasValue ?
-                new ObjectParameter("DocType", docType) :
-                new ObjectParameter("DocType", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AppStudent_Insert", sessionIdParameter, firstNameParameter, lastNameParameter, cnicNo_FormBNoParameter, genderIdParameter, dOBParameter, martialStatusIdParameter, religionIdParameter, nationalityIdParameter, resedenitalAddressParameter, mobileNumberParameter, emailAddressParameter, parentNameParameter, parentCnicParameter, parentStudyLevelIdParameter, occupationIdParameter, relationshipIdParameter, monthlyIncomeParameter, documentStatusParameter, createdByParameter, branchIdParameter, companyIdParameter, docTypeParameter, code_, response, studentId);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AppSession_UpSert", dB_OperationTypeParameter, guIDParameter, descriptionParameter, campusIdParameter, sessionStartOnParameter, sessionEndOnParameter, enrollmentTypeIdParameter, classIdsParameter, createdOnParameter, createdByParameter, updatedOnParameter, updatedByParameter, docTypeParameter, documentStatusParameter, statusParameter, branchIdParameter, companyIdParameter, response);
         }
     
         public virtual ObjectResult<Nullable<int>> DEV_CheckDuplicateRecord(string tableName, string selectColumns, string whereClause)
@@ -734,7 +440,7 @@ namespace office360.Models.EDMX
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GeneralBranch_GetListBySearch_Result>("GeneralBranch_GetListBySearch", companyIdParameter, branchIdParameter, inputTypeIdParameter, inputTextParameter);
         }
     
-        public virtual int GeneralBranch_UpSert(string dB_OperationType, Nullable<System.Guid> guID, string description, Nullable<int> campusTypeId, Nullable<int> organizationTypeId, Nullable<int> countryId, Nullable<int> cityId, string address, string contactNo, string emailAddress, string nTNNo, string remarks, Nullable<System.DateTime> createdOn, Nullable<int> createdBy, Nullable<System.DateTime> updatedOn, Nullable<int> updatedBy, Nullable<System.DateTime> effectiveFrom, Nullable<System.DateTime> expiredOn, Nullable<bool> status, Nullable<int> docType, Nullable<int> documentStatus, Nullable<int> branchId, Nullable<int> companyId, ObjectParameter response, ObjectParameter campusId)
+        public virtual int GeneralBranch_UpSert(string dB_OperationType, Nullable<System.Guid> guID, string description, Nullable<int> campusTypeId, Nullable<int> organizationTypeId, Nullable<int> countryId, Nullable<int> cityId, string address, string contactNo, string emailAddress, string nTNNo, string remarks, Nullable<System.DateTime> createdOn, Nullable<int> createdBy, Nullable<System.DateTime> updatedOn, Nullable<int> updatedBy, Nullable<int> documentStatus, Nullable<int> docType, Nullable<bool> status, Nullable<int> branchId, Nullable<int> companyId, ObjectParameter response, ObjectParameter campusId)
         {
             var dB_OperationTypeParameter = dB_OperationType != null ?
                 new ObjectParameter("DB_OperationType", dB_OperationType) :
@@ -800,25 +506,17 @@ namespace office360.Models.EDMX
                 new ObjectParameter("UpdatedBy", updatedBy) :
                 new ObjectParameter("UpdatedBy", typeof(int));
     
-            var effectiveFromParameter = effectiveFrom.HasValue ?
-                new ObjectParameter("EffectiveFrom", effectiveFrom) :
-                new ObjectParameter("EffectiveFrom", typeof(System.DateTime));
-    
-            var expiredOnParameter = expiredOn.HasValue ?
-                new ObjectParameter("ExpiredOn", expiredOn) :
-                new ObjectParameter("ExpiredOn", typeof(System.DateTime));
-    
-            var statusParameter = status.HasValue ?
-                new ObjectParameter("Status", status) :
-                new ObjectParameter("Status", typeof(bool));
+            var documentStatusParameter = documentStatus.HasValue ?
+                new ObjectParameter("DocumentStatus", documentStatus) :
+                new ObjectParameter("DocumentStatus", typeof(int));
     
             var docTypeParameter = docType.HasValue ?
                 new ObjectParameter("DocType", docType) :
                 new ObjectParameter("DocType", typeof(int));
     
-            var documentStatusParameter = documentStatus.HasValue ?
-                new ObjectParameter("DocumentStatus", documentStatus) :
-                new ObjectParameter("DocumentStatus", typeof(int));
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(bool));
     
             var branchIdParameter = branchId.HasValue ?
                 new ObjectParameter("BranchId", branchId) :
@@ -828,7 +526,84 @@ namespace office360.Models.EDMX
                 new ObjectParameter("CompanyId", companyId) :
                 new ObjectParameter("CompanyId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GeneralBranch_UpSert", dB_OperationTypeParameter, guIDParameter, descriptionParameter, campusTypeIdParameter, organizationTypeIdParameter, countryIdParameter, cityIdParameter, addressParameter, contactNoParameter, emailAddressParameter, nTNNoParameter, remarksParameter, createdOnParameter, createdByParameter, updatedOnParameter, updatedByParameter, effectiveFromParameter, expiredOnParameter, statusParameter, docTypeParameter, documentStatusParameter, branchIdParameter, companyIdParameter, response, campusId);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GeneralBranch_UpSert", dB_OperationTypeParameter, guIDParameter, descriptionParameter, campusTypeIdParameter, organizationTypeIdParameter, countryIdParameter, cityIdParameter, addressParameter, contactNoParameter, emailAddressParameter, nTNNoParameter, remarksParameter, createdOnParameter, createdByParameter, updatedOnParameter, updatedByParameter, documentStatusParameter, docTypeParameter, statusParameter, branchIdParameter, companyIdParameter, response, campusId);
+        }
+    
+        public virtual int GeneralBranchSetting_UpSert(string dB_OperationType, Nullable<System.Guid> guID, Nullable<int> campusId, Nullable<int> rollCallSystemId, Nullable<int> billingMethodId, string studyLevelIds, string studyGroupIds, Nullable<int> policyPeriodId, Nullable<int> challanMethodId, Nullable<System.DateTime> createdOn, Nullable<int> createdBy, Nullable<System.DateTime> updatedOn, Nullable<int> updatedBy, Nullable<int> docType, Nullable<int> documentStatus, Nullable<bool> status, Nullable<int> branchId, Nullable<int> companyId, ObjectParameter response)
+        {
+            var dB_OperationTypeParameter = dB_OperationType != null ?
+                new ObjectParameter("DB_OperationType", dB_OperationType) :
+                new ObjectParameter("DB_OperationType", typeof(string));
+    
+            var guIDParameter = guID.HasValue ?
+                new ObjectParameter("GuID", guID) :
+                new ObjectParameter("GuID", typeof(System.Guid));
+    
+            var campusIdParameter = campusId.HasValue ?
+                new ObjectParameter("CampusId", campusId) :
+                new ObjectParameter("CampusId", typeof(int));
+    
+            var rollCallSystemIdParameter = rollCallSystemId.HasValue ?
+                new ObjectParameter("RollCallSystemId", rollCallSystemId) :
+                new ObjectParameter("RollCallSystemId", typeof(int));
+    
+            var billingMethodIdParameter = billingMethodId.HasValue ?
+                new ObjectParameter("BillingMethodId", billingMethodId) :
+                new ObjectParameter("BillingMethodId", typeof(int));
+    
+            var studyLevelIdsParameter = studyLevelIds != null ?
+                new ObjectParameter("StudyLevelIds", studyLevelIds) :
+                new ObjectParameter("StudyLevelIds", typeof(string));
+    
+            var studyGroupIdsParameter = studyGroupIds != null ?
+                new ObjectParameter("StudyGroupIds", studyGroupIds) :
+                new ObjectParameter("StudyGroupIds", typeof(string));
+    
+            var policyPeriodIdParameter = policyPeriodId.HasValue ?
+                new ObjectParameter("PolicyPeriodId", policyPeriodId) :
+                new ObjectParameter("PolicyPeriodId", typeof(int));
+    
+            var challanMethodIdParameter = challanMethodId.HasValue ?
+                new ObjectParameter("ChallanMethodId", challanMethodId) :
+                new ObjectParameter("ChallanMethodId", typeof(int));
+    
+            var createdOnParameter = createdOn.HasValue ?
+                new ObjectParameter("CreatedOn", createdOn) :
+                new ObjectParameter("CreatedOn", typeof(System.DateTime));
+    
+            var createdByParameter = createdBy.HasValue ?
+                new ObjectParameter("CreatedBy", createdBy) :
+                new ObjectParameter("CreatedBy", typeof(int));
+    
+            var updatedOnParameter = updatedOn.HasValue ?
+                new ObjectParameter("UpdatedOn", updatedOn) :
+                new ObjectParameter("UpdatedOn", typeof(System.DateTime));
+    
+            var updatedByParameter = updatedBy.HasValue ?
+                new ObjectParameter("UpdatedBy", updatedBy) :
+                new ObjectParameter("UpdatedBy", typeof(int));
+    
+            var docTypeParameter = docType.HasValue ?
+                new ObjectParameter("DocType", docType) :
+                new ObjectParameter("DocType", typeof(int));
+    
+            var documentStatusParameter = documentStatus.HasValue ?
+                new ObjectParameter("DocumentStatus", documentStatus) :
+                new ObjectParameter("DocumentStatus", typeof(int));
+    
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(bool));
+    
+            var branchIdParameter = branchId.HasValue ?
+                new ObjectParameter("BranchId", branchId) :
+                new ObjectParameter("BranchId", typeof(int));
+    
+            var companyIdParameter = companyId.HasValue ?
+                new ObjectParameter("CompanyId", companyId) :
+                new ObjectParameter("CompanyId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GeneralBranchSetting_UpSert", dB_OperationTypeParameter, guIDParameter, campusIdParameter, rollCallSystemIdParameter, billingMethodIdParameter, studyLevelIdsParameter, studyGroupIdsParameter, policyPeriodIdParameter, challanMethodIdParameter, createdOnParameter, createdByParameter, updatedOnParameter, updatedByParameter, docTypeParameter, documentStatusParameter, statusParameter, branchIdParameter, companyIdParameter, response);
         }
     
         public virtual ObjectResult<GeneralCompany_GetDetailByParam_Result> GeneralCompany_GetDetailByParam(Nullable<int> id, string listCondition)
@@ -1122,6 +897,88 @@ namespace office360.Models.EDMX
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<StructureCOAAccount_GetListByParam_Result>("StructureCOAAccount_GetListByParam", companyIdParameter, branchIdParameter, listConditionParameter, coaCatagoryIdsParameter);
         }
     
+        public virtual ObjectResult<StructureDiscountType_GetListByParam_Result> StructureDiscountType_GetListByParam(string dB_IF_PARAM, Nullable<int> branchId, Nullable<int> companyId, Nullable<int> id)
+        {
+            var dB_IF_PARAMParameter = dB_IF_PARAM != null ?
+                new ObjectParameter("DB_IF_PARAM", dB_IF_PARAM) :
+                new ObjectParameter("DB_IF_PARAM", typeof(string));
+    
+            var branchIdParameter = branchId.HasValue ?
+                new ObjectParameter("BranchId", branchId) :
+                new ObjectParameter("BranchId", typeof(int));
+    
+            var companyIdParameter = companyId.HasValue ?
+                new ObjectParameter("CompanyId", companyId) :
+                new ObjectParameter("CompanyId", typeof(int));
+    
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<StructureDiscountType_GetListByParam_Result>("StructureDiscountType_GetListByParam", dB_IF_PARAMParameter, branchIdParameter, companyIdParameter, idParameter);
+        }
+    
+        public virtual int StructureDiscountType_Upsert(string dB_OperationType, Nullable<System.Guid> guID, string code, string description, string remarks, Nullable<System.DateTime> createdOn, Nullable<int> createdBy, Nullable<System.DateTime> updatedOn, Nullable<int> updatedBy, Nullable<int> docType, Nullable<int> documentStatus, Nullable<bool> status, Nullable<int> branchId, Nullable<int> companyId, ObjectParameter response)
+        {
+            var dB_OperationTypeParameter = dB_OperationType != null ?
+                new ObjectParameter("DB_OperationType", dB_OperationType) :
+                new ObjectParameter("DB_OperationType", typeof(string));
+    
+            var guIDParameter = guID.HasValue ?
+                new ObjectParameter("GuID", guID) :
+                new ObjectParameter("GuID", typeof(System.Guid));
+    
+            var codeParameter = code != null ?
+                new ObjectParameter("Code", code) :
+                new ObjectParameter("Code", typeof(string));
+    
+            var descriptionParameter = description != null ?
+                new ObjectParameter("Description", description) :
+                new ObjectParameter("Description", typeof(string));
+    
+            var remarksParameter = remarks != null ?
+                new ObjectParameter("Remarks", remarks) :
+                new ObjectParameter("Remarks", typeof(string));
+    
+            var createdOnParameter = createdOn.HasValue ?
+                new ObjectParameter("CreatedOn", createdOn) :
+                new ObjectParameter("CreatedOn", typeof(System.DateTime));
+    
+            var createdByParameter = createdBy.HasValue ?
+                new ObjectParameter("CreatedBy", createdBy) :
+                new ObjectParameter("CreatedBy", typeof(int));
+    
+            var updatedOnParameter = updatedOn.HasValue ?
+                new ObjectParameter("UpdatedOn", updatedOn) :
+                new ObjectParameter("UpdatedOn", typeof(System.DateTime));
+    
+            var updatedByParameter = updatedBy.HasValue ?
+                new ObjectParameter("UpdatedBy", updatedBy) :
+                new ObjectParameter("UpdatedBy", typeof(int));
+    
+            var docTypeParameter = docType.HasValue ?
+                new ObjectParameter("DocType", docType) :
+                new ObjectParameter("DocType", typeof(int));
+    
+            var documentStatusParameter = documentStatus.HasValue ?
+                new ObjectParameter("DocumentStatus", documentStatus) :
+                new ObjectParameter("DocumentStatus", typeof(int));
+    
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(bool));
+    
+            var branchIdParameter = branchId.HasValue ?
+                new ObjectParameter("BranchId", branchId) :
+                new ObjectParameter("BranchId", typeof(int));
+    
+            var companyIdParameter = companyId.HasValue ?
+                new ObjectParameter("CompanyId", companyId) :
+                new ObjectParameter("CompanyId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("StructureDiscountType_Upsert", dB_OperationTypeParameter, guIDParameter, codeParameter, descriptionParameter, remarksParameter, createdOnParameter, createdByParameter, updatedOnParameter, updatedByParameter, docTypeParameter, documentStatusParameter, statusParameter, branchIdParameter, companyIdParameter, response);
+        }
+    
         public virtual ObjectResult<StructureFeeType_GetListByParam_Result> StructureFeeType_GetListByParam(string dB_IF_PARAM, Nullable<int> companyId, Nullable<int> branchId)
         {
             var dB_IF_PARAMParameter = dB_IF_PARAM != null ?
@@ -1160,7 +1017,7 @@ namespace office360.Models.EDMX
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<StructureFeeType_GetListBySearch_Result>("StructureFeeType_GetListBySearch", companyIdParameter, branchIdParameter, inputTypeIdParameter, inputTextParameter);
         }
     
-        public virtual int StructureFeeType_UpSert(string dB_OperationType, Nullable<System.Guid> guID, Nullable<int> feeCatagoryId, Nullable<int> chargingMethodId, string description, Nullable<bool> isOnAdmission, Nullable<bool> isSecurity, Nullable<bool> isRefundable, Nullable<bool> isDiscount, Nullable<int> revenueAccountId, Nullable<int> assetAccountId, Nullable<int> liabilityAccountId, Nullable<int> costOfSaleAccountId, Nullable<System.DateTime> createdOn, Nullable<int> createdBy, Nullable<System.DateTime> updatedOn, Nullable<int> updatedBy, Nullable<int> branchId, Nullable<int> companyId, ObjectParameter response)
+        public virtual int StructureFeeType_UpSert(string dB_OperationType, Nullable<System.Guid> guID, Nullable<int> feeCatagoryId, Nullable<int> chargingMethodId, string description, Nullable<bool> isOnAdmission, Nullable<bool> isSecurity, Nullable<bool> isRefundable, Nullable<bool> isDiscount, Nullable<int> revenueAccountId, Nullable<int> assetAccountId, Nullable<int> liabilityAccountId, Nullable<int> costOfSaleAccountId, Nullable<System.DateTime> createdOn, Nullable<int> createdBy, Nullable<System.DateTime> updatedOn, Nullable<int> updatedBy, Nullable<int> docType, Nullable<int> documentStatus, Nullable<bool> status, Nullable<int> branchId, Nullable<int> companyId, ObjectParameter response)
         {
             var dB_OperationTypeParameter = dB_OperationType != null ?
                 new ObjectParameter("DB_OperationType", dB_OperationType) :
@@ -1230,6 +1087,18 @@ namespace office360.Models.EDMX
                 new ObjectParameter("UpdatedBy", updatedBy) :
                 new ObjectParameter("UpdatedBy", typeof(int));
     
+            var docTypeParameter = docType.HasValue ?
+                new ObjectParameter("DocType", docType) :
+                new ObjectParameter("DocType", typeof(int));
+    
+            var documentStatusParameter = documentStatus.HasValue ?
+                new ObjectParameter("DocumentStatus", documentStatus) :
+                new ObjectParameter("DocumentStatus", typeof(int));
+    
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(bool));
+    
             var branchIdParameter = branchId.HasValue ?
                 new ObjectParameter("BranchId", branchId) :
                 new ObjectParameter("BranchId", typeof(int));
@@ -1238,7 +1107,7 @@ namespace office360.Models.EDMX
                 new ObjectParameter("CompanyId", companyId) :
                 new ObjectParameter("CompanyId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("StructureFeeType_UpSert", dB_OperationTypeParameter, guIDParameter, feeCatagoryIdParameter, chargingMethodIdParameter, descriptionParameter, isOnAdmissionParameter, isSecurityParameter, isRefundableParameter, isDiscountParameter, revenueAccountIdParameter, assetAccountIdParameter, liabilityAccountIdParameter, costOfSaleAccountIdParameter, createdOnParameter, createdByParameter, updatedOnParameter, updatedByParameter, branchIdParameter, companyIdParameter, response);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("StructureFeeType_UpSert", dB_OperationTypeParameter, guIDParameter, feeCatagoryIdParameter, chargingMethodIdParameter, descriptionParameter, isOnAdmissionParameter, isSecurityParameter, isRefundableParameter, isDiscountParameter, revenueAccountIdParameter, assetAccountIdParameter, liabilityAccountIdParameter, costOfSaleAccountIdParameter, createdOnParameter, createdByParameter, updatedOnParameter, updatedByParameter, docTypeParameter, documentStatusParameter, statusParameter, branchIdParameter, companyIdParameter, response);
         }
     }
 }

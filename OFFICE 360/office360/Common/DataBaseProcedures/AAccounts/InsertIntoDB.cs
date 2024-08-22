@@ -29,7 +29,12 @@ namespace office360.Common.DataBaseProcedures.AAccounts
                 {
                     try
                     {
-
+                        #region DB SETTING
+                        if(PostedData.OperationType == nameof(DB_OperationType.INSERT_DATA_INTO_DB))
+                        {
+                            PostedData.GuID = Uttility.fn_GetHashGuid();
+                        }
+                        #endregion
                         #region OUTPUT VARAIBLE
                         var ResponseParameter       = new ObjectParameter("Response", typeof(int));
                         #endregion
@@ -52,6 +57,9 @@ namespace office360.Common.DataBaseProcedures.AAccounts
                                                              Session_Manager.UserId,
                                                              DateTime.Now,
                                                              Session_Manager.UserId,
+                                                             (int?)DocType.FEE_TYPE,
+                                                             (int?)DocStatus.Active_FEE_TYPE,
+                                                             true,
                                                              Session_Manager.BranchId,
                                                              Session_Manager.CompanyId,
                                                              ResponseParameter
@@ -99,11 +107,17 @@ namespace office360.Common.DataBaseProcedures.AAccounts
 
                         var FeeStructureParentGuID = Uttility.fn_GetHashGuid();
 
+                        #region DB SETTING
+                        if (PostedData.OperationType == nameof(DB_OperationType.INSERT_DATA_INTO_DB))
+                        {
+                            PostedData.GuID = Uttility.fn_GetHashGuid();
+                        }
+                        #endregion
 
 
                         #region DESCRIPTIONAL VARIABLE
                         var Code = (DateTime.Now.ToString("ddMMyy") + "-000" + (db.AccFeeStructure.ToList().Count() + 1)).ToSafeString();
-                        var SessionName = db.AppSession.Where(x => x.Id == PostedData.SessionId).Select(x => new _SqlParameters { Code = x.Code, EffectiveFrom = x.EffectiveFrom, ExpiredOn = x.ExpiredOn }).FirstOrDefault();
+                        var SessionName = db.AppSession.Where(x => x.Id == PostedData.SessionId).Select(x => new _SqlParameters { Code = x.Code }).FirstOrDefault();
                         var ClassName = db.AppClass.Where(x => x.Id == PostedData.ClassId).Select(x => new _SqlParameters { Code = x.Code }).FirstOrDefault();
                         #endregion
                         #region COUNT CHECK FEE STRUCTURE CLASS WISE
@@ -131,7 +145,7 @@ namespace office360.Common.DataBaseProcedures.AAccounts
                                     #region EXECUTE STORE PROCEDURE PARENT ::ACCFEESTRUCTURE
                                     var NewFeeStructureParent = new AccFeeStructure
                                     {
-                                        GuID = FeeStructureParentGuID,
+                                        GuID = PostedData.GuID,
                                         Code = Code,
                                         CampusId = PostedData.CampusId,
                                         Description = (("FS-" + ClassName.Code +"-"+SessionName.Code)+ (db.AccFeeStructure.ToList().Count() + 1)).ToSafeString(),
@@ -141,8 +155,6 @@ namespace office360.Common.DataBaseProcedures.AAccounts
                                         TotalFeeExclusive = PostedData.TotalFeeExclusive,
                                         WHTAmount = PostedData.WHTAmount,
                                         TotalFee = PostedData.TotalFee,
-                                        EffectiveFrom = SessionName.EffectiveFrom,
-                                        ExpiredOn = SessionName.ExpiredOn,
                                         CreatedOn = DateTime.Now,
                                         CreatedBy = Session_Manager.UserId,
                                         DocType = (int?)DocType.FEE_STRUCTURE,
@@ -154,14 +166,17 @@ namespace office360.Common.DataBaseProcedures.AAccounts
                                     db.AccFeeStructure.Add(NewFeeStructureParent);
                                     db.SaveChanges();
 
-                                    var InsertedFeeStructureId = db.AccFeeStructure.Where(x => x.GuID == FeeStructureParentGuID).Select(x => new _SqlParameters { Id = x.Id }).ToList();
+                                    var InsertedFeeStructureId = db.AccFeeStructure.Where(x => x.GuID == PostedData.GuID).Select(x => new _SqlParameters { Id = x.Id }).ToList();
 
                                     #endregion
 
 
                                     #region EXECUTE STORE PROCEDURE DETAIL ::ACCFEESTRUCTUREDETAIL
                                     if (InsertedFeeStructureId.Count > 0)
+
                                     {
+                                        PostedDataDetail.ToDataTable();
+                                       
                                         var NewFeeStructureDetail = PostedDataDetail.Select(FeeStructureDetailList => new AccFeeStructureDetail
                                         {
                                             GuID = Uttility.fn_GetHashGuid(),
@@ -217,8 +232,7 @@ namespace office360.Common.DataBaseProcedures.AAccounts
                                         TotalFeeExclusive = PostedData.TotalFeeExclusive,
                                         WHTAmount = PostedData.WHTAmount,
                                         TotalFee = PostedData.TotalFeeExclusive,
-                                        EffectiveFrom = SessionName.EffectiveFrom,
-                                        ExpiredOn = SessionName.ExpiredOn,
+                                     
                                         CreatedOn = DateTime.Now,
                                         CreatedBy = Session_Manager.UserId,
                                         DocType = (int?)DocType.FEE_STRUCTURE,
@@ -311,6 +325,74 @@ namespace office360.Common.DataBaseProcedures.AAccounts
                 }
             }
         }
+        public static int? StructureDiscountType_UPDATE_INSERT(_SqlParameters PostedData)
+        {
+            using (var db = new SESEntities())
+            {
+                using (System.Data.Entity.DbContextTransaction dbTran = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        #region DB SETTING
+                        if (PostedData.OperationType == nameof(DB_OperationType.INSERT_DATA_INTO_DB))
+                        {
+                            PostedData.GuID = Uttility.fn_GetHashGuid();
+                        }
+                        #endregion
+                        #region OUTPUT VARAIBLE
+                        var ResponseParameter = new ObjectParameter("Response", typeof(int));
+                        #endregion
+                        #region EXECUTE STORE PROCEDURE
+                        var data = db.StructureDiscountType_Upsert(
+                                                             PostedData.OperationType,
+                                                             PostedData.GuID,
+                                                             PostedData.Code,
+                                                             PostedData.Description,
+                                                             PostedData.Remarks,
+                                                             DateTime.Now,
+                                                             Session_Manager.UserId,
+                                                             DateTime.Now,
+                                                             Session_Manager.UserId,
+                                                             (int?)DocType.DISCOUNT_TYPE,
+                                                             (int?)DocStatus.Active_DISCOUNT_TYPE,
+                                                             true,
+                                                             Session_Manager.BranchId,
+                                                             Session_Manager.CompanyId,
+                                                             ResponseParameter
+                                                              );
+                        #endregion
+                        #region RESPONSE VALUES IN VARIABLE
+                        int? Response = (int)ResponseParameter.Value;
+                        #endregion
+                        #region TRANSACTION HANDLING DETAIL
+                        switch (Response)
+                        {
+                            case (int?)HttpResponses.CODE_SUCCESS:
+                            case (int?)HttpResponses.CODE_DATA_UPDATED:
+                                dbTran.Commit();
+                                break;
+                            case (int?)HttpResponses.CODE_BAD_REQUEST:
+                                dbTran.Rollback();
+                                break;
+                            default:
+                                dbTran.Rollback();
+                                break;
+                        }
+
+                        return HttpStatus.HttpResponseByReturnValue(Response);
+                        #endregion
+
+                    }
+                    catch (Exception Ex)
+                    {
+                        dbTran.Rollback();
+                        return HttpStatus.HttpResponses.CODE_INTERNAL_SERVER_ERROR.ToInt();
+                    }
+                }
+            }
+        }
+
+
         public static int? AccFeeChallan_Insert(_SqlParameters PostedData, List<_SqlParameters> PostedDataDetail)
         {
             using (var db = new SESEntities())
@@ -320,98 +402,102 @@ namespace office360.Common.DataBaseProcedures.AAccounts
                     try
                     {
                         #region CHECK IF 1ST FEE INSTALLMENT ALREADY EXIST
-                        var IsAlreadyExist = office360.Common.DataBaseProcedures.Common.GetDataFromDB.CountCheck_AccFeeChallan(PostedData);
+                        var IsAlreadyExist = 1;
+
+                        // office360.Common.DataBaseProcedures.Common.GetDataFromDB.CountCheck_AccFeeChallan(PostedData);
                         #endregion
 
-                        #region IF DATA DOES NOT EXIST PROCEED
-                        if (IsAlreadyExist.Count == 0)
-                        {
-                            #region GET MONTHS ON RANGE BASIS FOR ISSUING FEE CHALLAN
-                            var TransactionMonthNo = 4;
-                                //office360.Common.DataBaseProcedures.Common.GetDataFromDB.PopulateAccFeeStructureByParameter(PostedData);
-                            PostedData.TransactionMonth = TransactionMonthNo;
-                            #endregion
-                            #region DECLARATION OF VARIABLES FOR FEE CHALLAN PARENT
-                       //     Guid? FeeChallanId = Uttility.GetHashGuid();
-                            string Description = "Fee Challan For Month of " + Uttility.fn_GetMonthRange(PostedData);
-                            int? SessionId = PostedData.SessionId;
-                            int? ClassId = PostedData.ClassId;
-                            int? RegistrationTypeId = PostedData.RegistrationTypeId;
-                            int? ClassRegistrationId = PostedData.ClassRegistrationId;
-                            DateTime? TransactionDate = PostedData.TransactionDate;
-                            DateTime? DueDate = PostedData.DueDate;
-                            DateTime? ExpiryDate = PostedData.DueDate;
-                            int? FeeStructureId = PostedData.FeeStructureId;
-                            decimal? GrossRecievable = PostedData.GrossRecievable;
-                            decimal? LateFee = PostedData.LateFee;
-                            decimal? Discount = PostedData.Discount;
-                            decimal? NetRecievable = PostedData.NetRecievable;
-                            #endregion
-                            #region OUTPUT PARAMETER
-                            ObjectParameter Response = new ObjectParameter("Response", typeof(int));
-                            #endregion
-                            #region INSERT INTO DATA BASE AccFeeChallan
-                            var Data = db.AccFeeChallan_Insert(
-                                null,
-                                                               // FeeChallanId,
-                                                                Description,
-                                                                SessionId,
-                                                                ClassId,
-                                                                RegistrationTypeId,
-                                                                ClassRegistrationId,
-                                                                TransactionDate,//CHALLAN ISSUE DATE
-                                                                DueDate,
-                                                                ExpiryDate,
-                                                                FeeStructureId,
-                                                                GrossRecievable,
-                                                                LateFee,
-                                                                Discount,
-                                                                NetRecievable,
-                                                                Session_Manager.UserId,
-                                                                (int?)Models.General.DocumentStatus.DocStatus.UnPaid_FEE_CHALLAN,
-                                                                (int?)Models.General.DocumentStatus.DocType.FEE_CHALLAN,
-                                                                Session_Manager.BranchId,
-                                                                Session_Manager.CompanyId,
-                                                                Response
-                                                              );
-                            #endregion
-                            #region INSERT INTO DATA BASE AccFeeChallanDetail
-                            foreach (var Item in PostedDataDetail)
-                            {
-                                decimal? DifferenceCharge = Item.ActualFeeAmount - Item.ChargedFeeAmount;
-                                db.AccFeeChallanDetail_Insert(
-                                                                  null, // FeeChallanId,
-                                                                  Item.FeeTypeId,
-                                                                  Item.ActualFeeAmount,
-                                                                  Item.ChargedFeeAmount,
-                                                                  DifferenceCharge
-                                                                );
-                            }
-                            #endregion
-                            #region INSERT INTO DATA BASE FEE LEDGER
-                            #endregion
-                            #region INSERT INTO DATA BASE GENERAL JOURNAL
-                            foreach (var Item in PostedDataDetail)
-                            {
-                                if (Item.AssetAccountId != null)
-                                {
+                        // #region IF DATA DOES NOT EXIST PROCEED
+                        // if (IsAlreadyExist == 0)
+                        // {
+                        //     #region GET MONTHS ON RANGE BASIS FOR ISSUING FEE CHALLAN
+                        //     var TransactionMonthNo = 4;
+                        //         //office360.Common.DataBaseProcedures.Common.GetDataFromDB.PopulateAccFeeStructureByParameter(PostedData);
+                        //     PostedData.TransactionMonth = TransactionMonthNo;
+                        //     #endregion
+                        //     #region DECLARATION OF VARIABLES FOR FEE CHALLAN PARENT
+                        ////     Guid? FeeChallanId = Uttility.GetHashGuid();
+                        //     string Description = "Fee Challan For Month of " + Uttility.fn_GetMonthRange(PostedData);
+                        //     int? SessionId = PostedData.SessionId;
+                        //     int? ClassId = PostedData.ClassId;
+                        //     int? RegistrationTypeId = PostedData.RegistrationTypeId;
+                        //     int? ClassRegistrationId = PostedData.ClassRegistrationId;
+                        //     DateTime? TransactionDate = PostedData.TransactionDate;
+                        //     DateTime? DueDate = PostedData.DueDate;
+                        //     DateTime? ExpiryDate = PostedData.DueDate;
+                        //     int? FeeStructureId = PostedData.FeeStructureId;
+                        //     decimal? GrossRecievable = PostedData.GrossRecievable;
+                        //     decimal? LateFee = PostedData.LateFee;
+                        //     decimal? Discount = PostedData.Discount;
+                        //     decimal? NetRecievable = PostedData.NetRecievable;
+                        //     #endregion
+                        //     #region OUTPUT PARAMETER
+                        //     ObjectParameter Response = new ObjectParameter("Response", typeof(int));
+                        //     #endregion
+                        //     //#region INSERT INTO DATA BASE AccFeeChallan
+                        //     //var Data = db.AccFeeChallan_Insert(
+                        //     //    null,
+                        //     //                                   // FeeChallanId,
+                        //     //                                    Description,
+                        //     //                                    SessionId,
+                        //     //                                    ClassId,
+                        //     //                                    RegistrationTypeId,
+                        //     //                                    ClassRegistrationId,
+                        //     //                                    TransactionDate,//CHALLAN ISSUE DATE
+                        //     //                                    DueDate,
+                        //     //                                    ExpiryDate,
+                        //     //                                    FeeStructureId,
+                        //     //                                    GrossRecievable,
+                        //     //                                    LateFee,
+                        //     //                                    Discount,
+                        //     //                                    NetRecievable,
+                        //     //                                    Session_Manager.UserId,
+                        //     //                                    (int?)Models.General.DocumentStatus.DocStatus.UnPaid_FEE_CHALLAN,
+                        //     //                                    (int?)Models.General.DocumentStatus.DocType.FEE_CHALLAN,
+                        //     //                                    Session_Manager.BranchId,
+                        //     //                                    Session_Manager.CompanyId,
+                        //     //                                    Response
+                        //     //                                  );
+                        //     //#endregion
+                        //     #region INSERT INTO DATA BASE AccFeeChallanDetail
+                        //     foreach (var Item in PostedDataDetail)
+                        //     {
+                        //         decimal? DifferenceCharge = Item.ActualFeeAmount - Item.ChargedFeeAmount;
+                        //         db.AccFeeChallanDetail_Insert(
+                        //                                           null, // FeeChallanId,
+                        //                                           Item.FeeTypeId,
+                        //                                           Item.ActualFeeAmount,
+                        //                                           Item.ChargedFeeAmount,
+                        //                                           DifferenceCharge
+                        //                                         );
+                        //     }
+                        //     #endregion
+                        //     #region INSERT INTO DATA BASE FEE LEDGER
+                        //     #endregion
+                        //     #region INSERT INTO DATA BASE GENERAL JOURNAL
+                        //     foreach (var Item in PostedDataDetail)
+                        //     {
+                        //         if (Item.AssetAccountId != null)
+                        //         {
 
-                                }
-                                else if (Item.LiabilityAccountId != null)
-                                {
+                        //         }
+                        //         else if (Item.LiabilityAccountId != null)
+                        //         {
 
-                                }
-                            }
-                            #endregion
+                        //         }
+                        //     }
+                        //     #endregion
 
-                            dbTran.Commit();
-                            return HttpStatus.HttpResponseByReturnValue((int?)Response.Value);
-                        }
-                        #endregion
-                        else
-                        {
-                            return HttpStatus.HttpResponses.CODE_DATA_ALREADY_EXIST.ToInt();
-                        }
+                        //     dbTran.Commit();
+                        //     return HttpStatus.HttpResponseByReturnValue((int?)Response.Value);
+                        // }
+                        // #endregion
+                        // else
+                        // {
+                        //     return HttpStatus.HttpResponses.CODE_DATA_ALREADY_EXIST.ToInt();
+                        // }
+                             return HttpStatus.HttpResponses.CODE_DATA_ALREADY_EXIST.ToInt();
+
 
                     }
                     catch (Exception Ex)

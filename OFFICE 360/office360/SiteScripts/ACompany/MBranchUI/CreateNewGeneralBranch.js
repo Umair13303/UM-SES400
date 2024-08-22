@@ -428,7 +428,7 @@ function UpSertDataIntoDB() {
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/ACompany/MBranchUI/Insert_GeneralBranches",
+        url: BasePath + "/ACompany/MBranchUI/UpSert_Into_GeneralBranch",
         dataType: 'json',
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {

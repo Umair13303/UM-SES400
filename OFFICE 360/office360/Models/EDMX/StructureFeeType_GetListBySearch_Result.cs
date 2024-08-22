@@ -23,6 +23,6 @@ namespace office360.Models.EDMX
         public Nullable<bool> IsOnAdmission { get; set; }
         public Nullable<bool> IsDiscount { get; set; }
         public Nullable<bool> IsRefundable { get; set; }
-        public bool IsSecurity { get; set; }
+        public Nullable<bool> IsSecurity { get; set; }
     }
 }

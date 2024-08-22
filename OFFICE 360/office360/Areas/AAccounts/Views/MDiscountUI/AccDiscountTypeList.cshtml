@@ -1,29 +1,31 @@
-﻿@{
-
+﻿
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="statbox widget box box-shadow">
-    <div class="widget-header">
-        <div class="row">
-            <div class="col-xl-12 col-md-12 col-sm-12 col-12 d-flex justify-content-between align-items-center">
-                <h4>@ViewBag.Title</h4>
+@using (Html.BeginForm())
+{
+    <div class="statbox widget box box-shadow">
+        <div class="widget-header">
+            <div class="row">
+                <div class="col-xl-12 col-md-12 col-sm-12 col-12 d-flex justify-content-between align-items-center">
+                    <h4>@ViewBag.Title</h4>
 
+                </div>
             </div>
+            <nav class="breadcrumb-one" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">Setup</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">Discount</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><span>@ViewBag.DisplayName</span></li>
+                </ol>
+            </nav>
         </div>
-        <nav class="breadcrumb-one" aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="javascript:void(0);">Account</a></li>
-                <li class="breadcrumb-item"><a href="javascript:void(0);">Fee</a></li>
-                <li class="breadcrumb-item active" aria-current="page"><span>@ViewBag.Title</span></li>
-            </ol>
-        </nav>
     </div>
-</div>
+    <div class="card" style="margin-top:1%;width:100%">
 
-<div class="card" style="margin-top:1%;width:100%">
-    <div class="card-body">
-        <form>
+        <div class="card-body">
+            <h3 style="font-family: 'Bahnschrift'; font-weight: bolder; color: navy">Search Parameter</h3>
             <div class="row mb-0">
                 <div class="col-sm-12 col-md-5">
                     <div class="form-group">
@@ -31,15 +33,12 @@
                         @Html.DropDownList("DropDownListSearchBy", new List<SelectListItem>
                                                                     {
                                                                         new SelectListItem { Value = "0", Text = "Select An Option" },
-                                                                        new SelectListItem { Value = "1", Text = "Get All Fee Structure" },
-                                                                        new SelectListItem { Value = "2", Text = "Code" },
+                                                                        new SelectListItem { Value = "1", Text = "Get All Discount" },
+                                                                        new SelectListItem { Value = "2", Text = "Discount Name" },
                                                                     },
                                                                     new { @class = "form-control select2", @data_toggle = "select2", id = "DropDownListSearchBy" })
                     </div>
                 </div>
-
-
-
                 <div class="col-sm-12 col-md-5">
                     <div class="form-group">
                         @Html.Label("Input", new { @class = "col-form-label", @for = "TextBoxQueryString" })
@@ -52,15 +51,14 @@
             </div>
 
 
-
-
             <div class="bootstrap-admin-panel-content">
-                <table class="table table-bordered table-sm order-column stripe table-hover" style="width: 100%" id="MainTableFeeStructure">
-                    <tbody id="TableBodyMainTableFeeStructure">
+                <table class="table table-bordered table-sm order-column fullInit stripe table-hover" style="width: 100%" id="MainTableDiscountType">
+                    <tbody id="TableBodyMainTableDiscountType">
                     </tbody>
                 </table>
             </div>
-        </form>
+        </div>
     </div>
-</div>
-<script src="~/SiteScripts/AAccounts/MFeeUI/AccFeeStructureList.js"></script>
+
+}
+<script src="~/SiteScripts/AAccounts/MDiscountUI/AccDiscountTypeList.js"></script>

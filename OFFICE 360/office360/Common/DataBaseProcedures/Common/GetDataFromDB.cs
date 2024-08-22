@@ -320,24 +320,25 @@ namespace office360.Common.DataBaseProcedures.Common
         #endregion
 
         #region FUNCTION FOR :: COUNT CHECK::IF DATA ALREAD EXIST FROM MAIN DB/BY PARAMETER
-        public static List<_SqlParameters> CountCheck_AccFeeChallan(_SqlParameters PostedData)
-        {
-            using (var db = new SESEntities())
-            {
-                using (System.Data.Entity.DbContextTransaction dbTran = db.Database.BeginTransaction())
-                {
-                    var DATA = db.AccFeeChallan
-                         .Where(AFC =>
-                          AFC.SessionId == PostedData.SessionId && AFC.ClassId == PostedData.ClassId
-                       && AFC.RegistrationTypeId == PostedData.RegistrationTypeId && AFC.ClassRegistrationId == PostedData.ClassRegistrationId
-                       && AFC.FeeStructureId == PostedData.FeeStructureId && AFC.BranchId == Session_Manager.BranchId
-                       && AFC.CompanyId == Session_Manager.CompanyId
-                               )
-                         .Select(x => new _SqlParameters { Id = x.Id, Description = x.Description }).ToList();
-                    return DATA;
-                }
-            }
-        }
+        //public static List<_SqlParameters> CountCheck_AccFeeChallan(_SqlParameters PostedData)
+        //{
+        //    using (var db = new SESEntities())
+        //    {
+        //        using (System.Data.Entity.DbContextTransaction dbTran = db.Database.BeginTransaction())
+        //        {
+        //            var DATA = 
+        //               // db.AccFeeChallan
+        //               //  .Where(AFC =>
+        //               //   AFC.SessionId == PostedData.SessionId && AFC.ClassId == PostedData.ClassId
+        //               //&& AFC.RegistrationTypeId == PostedData.RegistrationTypeId && AFC.ClassRegistrationId == PostedData.ClassRegistrationId
+        //               //&& AFC.FeeStructureId == PostedData.FeeStructureId && AFC.BranchId == Session_Manager.BranchId
+        //               //&& AFC.CompanyId == Session_Manager.CompanyId
+        //               //        )
+        //               //  .Select(x => new _SqlParameters { Id = x.Id, Description = x.Description }).ToList();
+        //            return DATA;
+        //        }
+        //    }
+        //}
         public static List<_SqlParameters> CountCheck_AppSession(_SqlParameters PostedData)
         {
             using (SESEntities db = new SESEntities())

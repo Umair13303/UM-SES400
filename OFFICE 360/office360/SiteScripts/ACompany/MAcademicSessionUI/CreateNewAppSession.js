@@ -1,5 +1,23 @@
-﻿var ClassIds;
+﻿var OperationType = "";
+var DB_OperationType = $('#HiddenFieldDB_OperationType').val();
+var IsFieldClear = false;
+
+
+var ClassIds;
 $(document).ready(function () {
+
+    DB_OperationType = $('#HiddenFieldDB_OperationType').val();
+    switch (DB_OperationType) {
+        case PARAMETER.DB_OperationType.INSERT:
+            $('#DivButtonSubmitDown').show();
+            $('#DivButtonUpdateDown').hide();
+            break;
+        case PARAMETER.DB_OperationType.UPDATE:
+            GET_GENERALBRACH_LISTBYPARAM();
+            $('#DivButtonSubmitDown').hide();
+            $('#DivButtonUpdateDown').show();
+            break;
+    }
     PopulateDropDownLists();
     ChangeCase();
 });
@@ -21,6 +39,14 @@ function ChangeCase() {
     }).change(function (event) {
         if (event.target == this) {
             ClassIds = $(this).val();
+        }
+    });
+
+    $('#DropDownListSession').change(function () {
+        if (!IsFieldClear) {
+            IsFieldClear = true;
+            ClearInputFields();
+            IsFieldClear = false;
         }
     });
 }
@@ -104,17 +130,30 @@ function PopulateMT_AppClass_ListByParam() {
 
 //-----------DB OPERATION CALL
 
+
 $('#ButtonSubmitDown').click(function (event) {
     event.preventDefault();
     var IsValid = ValidateInputFields();
-    debugger
     if (IsValid) {
         try {
-            InsertData();
+            OperationType = PARAMETER.DB_OperationType.INSERT;
+            UpSertDataIntoDB();
         }
-        catch (err) {
-            GetMessageBox(err, 500);
-
+        catch {
+            GetMessageBox(err, 505);
+        }
+    }
+});
+$('#ButtonUpdateDown').click(function (event) {
+    event.preventDefault();
+    var IsValid = ValidateInputFields();
+    if (IsValid) {
+        try {
+            OperationType = PARAMETER.DB_OperationType.UPDATE;
+            UpSertDataIntoDB();
+        }
+        catch {
+            GetMessageBox(err, 505);
         }
     }
 });
@@ -139,7 +178,7 @@ function ValidateInputFields() {
     return true;
 }
 
-function InsertData() {
+function UpSertDataIntoDB() {
 
     var SessionPeriod = $('#TextBoxSessionPeriod').val();
     var Dates = SessionPeriod.split("to");
@@ -149,7 +188,13 @@ function InsertData() {
     var CampusId = $('#DropDownListCampus :selected').val();
     var Description = $('#TextBoxSessionDescription').val();
     var EnrollmentTypeId = $('#DropDownListEnrollmentType :selected').val();
+
+
+    var SessionGuID = $('#HiddenFieldSessionGuID').val();
+
     var JsonArg = {
+        GuID: SessionGuID,
+        OperationType: OperationType,
         CampusId: CampusId,
         Description: Description,
         EnrollmentTypeId: EnrollmentTypeId,
@@ -159,7 +204,7 @@ function InsertData() {
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/ACompany/MAcademicSessionUI/Insert_AppSession",
+        url: BasePath + "/ACompany/MAcademicSessionUI/UpSert_Into_AppSession",
         dataType: 'json',
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
@@ -181,8 +226,8 @@ function InsertData() {
 }
 
 function ClearInputFields() {
-    $('.form-control').val('');
-    $('.select2').val('-1').change();
+    //-----------NOT CLEARING REQUIRED FIELD
+    $('.form-control').not('#DropDownListSession').val('');
+    $('.select2').not('#DropDownListSession').val('-1').change();
     $('form').removeClass('Is-Valid');
-   
 }

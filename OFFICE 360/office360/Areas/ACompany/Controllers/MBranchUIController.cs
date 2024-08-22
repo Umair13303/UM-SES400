@@ -171,7 +171,7 @@ namespace office360.Areas.ACompany.Controllers
 
         #region INSERT DATA INTO DATABASE FOR DBO GENERAL BRANCH
         [HttpPost]
-        public ActionResult Insert_GeneralBranches(_SqlParameters PostedData)
+        public ActionResult UpSert_Into_GeneralBranch(_SqlParameters PostedData)
         {
             _Exe = Common.DataBaseProcedures.ACompany.InsertIntoDB.Update_Insert_GeneralBranch(PostedData);
             var data = new { Message = HttpStatus.HTTPTransactionMessagByStatusCode(_Exe), StatusCode = StatusCode };

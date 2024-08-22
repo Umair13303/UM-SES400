@@ -11,6 +11,7 @@ $(document).ready(function () {
             $('#DivButtonUpdateDown').hide();
             break;
         case PARAMETER.DB_OperationType.UPDATE:
+            GET_STRUCTUREDISCOUNTTYPE_LISTBYPARAM();
             $('#DivButtonSubmitDown').hide();
             $('#DivButtonUpdateDown').show();
             break;
@@ -35,7 +36,7 @@ function ChangeCase() {
 //-----------DB OPERATION CALL
 function ValidateInputFields() {
 
-    if ($('#TextBoxShortCode').RequiredTextBoxInputGroup() == false) {
+    if ($('#TextBoxCode').RequiredTextBoxInputGroup() == false) {
         return false;
     }
     if ($('#TextBoxDescription').RequiredTextBoxInputGroup() == false) {
@@ -48,11 +49,11 @@ function ValidateInputFields() {
 }
 $('#ButtonCheckDuplicate').click(function (event) {
     event.preventDefault();
-    if ($('#TextBoxShortCode').RequiredTextBoxInputGroup() == false) {
+    if ($('#TextBoxCode').RequiredTextBoxInputGroup() == false) {
         return false;
     }
     else {
-        var ShortCode = $('#TextBoxShortCode').val();
+        var ShortCode = $('#TextBoxCode').val();
         var JsonArg = {
             ActionCondition: PARAMETER.SESCondition.ISEXIST_MT_ACCDISCOUNTTYPE,
             ShortCode: ShortCode
@@ -112,13 +113,26 @@ $('#ButtonUpdateDown').click(function (event) {
     }
 });
 function UpSertDataIntoDB() {
+    var Code            = $('#TextBoxCode').val();
+    var Description     = $('#TextBoxDescription').val();
+    var Remarks         = $('#TextBoxRemarks').val();
+
+    var DiscountTypeGUID = $('#HiddenFieldDiscountTypeGUID').val();
+
+    var JsonArg = {
+        GuID: DiscountTypeGUID,
+        OperationType: OperationType,
+        Code: Code,
+        Description: Description,
+        Remarks: Remarks,
+    }
       
     $.ajax({
         type: "POST",
-        url: BasePath + "/AAccounts/MFeeUI/Update_Insert_AccDiscountType",
+        url: BasePath + "/AAccounts/MDiscountUI/Update_Insert_AccDiscountType",
         dataType: 'json',
         data: {
-            //'PostedData': (JsonArg), 'PostedDataDetail': (FeeStructureDetailArray),
+            'PostedData': (JsonArg), 
         },
         beforeSend: function () {
             startLoading();
@@ -142,72 +156,6 @@ function ClearInputFields() {
 }
 
 
-//-----------LOAD ENTERY RECORD :: FEE TYPE SETTING
-function GET_STRUCTUREFEETYPE_DETAILBYID() {
-    var FeeTypeId = $('#DropDownListFeeType :selected').attr('data-FeeTypeGuId');
-    if (FeeTypeId != null && FeeTypeId != undefined && FeeTypeId != "" && FeeTypeId != "-1") {
-
-        var JsonArg = {
-            GuID: FeeTypeId,
-            ActionCondition: PARAMETER.SESCondition.GET_MT_STRUCTUREFEETYPE_DETAILBYID,
-        }
-        $.ajax({
-            type: "POST",
-            url: BasePath + "/AAccounts/MFeeUI/GET_DATA_BY_PARAMETER",
-            dataType: 'json',
-            data: { 'PostedData': (JsonArg) },
-            beforeSend: function () {
-                startLoading();
-            },
-            success: function (data) {
-                if (data.length == undefined) {
-                }
-                else {
-                    ClearOtherFeeSetting();
-                    FeeSettingIsSecurity = data[0].IsSecurity;
-                    FeeSettingIsRefundable = data[0].IsRefundable;
-                    FeeSettingIsDiscount = data[0].IsDiscount;
-
-                    if (FeeSettingIsSecurity == true && FeeSettingIsDiscount == true) {
-                        $('#DivDropDownListRevenueAccount').hide();
-                        $('#DivDropDownListAssetAccount').show();
-                        $('#DivDropDownListLiabilityAccount').show();
-                        $('#DivDropDownListCostOfSaleAccount').show();
-                    }
-                    else if (FeeSettingIsSecurity == false && FeeSettingIsDiscount == true) {
-                        $('#DivDropDownListRevenueAccount').show();
-                        $('#DivDropDownListAssetAccount').show();
-                        $('#DivDropDownListLiabilityAccount').hide();
-                        $('#DivDropDownListCostOfSaleAccount').show();
-                    }
-                    else if (FeeSettingIsSecurity == true && FeeSettingIsDiscount == false) {
-                        $('#DivDropDownListRevenueAccount').hide();
-                        $('#DivDropDownListAssetAccount').show();
-                        $('#DivDropDownListLiabilityAccount').show();
-                        $('#DivDropDownListCostOfSaleAccount').hide();
-                    }
-                    else if (FeeSettingIsSecurity == false && FeeSettingIsDiscount == false) {
-                        $('#DivDropDownListRevenueAccount').show();
-                        $('#DivDropDownListAssetAccount').show();
-                        $('#DivDropDownListLiabilityAccount').hide();
-                        $('#DivDropDownListCostOfSaleAccount').hide();
-                    }
-
-
-                }
-            },
-            complete: function () {
-                stopLoading();
-            },
-        });
-    }
-    else {
-        $('#DivDropDownListRevenueAccount').hide();
-        $('#DivDropDownListAssetAccount').hide();
-        $('#DivDropDownListLiabilityAccount').hide();
-        $('#DivDropDownListCostOfSaleAccount').hide();
-    }
-}
 
 
 //-----------LOAD ENTERY RECORD :: EDIT
@@ -217,8 +165,60 @@ $('#ButtonSubmitGetInfoForEdit').click(function () {
         return;
     }
     else {
-
+        GET_STRUCTUREDISCOUNTTYPE_DETAILBYID();
     }
 });
+
+function GET_STRUCTUREDISCOUNTTYPE_LISTBYPARAM() {
+    var JsonArg = {
+        ActionCondition: PARAMETER.SESCondition.GET_MT_STRUCTUREDISCOUNTTYPE_BYPARAMETER,
+        DB_IF_PARAM: PARAMETER.DB_IF_Condition.STRUCTUREDISCOUNTTYPE_LIST,
+    }
+    $.ajax({
+        type: "POST",
+        url: BasePath + "/AAccounts/MDiscountUI/GET_DATA_BY_PARAMETER",
+        data: { 'PostedData': (JsonArg) },
+        beforeSend: function () {
+            startLoading();
+        },
+        success: function (data) {
+            var s = '<option  value="-1">Select an option</option>';
+            for (var i = 0; i < data.length; i++) {
+                s += '<option  value="' + data[i].GuID + '">' + data[i].Description + '' + '</option>';
+            }
+            $("#DropDownListDiscountType").html(s);
+        },
+        complete: function () {
+            stopLoading();
+        },
+    });
+}
+
+function GET_STRUCTUREDISCOUNTTYPE_DETAILBYID() {
+    var DiscountTypeId = $('#DropDownListDiscountType :selected').val();
+
+    var JsonArg = {
+        GuID: DiscountTypeId,
+        ActionCondition: PARAMETER.SESCondition.GET_MT_STRUCTUREDISCOUNTTYPE_DETAILBYID,
+    }
+    $.ajax({
+        type: "POST",
+        url: BasePath + "/AAccounts/MDiscountUI/GET_DATA_BY_PARAMETER",
+        dataType: 'json',
+        data: { 'PostedData': (JsonArg) },
+        beforeSend: function () {
+            startLoading();
+        },
+        success: function (data) {
+            $('#TextBoxCode').val(data[0].Code);
+            $('#TextBoxDescription').val(data[0].Description);
+            $('#TextBoxRemarks').val(data[0].Remarks);
+            $('#HiddenFieldDiscountTypeGUID').val(data[0].GuID);
+        },
+        complete: function () {
+            stopLoading();
+        },
+    });
+}
 
 

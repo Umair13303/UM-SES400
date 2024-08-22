@@ -193,6 +193,7 @@ namespace office360.Areas.AAccounts.Controllers
             var data = new { Message = HttpStatus.HTTPTransactionMessagByStatusCode(_Exe), StatusCode = StatusCode };
             return Json(data, JsonRequestBehavior.AllowGet);
         }
+        [HttpPost]
         public ActionResult Update_Insert_AccFeeStructure(_SqlParameters PostedData,List<_SqlParameters> PostedDataDetail)
         {
             _Exe = Common.DataBaseProcedures.AAccounts.InsertIntoDB.AccFeeStructure_UPDATE_INSERT(PostedData, PostedDataDetail);

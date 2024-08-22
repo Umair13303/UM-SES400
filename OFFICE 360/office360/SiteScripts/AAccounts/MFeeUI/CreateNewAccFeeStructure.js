@@ -146,30 +146,30 @@ $('#MainTableFeeStructure tbody').on('click', '.delete', function (e) {
 });
 
 $('#MainTableFeeStructure tbody').on('click', '.edit', function (e) {
-  
+
     startLoading();
 
-        var selectedRow = $(this).closest('tr');
-        var RIdx = table.row(selectedRow).index();
-        var Amount = table.cell(RIdx, 2).data();
-        var FeeTypeId = table.cell(RIdx, 4).data();
-        var RevenueAccountId = table.cell(RIdx, 5).data() ?? null;
-        var AssetAccountId = table.cell(RIdx, 6).data() ?? null;
-        var LiabilityAccountId = table.cell(RIdx, 7).data() ?? null;
-        var CostOfSaleAccountId = table.cell(RIdx, 8).data() ?? null;
-        $('#TextBoxAmount').val(Amount);
-        $('#DropDownListFeeType').val(FeeTypeId).change();
+    var selectedRow = $(this).closest('tr');
+    var RIdx = table.row(selectedRow).index();
+    var Amount = table.cell(RIdx, 2).data();
+    var FeeTypeId = table.cell(RIdx, 4).data();
+    var RevenueAccountId = table.cell(RIdx, 5).data() ?? null;
+    var AssetAccountId = table.cell(RIdx, 6).data() ?? null;
+    var LiabilityAccountId = table.cell(RIdx, 7).data() ?? null;
+    var CostOfSaleAccountId = table.cell(RIdx, 8).data() ?? null;
+    $('#TextBoxAmount').val(Amount);
+    $('#DropDownListFeeType').val(FeeTypeId).change();
     setTimeout(function () {
-            // Code to run after timeout
-            $('#DropDownListRevenueAccount').val(RevenueAccountId).change();
-            $('#DropDownListAssetAccount').val(AssetAccountId).change();
-            $('#DropDownListLiabilityAccount').val(LiabilityAccountId).change();
-            $('#DropDownListCostOfSaleAccount').val(CostOfSaleAccountId).change();
+        // Code to run after timeout
+        $('#DropDownListRevenueAccount').val(RevenueAccountId).change();
+        $('#DropDownListAssetAccount').val(AssetAccountId).change();
+        $('#DropDownListLiabilityAccount').val(LiabilityAccountId).change();
+        $('#DropDownListCostOfSaleAccount').val(CostOfSaleAccountId).change();
 
-            // Call the function during the timeout period
-        }, 400); //
+        // Call the function during the timeout period
+    }, 400); //
     stopLoading();
-    
+
 });
 function CalcBoxDataTable() {
     var TotalFeeExclusiveAmount = table.column(2).data().reduce(function (a, b) {
@@ -210,7 +210,7 @@ function PopulateDropDownLists() {
 
 //-----------ALL CHANGE CASES
 function ChangeCase() {
-   
+
     $('#DropDownListCampus').change(function (event) {
         event.preventDefault();
         $('#DropDownListSession').val('-1').change();
@@ -224,7 +224,7 @@ function ChangeCase() {
         $('#DropDownListClass').val('-1').change();
         PopulateMT_AppClass_ListByParam();
     });
-    
+
     $('#DropDownListWHTaxPolicy').change(function (event) {
         event.preventDefault();
         WH_Percentage = $('#DropDownListWHTaxPolicy :selected').attr('data-Percentage');
@@ -285,7 +285,7 @@ function PopulateMT_GeneralBranch_ListByParam() {
 }
 function PopulateMT_AppSession_ListByParam() {
     var CampusId = $('#DropDownListCampus :selected').val();
-
+    alert(CampusId)
     var JsonArg = {
         ActionCondition: PARAMETER.SESCondition.GET_MT_APPSESSION_BYPARAMETER,
         DB_IF_PARAM: PARAMETER.DB_IF_Condition.APPSESSION_BY_GENERALBRANCH,
@@ -316,35 +316,35 @@ function PopulateMT_AppSession_ListByParam() {
 }
 function PopulateMT_AppClass_ListByParam() {
 
-        var CampusId = $('#DropDownListCampus :selected').val();
-        var ClassIds = $('#DropDownListSession :selected').attr('data-ClassIds');
+    var CampusId = $('#DropDownListCampus :selected').val();
+    var ClassIds = $('#DropDownListSession :selected').attr('data-ClassIds');
 
-        var JsonArg = {
-            ActionCondition: PARAMETER.SESCondition.GET_MT_APPCLASS_BYPARAMETER,
-            DB_IF_PARAM: PARAMETER.DB_IF_Condition.APPCLASS_BY_APPSESSION,
-            CampusId: CampusId,
-            ClassIds: ClassIds,
-        }
-        $.ajax({
-            type: "POST",
-            url: BasePath + "/AAccounts/MFeeUI/GET_DATA_BY_PARAMETER",
-            data: { 'PostedData': (JsonArg) },
-            beforeSend: function () {
-                startLoading();
-            },
-            success: function (data) {
-                var s = '<option value="-1">Select an option</option>';
-                for (var i = 0; i < data.length; i++) {
-                    s += '<option value="' + data[i].Id + '">' + data[i].Description + '</option>';
-                }
-                $("#DropDownListClass").html(s);
-            },
-            complete: function () {
-                stopLoading();
-            },
-           
-        });
-   
+    var JsonArg = {
+        ActionCondition: PARAMETER.SESCondition.GET_MT_APPCLASS_BYPARAMETER,
+        DB_IF_PARAM: PARAMETER.DB_IF_Condition.APPCLASS_BY_APPSESSION,
+        CampusId: CampusId,
+        ClassIds: ClassIds,
+    }
+    $.ajax({
+        type: "POST",
+        url: BasePath + "/AAccounts/MFeeUI/GET_DATA_BY_PARAMETER",
+        data: { 'PostedData': (JsonArg) },
+        beforeSend: function () {
+            startLoading();
+        },
+        success: function (data) {
+            var s = '<option value="-1">Select an option</option>';
+            for (var i = 0; i < data.length; i++) {
+                s += '<option value="' + data[i].Id + '">' + data[i].Description + '</option>';
+            }
+            $("#DropDownListClass").html(s);
+        },
+        complete: function () {
+            stopLoading();
+        },
+
+    });
+
 };
 function PopulateLK_WHTaxPolicy_List() {
     var JsonArg = {
@@ -509,7 +509,7 @@ function PopulateMT_Account_COS_List() {
 
 //-----------DB OPERATION CALL
 function ValidateInputFields() {
-    
+
     if ($('#DropDownListCampus').RequiredDropdown() == false) {
         return false;
     }
@@ -679,8 +679,8 @@ function GET_STRUCTUREFEETYPE_DETAILBYID() {
                         $('#DivDropDownListLiabilityAccount').hide();
                         $('#DivDropDownListCostOfSaleAccount').hide();
                     }
-                   
-                   
+
+
                 }
             },
             complete: function () {
@@ -759,14 +759,14 @@ function GET_ACCFEESTRUCTURE_DETAILBYID() {
                 startLoading();
             },
             success: function (data) {
-               
-                $('#DropDownListSession').val(data[0].SessionId).change().prop('disabled', true);
-                    setTimeout(function () {
-                        $('#DropDownListClass').val(data[0].ClassId).change().prop('disabled',true);
-                    }, 800);
-                    $('#DropDownListWHTaxPolicy').val(data[0].WHTaxPolicyId).change();
 
-                    $('#HiddenFieldFeeStructureGuID').val(data[0].GuID);
+                $('#DropDownListSession').val(data[0].SessionId).change();
+                setTimeout(function () {
+                    $('#DropDownListClass').val(data[0].ClassId).change().prop('disabled', true);
+                }, 800);
+                $('#DropDownListWHTaxPolicy').val(data[0].WHTaxPolicyId).change();
+
+                $('#HiddenFieldFeeStructureGuID').val(data[0].GuID);
             },
             complete: function () {
                 stopLoading();
@@ -799,11 +799,11 @@ function GET_ACCFEESTRUCTUREDETAIL_DETAILBYID() {
                         row_data[1] = data[i].FeeName;
                         row_data[2] = data[i].FeeAmount;
                         row_data[3] = GetDeletebtn() + GetEditbtn();
-                        row_data[4] = data[i].FeeTypeId ;
-                        row_data[5] = data[i].RevenueAccountId ;
-                        row_data[6] = data[i].AssetAccountId ;
-                        row_data[7] = data[i].LiabilityAccountId ;
-                        row_data[8] = data[i].CostOfSaleAccountId ;
+                        row_data[4] = data[i].FeeTypeId;
+                        row_data[5] = data[i].RevenueAccountId;
+                        row_data[6] = data[i].AssetAccountId;
+                        row_data[7] = data[i].LiabilityAccountId;
+                        row_data[8] = data[i].CostOfSaleAccountId;
 
                         table.row.add(row_data);
                     }
@@ -817,4 +817,3 @@ function GET_ACCFEESTRUCTUREDETAIL_DETAILBYID() {
 
     }
 }
-

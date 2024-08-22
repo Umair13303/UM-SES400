@@ -28,6 +28,14 @@ namespace office360.Models.General
             Cancelled_FEE_CHALLAN = 17,
             Revised_FEE_CHALLAN = 18,
             Paid_FEE_CHALLAN = 19,
+            Active_FEE_TYPE = 20,
+            InActive_FEE_TYPE = 21,
+            Active_BranchSetting = 22,
+            Active_DISCOUNT_TYPE = 23,
+            InActive_DISCOUNT_TYPE = 24,
+            Active_COA = 25,
+            InActive_COA = 26,
+
         }
         public enum DocType
         {
@@ -39,6 +47,10 @@ namespace office360.Models.General
             FEE_STRUCTURE = 6,
             CHART_OF_ACCOUNT = 7,
             FEE_CHALLAN = 8,
+            FEE_TYPE = 9,
+            BRANCH_SETTING = 10,
+            DISCOUNT_TYPE = 11,
+
         }
         public enum ChallanType
         {

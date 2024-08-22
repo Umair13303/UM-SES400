@@ -114,9 +114,9 @@ namespace office360.Areas.ACompany.Controllers
         #endregion
 
         #region INSERT DATA INTO DATABASE FOR DBO APP CLASS
-        public ActionResult Insert_AppClass(_SqlParameters PostedData)
+        public ActionResult UpSert_Into_AppClass(_SqlParameters PostedData)
         {
-            _Exe = Common.DataBaseProcedures.ACompany.InsertIntoDB.AppClass_Insert(PostedData);
+            _Exe = Common.DataBaseProcedures.ACompany.InsertIntoDB.Update_Insert_AppClass(PostedData);
             var data = new { Message = HTTPTransactionMessagByStatusCode(_Exe), StatusCode = _Exe };
             return Json(data, JsonRequestBehavior.AllowGet);
         }

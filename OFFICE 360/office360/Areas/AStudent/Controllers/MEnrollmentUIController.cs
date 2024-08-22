@@ -101,7 +101,7 @@ namespace office360.Areas.AStudent.Controllers
         #region INSERT DATA INTO DATABASE 
         public ActionResult Insert_AppStudent(_SqlParameters PostedData)
         {
-            _Exe = Common.DataBaseProcedures.ACompany.InsertIntoDB.AppStudent_Insert(PostedData);
+            _Exe = Common.DataBaseProcedures.ACompany.InsertIntoDB.Update_Insert_AppStudent(PostedData);
             var data = new { Message = HttpStatus.HTTPTransactionMessagByStatusCode(_Exe), StatusCode = StatusCode };
             return Json(data, JsonRequestBehavior.AllowGet);
         }

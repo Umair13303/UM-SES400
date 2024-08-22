@@ -81,6 +81,27 @@ namespace office360.Common.DataBaseProcedures.AAccounts
             }
             return DATA;
         }
+        public static List<_SqlParameters> GET_MT_STRUCTUREDISCOUNTTYPE_BYPARAM(_SqlParameters PostedData)
+        {
+            List<_SqlParameters> DATA = new List<_SqlParameters>();
+            using (var db = new SESEntities())
+            {
+                DATA = db.StructureDiscountType_GetListByParam(
+                                                            PostedData.DB_IF_PARAM,
+                                                            Session_Manager.BranchId,
+                                                            Session_Manager.CompanyId,
+                                                            PostedData.Id
+                                                          )
+                    .Select(x => new _SqlParameters
+                    {
+                        Id = x.Id,
+                        GuID = x.GuID,
+                        Description = x.Description  +" [" +x.Code +" ]",
+
+                    }).ToList();
+            }
+            return DATA;
+        }
         #endregion
 
 
@@ -207,6 +228,30 @@ namespace office360.Common.DataBaseProcedures.AAccounts
             }
             return List;
         }
+
+        public static List<_SqlParameters> GET_MT_STRUCTUREDISCOUNTTYPE_INFO_BY_GUID(_SqlParameters PostedData)
+        {
+            List<_SqlParameters> List = new List<_SqlParameters>();
+            using (var db = new SESEntities())
+            {
+                List =
+                       ((List<_SqlParameters>)
+                       (from SFT in db.StructureDiscountType
+                        where
+                            SFT.CompanyId == Session_Manager.CompanyId && SFT.BranchId == Session_Manager.BranchId && SFT.GuID == PostedData.GuID
+                        select new _SqlParameters
+                        {
+                            Id = SFT.Id,
+                            GuID = SFT.GuID,
+                            Code = SFT.Code,
+                            Description = SFT.Description,
+                            Remarks = SFT.Remarks,
+                            
+                        }).ToList());
+            }
+            return List;
+        }
+
         #endregion
 
     }

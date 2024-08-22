@@ -20,7 +20,7 @@ namespace office360.Models.EDMX
         public Nullable<int> ChargingMethodId { get; set; }
         public string Description { get; set; }
         public Nullable<bool> IsOnAdmission { get; set; }
-        public bool IsSecurity { get; set; }
+        public Nullable<bool> IsSecurity { get; set; }
         public Nullable<bool> IsRefundable { get; set; }
         public Nullable<bool> IsDiscount { get; set; }
         public Nullable<int> RevenueAccountId { get; set; }
@@ -31,6 +31,9 @@ namespace office360.Models.EDMX
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> UpdatedOn { get; set; }
         public Nullable<int> UpdatedBy { get; set; }
+        public Nullable<int> DocType { get; set; }
+        public Nullable<int> DocumentStatus { get; set; }
+        public Nullable<bool> Status { get; set; }
         public Nullable<int> BranchId { get; set; }
         public Nullable<int> CompanyId { get; set; }
     }

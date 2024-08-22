@@ -90,7 +90,7 @@ namespace office360.CommonHelper
                                 var GBS = from ACR in db.GeneralBranchSetting
                                           where
                                           ACR.CompanyId == List.CompanyId && ACR.CampusId == List.BranchId && ACR.Status == true
-                                          && DateTime.Now >= ACR.EffectiveFrom && DateTime.Now <= ACR.ExpiredOn
+                                         
 
                                           select new
                                           {
@@ -98,11 +98,9 @@ namespace office360.CommonHelper
                                               ACR.BillingMethodId,
                                               ACR.PolicyPeriodId,
                                               ACR.StudyGroupIds,
-                                              ACR.StudyLevelIds
-                                          ,
+                                              ACR.StudyLevelIds,
                                               ACR.ChallanMethodId,
-                                              ACR.EffectiveFrom,
-                                              ACR.ExpiredOn
+                                           
                                           };
 
 
@@ -112,8 +110,7 @@ namespace office360.CommonHelper
                                 HttpContext.Current.Session["StudyGroupIds"] = GBS.FirstOrDefault().StudyGroupIds;
                                 HttpContext.Current.Session["StudyLevelIds"] = GBS.FirstOrDefault().StudyLevelIds;
                                 HttpContext.Current.Session["ChallanMethodId"] = GBS.FirstOrDefault().ChallanMethodId;
-                                HttpContext.Current.Session["PolicyEffectiveFrom"] = GBS.FirstOrDefault().EffectiveFrom;
-                                HttpContext.Current.Session["PolicyExpiredOn"] = GBS.FirstOrDefault().ExpiredOn;
+
                                 #endregion
 
                             }

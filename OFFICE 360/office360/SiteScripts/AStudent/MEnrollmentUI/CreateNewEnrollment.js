@@ -16,13 +16,7 @@ function InitDatePick() {
 // POPULATE DROPDOWN FUNCTION
 function PopulateDropDownLists() {
     PopulateGenderList();
-    PopulateMartialStatusList();
-    PopulateReligionList();
-    PopulateNationalityList();
-    PopulateEducationLevelList();
-    PopulateOccupationList();
-    PopulateRelationshipsList();
-    GetAllowedAppClasses();
+
 }
 
 // ALL DROPDOWNS
@@ -36,7 +30,7 @@ function PopulateGenderList() {
             for (var i = 0; i < data.length; i++) {
                 s += '<center><option  value="' + data[i].Id + '">' + data[i].Description  + '</option>';
             }
-            $("#DropDownListGender").html(s);
+            $("#DropDownListCampusType").html(s);
         },
     });
 }

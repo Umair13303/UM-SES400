@@ -67,9 +67,9 @@ namespace office360.Areas.ACompany.Controllers
 
         #region INSERT DATA INTO DATABASE FOR DBO APP SESSION
         [HttpPost]
-        public ActionResult Insert_AppSession(_SqlParameters PostedData)
+        public ActionResult UpSert_Into_AppSession(_SqlParameters PostedData)
         {
-            _Exe = Common.DataBaseProcedures.ACompany.InsertIntoDB.AppSession_Insert(PostedData);
+            _Exe = Common.DataBaseProcedures.ACompany.InsertIntoDB.Update_Insert_AppSession(PostedData);
             var data = new { Message = HttpStatus.HTTPTransactionMessagByStatusCode(_Exe), StatusCode = StatusCode };
             return Json(data, JsonRequestBehavior.AllowGet);
 

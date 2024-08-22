@@ -252,12 +252,6 @@ function OpenReport(response, status, xhr) {
     }
 }
 
-function Select2() {
-    $('.select2').select2({
-        placeholder: "Select a state"
-    });
-
-}
 $(function () {   
     $('.select2').select2();
     $('.js-basic-single').select2();

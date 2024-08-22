@@ -25,8 +25,6 @@ namespace office360.Models.EDMX
         public Nullable<decimal> TotalFeeExclusive { get; set; }
         public Nullable<decimal> WHTAmount { get; set; }
         public Nullable<decimal> TotalFee { get; set; }
-        public Nullable<System.DateTime> EffectiveFrom { get; set; }
-        public Nullable<System.DateTime> ExpiredOn { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> UpdatedOn { get; set; }
