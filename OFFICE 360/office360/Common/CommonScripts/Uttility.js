@@ -447,3 +447,29 @@ function initializeFullInitTables() {
         $(this).DataTable(tableSettings);
     });
 }
+var DatePickerRange = flatpickr(document.getElementsByClassName('DatePickerRange'), {
+    mode: "range",
+    dateFormat: "Y-m-d",
+});
+var DatePickerSimple = flatpickr(document.getElementsByClassName('DatePickerSimple'), {
+    dateFormat: "Y-m-d",
+    enableTime: false,
+    noCalendar: false,
+});
+var DatePickerMonthYear = flatpickr(document.getElementsByClassName('DatePickerMonthYear'), {
+    dateFormat: "Y-m",
+    enableTime: false,
+    noCalendar: false,
+});
+var DatePickerYear = flatpickr(document.getElementsByClassName('DatePickerYear'), {
+    dateFormat: "Y",
+    enableTime: false,
+    noCalendar: false,
+});
+var DatePickerTimer = flatpickr(document.getElementsByClassName('DatePickerTimer'), {
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i",
+    defaultDate: "13:45"
+});
+

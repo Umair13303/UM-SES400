@@ -188,3 +188,29 @@ class DynamicDTOperation {
         this.Description = Description;
     }
 }
+
+class MaskingClass {
+    static PhoneNumber = "PhoneNumber";
+    static MobileNumber = "MobileNumber";
+    static EmailAddress = "EmailAddress";
+    static CNICNumber = "CNICNumber";
+    static NumberOnly = "NumberOnly";
+    static DatePickerSimple = "DatePickerSimple";
+    static DatePickerMonthYear = "DatePickerMonthYear";
+    static DatePickerYear = "DatePickerYear";
+    static DatePickerRange = "DatePickerRange";
+    static DatePickerTimer = "DatePickerTimer";
+
+}
+class ApplicableMasking {
+    static PhoneNumber = "(999) 999-9999";
+    static MobileNumber = "(999) 999-9999";
+    static EmailAddress = "*{1,20}@*{1,20}.*{2,4}";
+    static CNICNumber = "99999-9999999-9";
+
+}
+
+$('.PhoneNumber').inputmask(ApplicableMasking.PhoneNumber);
+$('.MobileNumber').inputmask(ApplicableMasking.MobileNumber);
+$('.EmailAddress').inputmask(ApplicableMasking.EmailAddress);
+$('.CNICNumber').inputmask(ApplicableMasking.CNICNumber);
