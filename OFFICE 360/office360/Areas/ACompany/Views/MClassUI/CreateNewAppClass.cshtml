@@ -28,6 +28,22 @@
 
         <div class="card-body" style="margin-top: 20px">
             <form>
+
+                <div class="row">
+                    <div class="col-12 col-md-9">
+                        <div class="form-group row mb-3">
+                            @Html.Label("Campus", new { @class = "col-form-label col-12 col-md-3", @for = "DropDownListCampus" })
+                            <div class="col-12 col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="ri-settings-line"></i></span>
+                                    @Html.DropDownList("DropDownListCampus", Enumerable.Empty<SelectListItem>(), new { @class = "form-control select2", @data_toggle = "select2", id = "DropDownListCampus" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
                 @if (ViewBag.DB_OperationType == nameof(office360.Models.General.DBListCondition.DB_OperationType.UPDATE_DATA_INTO_DB))
                 {
                     <div class="row mb-0">

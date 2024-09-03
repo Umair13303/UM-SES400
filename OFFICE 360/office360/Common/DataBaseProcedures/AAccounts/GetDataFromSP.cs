@@ -21,29 +21,22 @@ namespace office360.Common.DataBaseProcedures.AAccounts
      
         
         #region HELPER FOR :: DROP DOWN LIST
-        public static List<_SqlParameters> GET_MT_STRUCTUREFEETYPE_BYPARAM(_SqlParameters PostedData)
+        public static List<StructureFeeType_GetListByParam_Result> GET_MT_STRUCTUREFEETYPE_BYPARAM(_SqlParameters PostedData)
         {
-            List<_SqlParameters> DATA = new List<_SqlParameters>();
+            List<StructureFeeType_GetListByParam_Result> DATA = new List<StructureFeeType_GetListByParam_Result>();
             using (var db = new SESEntities())
             {
                 DATA = db.StructureFeeType_GetListByParam(
                                                             PostedData.DB_IF_PARAM,
                                                             Session_Manager.CompanyId,
                                                             Session_Manager.BranchId
-                                                          )
-                    .Select(x => new _SqlParameters
-                    {
-                        Id = x.Id,
-                        GuID = x.GuID,
-                        Description = x.Description,
-
-                    }).ToList();
+                                                          ).ToList();
             }
                 return DATA;
         }
-        public static List<_SqlParameters> GET_MT_STRUCTURECOAACCOUNT_BYPARAM(_SqlParameters PostedData)
+        public static List<StructureCOAAccount_GetListByParam_Result> GET_MT_STRUCTURECOAACCOUNT_BYPARAM(_SqlParameters PostedData)
         {
-            List<_SqlParameters> DATA = new List<_SqlParameters>();
+            List<StructureCOAAccount_GetListByParam_Result> DATA = new List<StructureCOAAccount_GetListByParam_Result>();
             using (var db = new SESEntities())
             {
                 DATA = db.StructureCOAAccount_GetListByParam(
@@ -51,39 +44,44 @@ namespace office360.Common.DataBaseProcedures.AAccounts
                                                  Session_Manager.BranchId,
                                                  PostedData.DB_IF_PARAM,
                                                  PostedData.CoaCatagoryIds
-                                                 )
-                 .Select(x => new _SqlParameters
-                 {
-                     Id = x.Id,
-                     Description = x.Description,
-                 }).ToList();
+                                                 ).ToList();
                 return DATA;
             }
         }
-        public static List<_SqlParameters> GET_MT_ACCFEESTRUCTURE_BYPARAM(_SqlParameters PostedData)
+        public static List<AccFeeStructure_GetListByParam_Result> GET_MT_ACCFEESTRUCTURE_BYPARAM(_SqlParameters PostedData)
         {
-            List<_SqlParameters> DATA = new List<_SqlParameters>();
+            List<AccFeeStructure_GetListByParam_Result> DATA = new List<AccFeeStructure_GetListByParam_Result>();
             using (var db = new SESEntities())
             {
                 DATA = db.AccFeeStructure_GetListByParam(
                                                             PostedData.DB_IF_PARAM,
                                                             Session_Manager.CompanyId,
                                                             PostedData.CampusId,
-                                                            Session_Manager.AllowedCampusIds
-                                                          )
-                    .Select(x => new _SqlParameters
-                    {
-                        Id = x.Id,
-                        GuID = x.GuID,
-                        Description = x.Description,
-
-                    }).ToList();
+                                                            PostedData.SessionId,
+                                                            PostedData.ClassId
+                                                          ).ToList();
             }
             return DATA;
         }
-        public static List<_SqlParameters> GET_MT_STRUCTUREDISCOUNTTYPE_BYPARAM(_SqlParameters PostedData)
+        public static List<AccFeeStructureDetail_GetListByParam_Result> GET_MT_ACCFEESTRUCTUREDETAIL_BYPARAM(_SqlParameters PostedData)
         {
-            List<_SqlParameters> DATA = new List<_SqlParameters>();
+            List<AccFeeStructureDetail_GetListByParam_Result> DATA = new List<AccFeeStructureDetail_GetListByParam_Result>();
+            using (var db = new SESEntities())
+            {
+                DATA = db.AccFeeStructureDetail_GetListByParam(
+                                                            PostedData.DB_IF_PARAM,
+                                                            Session_Manager.CompanyId,
+                                                            PostedData.CampusId,
+                                                            PostedData.FeeStructureId,
+                                                            PostedData.SessionId,
+                                                            PostedData.ClassId
+                                                          ).ToList();
+            }
+            return DATA;
+        }
+        public static List<StructureDiscountType_GetListByParam_Result> GET_MT_STRUCTUREDISCOUNTTYPE_BYPARAM(_SqlParameters PostedData)
+        {
+            List<StructureDiscountType_GetListByParam_Result> DATA = new List<StructureDiscountType_GetListByParam_Result>();
             using (var db = new SESEntities())
             {
                 DATA = db.StructureDiscountType_GetListByParam(
@@ -91,19 +89,11 @@ namespace office360.Common.DataBaseProcedures.AAccounts
                                                             Session_Manager.BranchId,
                                                             Session_Manager.CompanyId,
                                                             PostedData.Id
-                                                          )
-                    .Select(x => new _SqlParameters
-                    {
-                        Id = x.Id,
-                        GuID = x.GuID,
-                        Description = x.Description  +" [" +x.Code +" ]",
-
-                    }).ToList();
+                                                          ).ToList();
             }
             return DATA;
         }
         #endregion
-
 
         #region HELPER FOR :: DATA TABLE LIST
         public static List<StructureFeeType_GetListBySearch_Result> GET_MT_STRUCTUREFEETYPE_LISTSEARCHPARAM(_SqlParameters PostedData)
@@ -137,7 +127,6 @@ namespace office360.Common.DataBaseProcedures.AAccounts
 
         }
         #endregion
-
 
         #region HELPER FOR :: GET DETAIL FOR ID
         public static List<_SqlParameters> GET_MT_STRUCTUREFEETYPE_INFO_BY_GUID(_SqlParameters PostedData)
@@ -228,7 +217,6 @@ namespace office360.Common.DataBaseProcedures.AAccounts
             }
             return List;
         }
-
         public static List<_SqlParameters> GET_MT_STRUCTUREDISCOUNTTYPE_INFO_BY_GUID(_SqlParameters PostedData)
         {
             List<_SqlParameters> List = new List<_SqlParameters>();
@@ -251,8 +239,26 @@ namespace office360.Common.DataBaseProcedures.AAccounts
             }
             return List;
         }
-
         #endregion
 
+        #region HELPER FOR :: DUPLICATE RECORD CHECK
+        public static List<_SqlParameters> ISEXIST_FEESTRUCTURE_FOR_CLASS(_SqlParameters PostedData)
+        {
+            using (var db = new SESEntities())
+            {
+                var DATA = db.AccFeeStructure.Where(x =>
+
+                                                 x.Status == true
+                                                && x.DocumentStatus==(int ?)DocStatus.Active_FEE_STRUCTURE
+                                                && x.SessionId == PostedData.SessionId
+                                                && x.ClassId == PostedData.ClassId
+                                                
+                                                && x.CompanyId == Session_Manager.CompanyId).Select(x => new _SqlParameters { Id = x.Id }).ToList();
+
+                return DATA;
+            }
+        }
+
+        #endregion
     }
 }

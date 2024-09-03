@@ -59,6 +59,62 @@ namespace office360.Areas.ACompany.Controllers
         #endregion
 
         #region DROP DOWN LIST HELPER
+
+        public ActionResult GET_MT_GENERALCOMPANY_BYPARAMETER(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_GENERALCOMPANY_BYPARAM(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_MT_GENERALBRANCH_BYPARAMETER(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_GENERALBRANCH_BYPARAM(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_LK1_CampusType(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_CampusType(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_LK1_ORGANIZATIONTYPE(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_OrganizationType(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_LK1_COUNTRY(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_Country(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_LK1_CITY_BYPARAMETER(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_City(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_LK1_POLICYPERIOD(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_PolicyPeriod(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_LK1_ROLLCALLSYSTEM(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_RollCallSystem(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_LK1_BILLINGMETHOD(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_BillingMethod(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_LK1_STUDYGROUP_BYPARAMTER(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_StudyGroup(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_LK1_STUDYLEVEL_BYPARAMTER(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_StudyLevel(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult GET_DATA_BY_PARAMETER(_SqlParameters PostedData)
         {
 
@@ -66,47 +122,47 @@ namespace office360.Areas.ACompany.Controllers
 
             switch (PostedData.ActionCondition)
             {
-                case nameof(SESActionCondition.GET_MT_GENERALCOMPANY_BYPARAMETER):
-                    DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_GENERALCOMPANY_BYPARAM(PostedData).ToList();
-                    break;
+                //case nameof(SESActionCondition.GET_MT_GENERALCOMPANY_BYPARAMETER):
+                //    DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_GENERALCOMPANY_BYPARAM(PostedData).ToList();
+                //    break;
 
-                case nameof(LookUpActionCondition.GET_LK1_CAMPUSTYPE):
-                    DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_CampusType(PostedData).ToList();
-                    break;
+                //case nameof(SESActionCondition.GET_MT_GENERALBRANCH_BYPARAMETER):
+                //    DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_GENERALBRANCH_BYPARAM(PostedData).ToList();
+                //    break;
+                //case nameof(LookUpActionCondition.GET_LK1_CAMPUSTYPE):
+                //    DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_CampusType(PostedData).ToList();
+                //    break;
 
-                case nameof(LookUpActionCondition.GET_LK1_ORGANIZATIONTYPE):
-                    DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_OrganizationType(PostedData).ToList();
-                    break;
+                //case nameof(LookUpActionCondition.GET_LK1_ORGANIZATIONTYPE):
+                //    DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_OrganizationType(PostedData).ToList();
+                //    break;
 
-                case nameof(LookUpActionCondition.GET_LK1_COUNTRY):
-                    DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_Country(PostedData).ToList();
-                    break;
+                //case nameof(LookUpActionCondition.GET_LK1_COUNTRY):
+                //    DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_Country(PostedData).ToList();
+                //    break;
 
-                case nameof(LookUpActionCondition.GET_LK1_CITY_BYPARAMETER):
-                    DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_City(PostedData).ToList();
-                    break;
+                //case nameof(LookUpActionCondition.GET_LK1_CITY_BYPARAMETER):
+                //    DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_City(PostedData).ToList();
+                //    break;
 
-                case nameof(LookUpActionCondition.GET_LK1_POLICYPERIOD):
-                    DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_PolicyPeriod(PostedData).ToList();
-                    break;
+                //case nameof(LookUpActionCondition.GET_LK1_POLICYPERIOD):
+                //    DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_PolicyPeriod(PostedData).ToList();
+                //    break;
+                //case nameof(LookUpActionCondition.GET_LK1_ROLLCALLSYSTEM):
+                //    DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_RollCallSystem(PostedData).ToList();
+                //    break;
 
-             
+                //case nameof(LookUpActionCondition.GET_LK1_BILLINGMETHOD):
+                //    DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_BillingMethod(PostedData).ToList();
+                //    break;
 
-                case nameof(LookUpActionCondition.GET_LK1_ROLLCALLSYSTEM):
-                    DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_RollCallSystem(PostedData).ToList();
-                    break;
+                //case nameof(LookUpActionCondition.GET_LK1_STUDYGROUP_BYPARAMTER):
+                //    DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_StudyGroup(PostedData).ToList();
+                //    break;
 
-                case nameof(LookUpActionCondition.GET_LK1_BILLINGMETHOD):
-                    DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_BillingMethod(PostedData).ToList();
-                    break;
-
-                case nameof(LookUpActionCondition.GET_LK1_STUDYGROUP_BYPARAMTER):
-                    DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_StudyGroup(PostedData).ToList();
-                    break;
-
-                case nameof(LookUpActionCondition.GET_LK1_STUDYLEVEL_BYPARAMTER):
-                    DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_StudyLevel(PostedData).ToList();
-                    break;
+                //case nameof(LookUpActionCondition.GET_LK1_STUDYLEVEL_BYPARAMTER):
+                //    DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_StudyLevel(PostedData).ToList();
+                //    break;
 
             }
             return Json(DATA, JsonRequestBehavior.AllowGet);

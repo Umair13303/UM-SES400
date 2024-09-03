@@ -17,7 +17,9 @@ namespace office360.Models.General
 
         public DateTime? DateofBirth { get; set; }
         public DateTime? ClassEndDate { get; set; }
+        public DateTime? PeriodEndOn { get; set; }
         public DateTime? ClassStartDate { get; set; }
+        public DateTime? PeriodStartOn { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? DueDate { get; set; }
         public DateTime? EffectiveFrom { get; set; }
@@ -46,6 +48,7 @@ namespace office360.Models.General
         public Guid? GuID { get; set; }
 
         public int? AdmissionId { get; set; }
+        public int? AppSessionId { get; set; }
         public int? AllowedChallanNo { get; set; }
         public int? AssetAccountId { get; set; }
         public int? BillingMethodId { get; set; }

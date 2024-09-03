@@ -16,6 +16,7 @@ namespace office360.Models.EDMX
     {
         public int Id { get; set; }
         public Nullable<System.Guid> GuID { get; set; }
+        public Nullable<int> CampusId { get; set; }
         public string Code { get; set; }
         public string Description { get; set; }
         public Nullable<int> StudyLevelId { get; set; }

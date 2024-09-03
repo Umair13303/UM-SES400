@@ -45,8 +45,8 @@
 
     <link rel="stylesheet" type="text/css" href="~/_Theme2/assets/css/forms/theme-checkbox-radio.css">
     <link rel="stylesheet" type="text/css" href="~/_Theme2/plugins/select2/select2.min.css">
-
-
+    <link rel="stylesheet" type="text/css" href="~/_Theme2/plugins/loaders/custom-loader.css">
+    <link rel="stylesheet" type="text/css" href="~/SiteAssets/Uttility/Uttility.css">
 
     <style>
         .blockui-growl-message {
@@ -395,12 +395,13 @@
                 <div class="row layout-top-spacing" id="cancel-row">
 
 
-                    <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+                    <div class="col-xl-12 col-lg-12 col-sm-12 layout-spacing">
                         <div id="messageContainer"></div>
-                        <div id="loadingcontainer" style="display:none">
-                            <div class="spinner"></div>
-                            <p id="loading-text">Request Is In Process</p>
+                        <div id="loading-container" style="display:none">
+                            <div class="loader dual-loader mx-auto">
+                            </div>
                         </div>
+
                         @RenderBody()
                         @{
                             <script type="text/javascript">
@@ -408,10 +409,12 @@
                                 var RoleId = '@office360.Models.General.Session_Manager.RoleId';
                                 var BranchId = '@office360.Models.General.Session_Manager.BranchId';
                             </script>
+
                         }
                     </div>
 
-                </div>
+
+                    </div>
 
             </div>
             <div class="footer-wrapper">

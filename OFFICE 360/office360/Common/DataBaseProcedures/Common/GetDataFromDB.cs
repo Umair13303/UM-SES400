@@ -143,7 +143,7 @@ namespace office360.Common.DataBaseProcedures.Common
         {
             using (SESEntities db = new SESEntities())
             {
-                var DATA = db.CampusType
+                var DATA = db.CampusType.Where(x=> x.Status==true)
                          .Select(x => new _SqlParameters
                          {
                              Id = x.Id,
@@ -235,6 +235,17 @@ namespace office360.Common.DataBaseProcedures.Common
                 return DATA;
             }
         }
+        public static List<_SqlParameters> GET_LK1_AdmissionCatagory(_SqlParameters PostedData)
+        {
+            using (SESEntities db = new SESEntities())
+            {
+                var DATA = db.AdmissionCatagory
+                      .Select(x => new _SqlParameters { Id = x.Id, Description = x.Description })
+                      .ToList();
+
+                return DATA;
+            }
+        }
         #endregion
 
         #region FUNCTION FOR :: GET DATA FROM LOOKUP/BY PARAMETER USING STORE PROCEDURE
@@ -246,7 +257,7 @@ namespace office360.Common.DataBaseProcedures.Common
                 data = db.LK_StudyLevel_GetListByParam(
                                                         PostedData.DB_IF_PARAM,
                                                         Session_Manager.CompanyId,
-                                                        Session_Manager.BranchId,
+                                                        PostedData.CampusId,
                                                         Session_Manager.StudyLevelIds    
                                                       )
                          .Select(x => new _SqlParameters
@@ -265,7 +276,7 @@ namespace office360.Common.DataBaseProcedures.Common
                 DATA = db.LK_StudyGroup_GetListByParam(
                                                         PostedData.DB_IF_PARAM,
                                                         Session_Manager.CompanyId,
-                                                        Session_Manager.BranchId,
+                                                        PostedData.CampusId,
                                                         Session_Manager.StudyGroupIds
                                                       )
                          .Select(x => new _SqlParameters
@@ -282,7 +293,8 @@ namespace office360.Common.DataBaseProcedures.Common
             using (var db = new SESEntities())
             {
                 DATA = db.LK_ChallanMethod_GetListByParam(
-                                                        PostedData.DB_IF_PARAM
+                                                        PostedData.DB_IF_PARAM,
+                                                        PostedData.Id
                                                         )
                          .Select(x => new _SqlParameters
                          {

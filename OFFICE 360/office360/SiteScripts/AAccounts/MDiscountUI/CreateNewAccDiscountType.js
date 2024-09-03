@@ -171,12 +171,11 @@ $('#ButtonSubmitGetInfoForEdit').click(function () {
 
 function GET_STRUCTUREDISCOUNTTYPE_LISTBYPARAM() {
     var JsonArg = {
-        ActionCondition: PARAMETER.SESCondition.GET_MT_STRUCTUREDISCOUNTTYPE_BYPARAMETER,
         DB_IF_PARAM: PARAMETER.DB_IF_Condition.STRUCTUREDISCOUNTTYPE_LIST,
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/AAccounts/MDiscountUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/AAccounts/MDiscountUI/GET_MT_STRUCTUREDISCOUNTTYPE_BYPARAMETER",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -199,11 +198,10 @@ function GET_STRUCTUREDISCOUNTTYPE_DETAILBYID() {
 
     var JsonArg = {
         GuID: DiscountTypeId,
-        ActionCondition: PARAMETER.SESCondition.GET_MT_STRUCTUREDISCOUNTTYPE_DETAILBYID,
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/AAccounts/MDiscountUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/AAccounts/MDiscountUI/GET_MT_STRUCTUREDISCOUNTTYPE_DETAILBYID",
         dataType: 'json',
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {

@@ -11,19 +11,24 @@ namespace office360.Models.EDMX
 {
     using System;
     
-    public partial class StructureFeeType_GetListBySearch_Result
+    public partial class AccFeeStructureDetail_GetListByParam_Result
     {
         public int Id { get; set; }
         public Nullable<System.Guid> GuID { get; set; }
         public string FeeName { get; set; }
-        public string FeeCatagory { get; set; }
-        public string ChargingMethod { get; set; }
-        public Nullable<int> FeeCatagoryId { get; set; }
-        public Nullable<int> ChargingMethodId { get; set; }
+        public Nullable<decimal> FeeAmount { get; set; }
+        public string RevenueAccount { get; set; }
+        public string AssetAccount { get; set; }
+        public string LiabilityAccount { get; set; }
+        public string CostOfSaleAccount { get; set; }
+        public Nullable<int> FeeTypeId { get; set; }
+        public Nullable<int> RevenueAccountId { get; set; }
+        public Nullable<int> AssetAccountId { get; set; }
+        public Nullable<int> LiabilityAccountId { get; set; }
+        public Nullable<int> CostOfSaleAccountId { get; set; }
         public Nullable<bool> IsOnAdmission { get; set; }
-        public Nullable<bool> IsDiscount { get; set; }
-        public Nullable<bool> IsRefundable { get; set; }
         public Nullable<bool> IsSecurity { get; set; }
-        public Nullable<int> DocumentStatus { get; set; }
+        public Nullable<bool> IsRefundable { get; set; }
+        public Nullable<bool> IsDiscount { get; set; }
     }
 }

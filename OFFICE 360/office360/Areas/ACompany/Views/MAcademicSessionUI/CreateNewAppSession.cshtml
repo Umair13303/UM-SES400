@@ -71,7 +71,7 @@
                     <div class="col-sm-12 col-md-6">
                         <div class="form-group">
                             @Html.Label("Period", new { @class = "col-form-label", @for = "TextBoxSessionPeriod" })
-                            @Html.TextBox("TextBoxSessionPeriod", null, new { @class = "form-control Range_Date_Masking_Format_Basic", placeholder = "Please Enter Period Date Here!", @id = "TextBoxSessionPeriod" })
+                            @Html.TextBox("TextBoxSessionPeriod", null, new { @class = "form-control DatePickerRange", placeholder = "Please Enter Period Date Here!", @id = "TextBoxSessionPeriod" })
                         </div>
                     </div>
 
@@ -81,6 +81,12 @@
                             @Html.DropDownList("DropDownListClass", Enumerable.Empty<SelectListItem>(), new { @class = "form-control select2", @data_toggle = "select2", id = "DropDownListClass" })
                         </div>
                     </div>
+                </div>
+                <div class="bootstrap-admin-panel-content">
+                    <table class="table table-bordered table-sm order-column stripe table-hover" style="width: 100%" id="MainTableSessionDetail">
+                        <tbody id="MainTableSessionDetail">
+                        </tbody>
+                    </table>
                 </div>
             </form>
         </div>

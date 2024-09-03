@@ -104,71 +104,149 @@ namespace office360.Areas.AAccounts.Controllers
         #endregion
 
         #region DROP DOWN LIST HELPER
-
-        public ActionResult GET_DATA_BY_PARAMETER(_SqlParameters PostedData)
+        public ActionResult GET_LK1_FEECATAGORY(_SqlParameters PostedData)
         {
-            List<_SqlParameters> DATA = null;
-
-            switch (PostedData.ActionCondition)
-            {
-                case nameof(LookUpActionCondition.GET_LK1_FEECATAGORY):
-                    DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_FeeCatagory(PostedData).ToList();
-                    break;
-
-                case nameof(LookUpActionCondition.GET_LK1_CHARGINGMETHOD):
-                    DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_ChargingMethod(PostedData).ToList();
-                    break;
-
-                case nameof(LookUpActionCondition.GET_LK1_WHTAXPOLICY_BYPARAMTER):
-                    DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_WHTaxPolicy(PostedData).ToList();
-                    break;
-
-                case nameof(SESActionCondition.GET_MT_GENERALCOMPANY_BYPARAMETER):
-                    DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_GENERALCOMPANY_BYPARAM(PostedData).ToList();
-                    break;
-
-                case nameof(SESActionCondition.GET_MT_GENERALBRANCH_BYPARAMETER):
-                    DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_GENERALBRANCH_BYPARAM(PostedData).ToList();
-                    break;
-
-                case nameof(SESActionCondition.GET_MT_APPSESSION_BYPARAMETER):
-                    DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_APPSESSION_BYPARAM(PostedData).ToList();
-                    break;
-
-                case nameof(SESActionCondition.GET_MT_APPCLASS_BYPARAMETER):
-                    DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_APPCLASS_BYPARAM(PostedData).ToList();
-                    break;
-
-                case nameof(SESActionCondition.GET_MT_STRUCTURECOAACCOUNT_BYPARAMETER):
-                    DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.GET_MT_STRUCTURECOAACCOUNT_BYPARAM(PostedData).ToList();
-                    break;
-
-                case nameof(SESActionCondition.GET_MT_STRUCTUREFEETYPE_BYPARAMETER):
-                    DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.GET_MT_STRUCTUREFEETYPE_BYPARAM(PostedData).ToList();
-                    break;
-
-                case nameof(SESActionCondition.GET_MT_ACCFEESTRUCTURE_BYPARAMETER):
-                    DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.GET_MT_ACCFEESTRUCTURE_BYPARAM(PostedData).ToList();
-                    break;
-
-                case nameof(SESActionCondition.GET_MT_STRUCTUREFEETYPE_DETAILBYID):
-                    DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.GET_MT_STRUCTUREFEETYPE_INFO_BY_GUID(PostedData).ToList();
-                    break;
-                
-                case nameof(SESActionCondition.GET_MT_ACCFEESTRUCTURE_DETAILBYID):
-                    DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.GET_MT_ACCFEESTRUCTURE_INFO_BY_GUID(PostedData).ToList();
-                    break;
-                case nameof(SESActionCondition.GET_MT_ACCFEESTRUCTUREDETAIL_DETAILBYID):
-                    DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.GET_MT_ACCFEESTRUCTUREDETAIL_INFO_BY_ID(PostedData).ToList();
-                    break;
-
-
-
-            }
+            var DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_FeeCatagory(PostedData).ToList();
             return Json(DATA, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult GET_LK1_CHARGINGMETHOD(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_ChargingMethod(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_LK1_WHTAXPOLICY_BYPARAMTER(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_WHTaxPolicy(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_MT_GENERALCOMPANY_BYPARAMETER(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_GENERALCOMPANY_BYPARAM(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_MT_GENERALBRANCH_BYPARAMETER(_SqlParameters PostedData)
+        {
+            var DATA  = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_GENERALBRANCH_BYPARAM(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_MT_APPSESSION_BYPARAMETER(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_APPSESSION_BYPARAM(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_MT_APPCLASS_BYPARAMETER(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_APPCLASS_BYPARAM(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_MT_STRUCTURECOAACCOUNT_BYPARAMETER(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.GET_MT_STRUCTURECOAACCOUNT_BYPARAM(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_MT_STRUCTUREFEETYPE_BYPARAMETER(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.GET_MT_STRUCTUREFEETYPE_BYPARAM(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_MT_ACCFEESTRUCTURE_BYPARAMETER(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.GET_MT_ACCFEESTRUCTURE_BYPARAM(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_MT_ACCFEESTRUCTUREDETAIL_BYPARAMETER(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.GET_MT_ACCFEESTRUCTURE_BYPARAM(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_MT_STRUCTUREFEETYPE_DETAILBYID(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.GET_MT_STRUCTUREFEETYPE_INFO_BY_GUID(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_MT_ACCFEESTRUCTURE_DETAILBYID(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.GET_MT_ACCFEESTRUCTURE_INFO_BY_GUID(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_MT_ACCFEESTRUCTUREDETAIL_DETAILBYID(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.GET_MT_ACCFEESTRUCTUREDETAIL_INFO_BY_ID(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+
+        //public ActionResult GET_DATA_BY_PARAMETER(_SqlParameters PostedData)
+        //{
+        //    List<_SqlParameters> DATA = null;
+
+        //    switch (PostedData.ActionCondition)
+        //    {
+        //        case nameof(LookUpActionCondition.GET_LK1_FEECATAGORY):
+        //            DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_FeeCatagory(PostedData).ToList();
+        //            break;
+
+        //        case nameof(LookUpActionCondition.GET_LK1_CHARGINGMETHOD):
+        //            DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_ChargingMethod(PostedData).ToList();
+        //            break;
+
+        //        case nameof(LookUpActionCondition.GET_LK1_WHTAXPOLICY_BYPARAMTER):
+        //            DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_WHTaxPolicy(PostedData).ToList();
+        //            break;
+
+        //        case nameof(SESActionCondition.GET_MT_GENERALCOMPANY_BYPARAMETER):
+        //            DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_GENERALCOMPANY_BYPARAM(PostedData).ToList();
+        //            break;
+
+        //        case nameof(SESActionCondition.GET_MT_GENERALBRANCH_BYPARAMETER):
+        //            DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_GENERALBRANCH_BYPARAM(PostedData).ToList();
+        //            break;
+
+        //        case nameof(SESActionCondition.GET_MT_APPSESSION_BYPARAMETER):
+        //            DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_APPSESSION_BYPARAM(PostedData).ToList();
+        //            break;
+
+        //        case nameof(SESActionCondition.GET_MT_APPCLASS_BYPARAMETER):
+        //            DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_APPCLASS_BYPARAM(PostedData).ToList();
+        //            break;
+
+        //        case nameof(SESActionCondition.GET_MT_STRUCTURECOAACCOUNT_BYPARAMETER):
+        //            DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.GET_MT_STRUCTURECOAACCOUNT_BYPARAM(PostedData).ToList();
+        //            break;
+
+        //        case nameof(SESActionCondition.GET_MT_STRUCTUREFEETYPE_BYPARAMETER):
+        //            DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.GET_MT_STRUCTUREFEETYPE_BYPARAM(PostedData).ToList();
+        //            break;
+
+        //        case nameof(SESActionCondition.GET_MT_ACCFEESTRUCTURE_BYPARAMETER):
+        //            DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.GET_MT_ACCFEESTRUCTURE_BYPARAM(PostedData).ToList();
+        //            break;
+
+        //        case nameof(SESActionCondition.GET_MT_STRUCTUREFEETYPE_DETAILBYID):
+        //            DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.GET_MT_STRUCTUREFEETYPE_INFO_BY_GUID(PostedData).ToList();
+        //            break;
+
+        //        case nameof(SESActionCondition.GET_MT_ACCFEESTRUCTURE_DETAILBYID):
+        //            DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.GET_MT_ACCFEESTRUCTURE_INFO_BY_GUID(PostedData).ToList();
+        //            break;
+        //        case nameof(SESActionCondition.GET_MT_ACCFEESTRUCTUREDETAIL_DETAILBYID):
+        //            DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.GET_MT_ACCFEESTRUCTUREDETAIL_INFO_BY_ID(PostedData).ToList();
+        //            break;
+
+
+
+        //    }
+        //    return Json(DATA, JsonRequestBehavior.AllowGet);
+        //}
         #endregion
 
+        #region CHECK DUPLICATE
+        public ActionResult CHECK_FEESTRUCTURE_FOR_CLASS(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.ISEXIST_FEESTRUCTURE_FOR_CLASS(PostedData);
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion
 
 
 

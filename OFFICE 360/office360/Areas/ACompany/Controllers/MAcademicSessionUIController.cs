@@ -4,6 +4,7 @@ using office360.Extensions;
 using office360.Models.EDMX;
 using office360.Models.General;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web.Mvc;
 using static office360.Models.General.DBListCondition;
@@ -39,37 +40,79 @@ namespace office360.Areas.ACompany.Controllers
         #endregion
 
         #region DROP DOWN LIST HELPER
+        public ActionResult GET_MT_GENERALCOMPANY_BYPARAMETER(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_GENERALCOMPANY_BYPARAM(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_MT_GENERALBRANCH_BYPARAMETER(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_GENERALBRANCH_BYPARAM(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_MT_GENERALBRANCH_DETAILBYID(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_GENERALBRANCH_INFO_BY_GUID(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_LK1_CHALLANMETHOD_BYPARAMTER(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_ChallanMethod(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_MT_APPCLASS_BYPARAMETER(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_APPCLASS_BYPARAM(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_LK1_ENROLLMENTTYPES(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_EnrollmentType(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult GET_DATA_BY_PARAMETER(_SqlParameters PostedData)
         {
             List<_SqlParameters> DATA = null;
 
-            switch (PostedData.ActionCondition)
-            {
-                case nameof(SESActionCondition.GET_MT_GENERALCOMPANY_BYPARAMETER):
-                    DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_GENERALCOMPANY_BYPARAM(PostedData).ToList();
-                    break;
+            //switch (PostedData.ActionCondition)
+            //{
+            //    case nameof(SESActionCondition.GET_MT_GENERALCOMPANY_BYPARAMETER):
+            //        DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_GENERALCOMPANY_BYPARAM(PostedData).ToList();
+            //        break;
 
-                case nameof(SESActionCondition.GET_MT_GENERALBRANCH_BYPARAMETER):
-                    DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_GENERALBRANCH_BYPARAM(PostedData).ToList();
-                    break;
+            //    case nameof(SESActionCondition.GET_MT_GENERALBRANCH_BYPARAMETER):
+            //        DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_GENERALBRANCH_BYPARAM(PostedData).ToList();
+            //        break;
 
-                case nameof(SESActionCondition.GET_MT_APPCLASS_BYPARAMETER):
-                    DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_APPCLASS_BYPARAM(PostedData).ToList();
-                    break;
+            //    case nameof(SESActionCondition.GET_MT_GENERALBRANCH_DETAILBYID):
+            //        DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_GENERALBRANCH_INFO_BY_GUID(PostedData).ToList();
+            //        break;
+                
+            //    case nameof(LookUpActionCondition.GET_LK1_CHALLANMETHOD_BYPARAMTER):
+            //        DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_ChallanMethod(PostedData).ToList();
+            //        break;
 
-                case nameof(LookUpActionCondition.GET_LK1_ENROLLMENTTYPES):
-                    DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_EnrollmentType(PostedData).ToList();
-                    break;
-            }
+            //    case nameof(SESActionCondition.GET_MT_APPCLASS_BYPARAMETER):
+            //        DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_APPCLASS_BYPARAM(PostedData).ToList();
+            //        break;
+
+            //    case nameof(LookUpActionCondition.GET_LK1_ENROLLMENTTYPES):
+            //        DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_EnrollmentType(PostedData).ToList();
+            //        break;
+            //}
             return Json(DATA, JsonRequestBehavior.AllowGet);
         }
         #endregion
 
         #region INSERT DATA INTO DATABASE FOR DBO APP SESSION
         [HttpPost]
-        public ActionResult UpSert_Into_AppSession(_SqlParameters PostedData)
+        public ActionResult UpSert_Into_AppSession(_SqlParameters PostedData, List<_SqlParameters> PostedDataDetail)
         {
-            _Exe = Common.DataBaseProcedures.ACompany.InsertIntoDB.Update_Insert_AppSession(PostedData);
+
+
+           
+            _Exe = Common.DataBaseProcedures.ACompany.InsertIntoDB.Update_Insert_AppSession(PostedData, PostedDataDetail);
             var data = new { Message = HttpStatus.HTTPTransactionMessagByStatusCode(_Exe), StatusCode = StatusCode };
             return Json(data, JsonRequestBehavior.AllowGet);
 

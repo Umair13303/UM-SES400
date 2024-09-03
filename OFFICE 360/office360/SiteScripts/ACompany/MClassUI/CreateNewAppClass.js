@@ -24,8 +24,7 @@ $(document).ready(function () {
 
 
 function PopulateDropDownLists() {
-    PopulateLK_StudyGroup_List();
-    PopulateLK_StudyLevel_List();
+    PopulateMT_GeneralBranch_ListByParam();
 }
 
 function ChangeCase() {
@@ -37,19 +36,56 @@ function ChangeCase() {
             IsFieldClear = false;
         }
     });
+    $('#DropDownListCampus').change(function () {
+        PopulateLK_StudyGroup_List();
+        PopulateLK_StudyLevel_List();
+    });
 }
 
 //-----------ALL DROPDOWN LIST
-function PopulateLK_StudyGroup_List() {
+function PopulateMT_GeneralBranch_ListByParam() {
     var JsonArg = {
-        ActionCondition: PARAMETER.LookUpCondition.GET_LK1_STUDYGROUP_BYPARAMTER,
-        DB_IF_PARAM: PARAMETER.DB_IF_Condition.STUDYGROUP_BY_BRANCHSETTING,
-
+        DB_IF_PARAM: PARAMETER.DB_IF_Condition.BRANCH_BY_USER_ALLOWEDBRANCHIDS,
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/ACompany/MClassUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/ACompany/MClassUI/GET_MT_GENERALBRANCH_BYPARAMETER",
         data: { 'PostedData': (JsonArg) },
+        beforeSend: function () {
+            startLoading();
+        },
+        success: function (data) {
+            var s = '<option value="-1">Select an option</option>';
+            for (var i = 0; i < data.length; i++) {
+                s += '<option  value="' + data[i].Id + '">' + data[i].Description + '' + '</option>';
+            }
+            $("#DropDownListCampus").html(s);
+            if (RoleId == Roles.RoleID_ADMIN || RoleId == Roles.RoleID_DEVELOPER) {
+                $("#DropDownListCampus").prop('disabled', Status.Close);
+            }
+            else {
+                $("#DropDownListCampus").prop('disabled', Status.Open);
+            }
+        },
+        complete: function () {
+            $('#DropDownListCampus').val(BranchId).change();
+            stopLoading();
+        },
+    });
+}
+function PopulateLK_StudyGroup_List() {
+    var CampusId = $('#DropDownListCampus :selected').val();
+    var JsonArg = {
+        CampusId: CampusId,
+        DB_IF_PARAM: PARAMETER.DB_IF_Condition.STUDYGROUP_BY_BRANCHSETTING,
+    }
+    $.ajax({
+        type: "POST",
+        url: BasePath + "/ACompany/MClassUI/GET_LK1_STUDYGROUP_BYPARAMTER",
+        data: { 'PostedData': (JsonArg) },
+        beforeSend: function () {
+            startLoading();
+        },
         success: function (data) {
             var s = '<option  value="-1">Select an option</option>';
             for (var i = 0; i < data.length; i++) {
@@ -57,24 +93,33 @@ function PopulateLK_StudyGroup_List() {
             }
             $("#DropDownListStudyGroup").html(s);
         },
+        complete: function () {
+            stopLoading();
+        },
     });
 }
 function PopulateLK_StudyLevel_List() {
+    var CampusId = $('#DropDownListCampus :selected').val();
     var JsonArg = {
-        ActionCondition: PARAMETER.LookUpCondition.GET_LK1_STUDYLEVEL_BYPARAMTER,
+        CampusId: CampusId,
         DB_IF_PARAM: PARAMETER.DB_IF_Condition.STUDYLEVEL_BY_BRANCHSETTING,
-
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/ACompany/MClassUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/ACompany/MClassUI/GET_LK1_STUDYLEVEL_BYPARAMTER",
         data: { 'PostedData': (JsonArg) },
+        beforeSend: function () {
+            startLoading();
+        },
         success: function (data) {
             var s = '<option  value="-1">Select an option</option>';
             for (var i = 0; i < data.length; i++) {
                 s += '<option  value="' + data[i].Id + '">' + data[i].Description + '' + '</option>';
             }
             $("#DropDownListStudyLevel").html(s);
+        },
+        complete: function () {
+            stopLoading();
         },
     });
 }
@@ -109,6 +154,9 @@ $('#ButtonUpdateDown').click(function (event) {
 });
 
 function ValidateInputFields() {
+    if ($('#DropDownListCampus').RequiredDropdown() == false) {
+        return false;
+    }
     if ($('#TextBoxDescription').RequiredTextBoxInputGroup() == false) {
         return false;
     }
@@ -121,6 +169,7 @@ function ValidateInputFields() {
     return true;
 }
 function UpSertDataIntoDB() {
+    var CampusId = $('#DropDownListCampus :selected').val();
     var Description = $('#TextBoxDescription').val();
     var StudyGroupId = $('#DropDownListStudyGroup :selected').val();
     var StudyLevelId = $('#DropDownListStudyLevel :selected').val();
@@ -130,6 +179,7 @@ function UpSertDataIntoDB() {
     var JsonArg = {
         GuID: ClassGuID,
         OperationType: OperationType,
+        CampusId: CampusId,
         Description: Description,
         StudyLevelId: StudyLevelId,
         StudyGroupId: StudyGroupId,

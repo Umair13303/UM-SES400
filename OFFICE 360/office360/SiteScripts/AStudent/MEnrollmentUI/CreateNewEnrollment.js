@@ -1,141 +1,378 @@
-﻿var OperationType;
+﻿var OperationType = "";
+var DB_OperationType = $('#HiddenFieldDB_OperationType').val();
+var IsFieldClear = false;
+
+var table = "";
 $(document).ready(function () {
+    InitDataTable();
     PopulateDropDownLists();
-    InitDatePick();
+    ChangeCase();
+
 });
-function InitDatePick() {
-    $('.date_masking').datepicker({
-        format: 'dd/mm/yyyy',
-        todayHighlight: true,
-        autoclose: true,
-        orientation: "bottom"
-    }).datepicker("setDate", 'now');
+
+
+
+//-----------ALL DATA TABLE
+function InitDataTable() {
+    table = $('#MainTableFeeChallanDetail').DataTable({
+        "responsive": true, "ordering": false,
+        "processing": true, "pagination": false,
+        "paging": false,
+        "columns": [
+            { "title": "#", "orderable": false, },
+            { "title": "Description" },
+            { "title": "Amount (PKR)" },
+            { "title": "Discount" },
+            { "title": "Remaining" },
+        ],
+        "columnDefs": [
+        ],
+    });
+    table.on('order.dt search.dt', function () {
+        table.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+
+    }).draw();
+}
+function GET_ACCFEESTRUCTUREDETAIL_DETAILBYID() {
+    var FeeStructureId = $('#DropDownListFeeStructure :selected').attr('data-Id');
+    var SessionId = $('#DropDownListSession :selected').val();
+    var ClassId = $('#DropDownListClass :selected').val();
+    if (FeeStructureId != null && FeeStructureId != undefined && FeeStructureId != "" && FeeStructureId != "-1") {
+        var JsonArg = {
+            DB_IF_PARAM: PARAMETER.DB_IF_Condition.ACCFEESTRUCTURE_GET_INFO_NEW_STUDENT,
+            FeeStructureId: FeeStructureId,
+            SessionId: SessionId,
+            ClassId: ClassId,
+        }
+        $.ajax({
+            type: "POST",
+            url: BasePath + "/AStudent/MEnrollmentUI/GET_MT_ACCFEESTRUCTUREDETAIL_BYPARAMETER",
+            data: { 'PostedData': (JsonArg) },
+            beforeSend: function () {
+                startLoading();
+            },
+            success: function (data) {
+                table.clear().draw();
+
+                if (data.length > 0) {
+                    for (var i in data) {
+                        var row_data = [];
+                        row_data[0] = '';
+                        row_data[1] = data[i].FeeName;
+                        row_data[2] = data[i].FeeAmount;
+                        row_data[3] = "<input Id='TextBoxDiscount" + (i + 1) + "' type='text' class='form-control form-control-sm' disabled='' value='" + data[i].FeeAmount + "'/>";;
+                        row_data[4] = row_data[2] - row_data[2];
+
+                        table.row.add(row_data);
+                    }
+                    table.draw();
+                }
+            },
+            complete: function () {
+                stopLoading();
+            },
+        });
+
+    }
 }
 
-
-// POPULATE DROPDOWN FUNCTION
 function PopulateDropDownLists() {
-    PopulateGenderList();
+    PopulateMT_GeneralBranch_ListByParam();
+    PopulateLK_AdmissionCatagory_List();
+    PopulateLK_Religion_List();
+    PopulateLK_Country_List();
+    PopulateLK_Occupation_List();
 
 }
 
-// ALL DROPDOWNS
-function PopulateGenderList() {
-    $.ajax({
-        type: "POST",
-        url: BasePath + "/AStudent/MEnrollmentUI/PopulateGenderList",
-        data: "{}",
-        success: function (data) {
-            var s = '<option  value="-1">Select an option</option>';
-            for (var i = 0; i < data.length; i++) {
-                s += '<center><option  value="' + data[i].Id + '">' + data[i].Description  + '</option>';
-            }
-            $("#DropDownListCampusType").html(s);
-        },
+//-----------ALL CHANGE CASES
+function ChangeCase() {
+    $('#DropDownListCampus').change(function (event) {
+        event.preventDefault();
+        $('#DropDownListSession').val('-1').change();
+
+        var CampusId = $('#DropDownListCampus :selected').val();
+        if (CampusId != null && CampusId != undefined && CampusId != "" && CampusId != "-1") {
+            PopulateMT_AppSession_ListByParam();
+        }
+
     });
-}
-function PopulateMartialStatusList() {
-    $.ajax({
-        type: "POST",
-        url: BasePath + "/AStudent/MEnrollmentUI/PopulateMartialStatusList",
-        data: "{}",
-        success: function (data) {
-            var s = '<option  value="-1">Select an option</option>';
-            for (var i = 0; i < data.length; i++) {
-                s += '<center><option  value="' + data[i].Id + '">' + data[i].Description  + '</option>';
-            }
-            $("#DropDownListMartialStatus").html(s);
-        },
+    $('#DropDownListSession').change(function (event) {
+        event.preventDefault();
+        $('#DropDownListClass').val('-1').change();
+
+        var SessionId = $('#DropDownListSession :selected').val();
+        if (SessionId != null && SessionId != undefined && SessionId != "" && SessionId != "-1") {
+            PopulateMT_AppSessionDetail_ListByParam();
+            PopulateMT_AppClass_ListByParam();
+        }
     });
-}
-function PopulateReligionList() {
-    $.ajax({
-        type: "POST",
-        url: BasePath + "/AStudent/MEnrollmentUI/PopulateReligionList",
-        data: "{}",
-        success: function (data) {
-            var s = '<option  value="-1">Select an option</option>';
-            for (var i = 0; i < data.length; i++) {
-                s += '<center><option  value="' + data[i].Id + '">' + data[i].Description  + '</option>';
-            }
-            $("#DropDownListReligion").html(s);
-        },
+
+    $('#DropDownListClass').change(function (event) {
+        event.preventDefault();
+        var ClassId = $('#DropDownListClass :selected').val();
+        if (ClassId != null && ClassId != undefined && ClassId != "" && ClassId != "-1") {
+            CHECK_FEESTRUCTURE_FOR_CLASS();
+            PopulateMT_AccFeeStructure_ListByParam();
+        }
     });
-}
-function PopulateNationalityList() {
-    $.ajax({
-        type: "POST",
-        url: BasePath + "/AStudent/MEnrollmentUI/PopulateNationalityList",
-        data: "{}",
-        success: function (data) {
-            var s = '<option  value="-1">Select an option</option>';
-            for (var i = 0; i < data.length; i++) {
-                s += '<center><option  value="' + data[i].Id + '">' + data[i].Description  + '</option>';
-            }
-            $("#DropDownListNationality").html(s);
-        },
+    $('#DropDownListFeeStructure').change(function (event) {
+        event.preventDefault();
+        var FeeStructureId = $('#DropDownListFeeStructure :selected').val();
+        if (FeeStructureId != null && FeeStructureId != undefined && FeeStructureId != "" && FeeStructureId != "-1") {
+            GET_ACCFEESTRUCTUREDETAIL_DETAILBYID();
+        }
     });
+   
+
 }
-function PopulateEducationLevelList() {
-    $.ajax({
-        type: "POST",
-        url: BasePath + "/AStudent/MEnrollmentUI/PopulateEducationLevelList",
-        data: "{}",
-        success: function (data) {
-            var s = '<option  value="-1">Select an option</option>';
-            for (var i = 0; i < data.length; i++) {
-                s += '<center><option  value="' + data[i].Id + '">' + data[i].Description  + '</option>';
-            }
-            $("#DropDownListParentStudyLevel").html(s);
-        },
-    });
-}
-function PopulateOccupationList() {
-    $.ajax({
-        type: "POST",
-        url: BasePath + "/AStudent/MEnrollmentUI/PopulateOccupationList",
-        data: "{}",
-        success: function (data) {
-            var s = '<option  value="-1">Select an option</option>';
-            for (var i = 0; i < data.length; i++) {
-                s += '<center><option  value="' + data[i].Id + '">' + data[i].Description  + '</option>';
-            }
-            $("#DropDownListOccupation").html(s);
-        },
-    });
-}
-function PopulateRelationshipsList() {
-    $.ajax({
-        type: "POST",
-        url: BasePath + "/AStudent/MEnrollmentUI/PopulateRelationshipsList",
-        data: "{}",
-        success: function (data) {
-            var s = '<option  value="-1">Select an option</option>';
-            for (var i = 0; i < data.length; i++) {
-                s += '<center><option  value="' + data[i].Id + '">' + data[i].Description  + '</option>';
-            }
-            $("#DropDownListRelationship").html(s);
-        },
-    });
-}
-function GetAllowedAppClasses() {
+//-----------ALL DROPDOWN LIST
+function PopulateMT_GeneralBranch_ListByParam() {
     var JsonArg = {
-        SessionId: $('#HiddenFieldSessionId').val(),
+        DB_IF_PARAM: PARAMETER.DB_IF_Condition.BRANCH_BY_USER_ALLOWEDBRANCHIDS,
+    }
+    $.ajax({
+
+        type: "POST",
+        url: BasePath + "/AStudent/MEnrollmentUI/GET_MT_GENERALBRANCH_BYPARAMETER",
+        data: { 'PostedData': (JsonArg) },
+        beforeSend: function () {
+            startLoading();
+        },
+        success: function (data) {
+            var s = '<option  value="-1">Select an option</option>';
+            for (var i = 0; i < data.length; i++) {
+                s += '<option  value="' + data[i].Id + '">' + data[i].Description + '' + '</option>';
+            }
+            $("#DropDownListCampus").html(s);
+            if (RoleId == Roles.RoleID_ADMIN || RoleId == Roles.RoleID_DEVELOPER) {
+                $("#DropDownListCampus").prop('disabled', Status.Close);
+            }
+            else {
+                $("#DropDownListCampus").prop('disabled', Status.Open);
+            }
+        },
+        complete: function () {
+            $("#DropDownListCampus").val(BranchId).change();
+
+            stopLoading();
+        },
+    });
+}
+function PopulateMT_AppSession_ListByParam() {
+    var CampusId = $('#DropDownListCampus :selected').val();
+    var JsonArg = {
+        DB_IF_PARAM: PARAMETER.DB_IF_Condition.APPSESSION_BY_GENERALBRANCH,
+        CampusId: CampusId,
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/AStudent/MEnrollmentUI/GetAllowedAppClasses",
-        data: { PostedData :(JsonArg)},
+        url: BasePath + "/AStudent/MEnrollmentUI/GET_MT_APPSESSION_BYPARAMETER",
+        data: { 'PostedData': (JsonArg) },
+        beforeSend: function () {
+            startLoading();
+        },
         success: function (data) {
-            debugger
             var s = '<option  value="-1">Select an option</option>';
             for (var i = 0; i < data.length; i++) {
-                s += '<center><option  value="' + data[i].Id + '">' + data[i].Description + ' - ' + data[i].Code +'[ '+data[i].StudyLevel+' ( '+data[i].StudyGroup+ ' ) ]'  + '</option>';
+                s += '<option ' +
+                    'data-ClassIds="' + data[i].ClassIds + '" ' +
+                    'value="' + data[i].Id + '">' + data[i].Description +
+                    '</option>';
             }
-            $("#DropDownListClass").html(s);
+            $("#DropDownListSession").html(s);
+
+        },
+        complete: function () {
+            stopLoading();
         },
     });
 }
+function PopulateMT_AppSessionDetail_ListByParam() {
+
+    var SessionId = $('#DropDownListSession :selected').val();
+
+    var JsonArg = {
+        DB_IF_PARAM: PARAMETER.DB_IF_Condition.APPSESSIONDETAIL_BY_APPSESSION,
+        SessionId: SessionId,
+    }
+    $.ajax({
+        type: "POST",
+        url: BasePath + "/AStudent/MEnrollmentUI/GET_MT_APPSESSIONDETAIL_BYPARAMETER",
+        data: { 'PostedData': (JsonArg) },
+        beforeSend: function () {
+            startLoading();
+        },
+        success: function (data) {
+            var s = '<option value="-1">Select an option</option>';
+            for (var i = 0; i < data.length; i++) {
+                s += '<option value="' + data[i].Id + '">' + data[i].Description + '</option>';
+            }
+            $("#DropDownListRegisteredPeriod").html(s);
+        },
+        complete: function () {
+            stopLoading();
+        },
+
+    });
+
+};
+function PopulateMT_AppClass_ListByParam() {
+
+    var CampusId = $('#DropDownListCampus :selected').val();
+    var ClassIds = $('#DropDownListSession :selected').attr('data-ClassIds');
+
+    var JsonArg = {
+        DB_IF_PARAM: PARAMETER.DB_IF_Condition.APPCLASS_BY_APPSESSION,
+        CampusId: CampusId,
+        ClassIds: ClassIds,
+    }
+    $.ajax({
+        type: "POST",
+        url: BasePath + "/AStudent/MEnrollmentUI/GET_MT_APPCLASS_BYPARAMETER",
+        data: { 'PostedData': (JsonArg) },
+        beforeSend: function () {
+            startLoading();
+        },
+        success: function (data) {
+            var s = '<option value="-1">Select an option</option>';
+            for (var i = 0; i < data.length; i++) {
+                s += '<option value="' + data[i].Id + '">' + data[i].Description + '</option>';
+            }
+            $("#DropDownListClass").html(s);
+        },
+        complete: function () {
+            stopLoading();
+        },
+
+    });
+
+};
+function PopulateMT_AccFeeStructure_ListByParam() {
+    var DB_Condition = PARAMETER.DB_IF_Condition.ACCFEESTRUCTURE_BY_APPCLASS
+    var CampusId = $('#DropDownListCampus :selected').val();
+    var SessionId = $('#DropDownListSession :selected').val();
+    var ClassId = $('#DropDownListClass :selected').val();
+    var JsonArg = {
+        CampusId: CampusId,
+        SessionId: SessionId,
+        ClassId: ClassId,
+        DB_IF_PARAM: DB_Condition,
+    }
+    $.ajax({
+        type: "POST",
+        url: BasePath + "/AStudent/MEnrollmentUI/GET_MT_ACCFEESTRUCTURE_BYPARAMETER",
+        data: { 'PostedData': (JsonArg) },
+        beforeSend: function () {
+            startLoading();
+        },
+        success: function (data) {
+            var s = '<option  value="-1">Select an option</option>';
+            for (var i = 0; i < data.length; i++) {
+                s += '<option ' +
+                    'data-Id="' + data[i].Id + '" ' +
+                    'value="' + data[i].GuID + '">' + data[i].Description +
+                    '</option>';
+            }
+            $("#DropDownListFeeStructure").html(s);
+        },
+        complete: function () {
+            stopLoading();
+        },
+    });
+}
+function PopulateLK_AdmissionCatagory_List() {
+    var JsonArg = {
+    }
+    $.ajax({
+        type: "POST",
+        url: BasePath + "/AStudent/MEnrollmentUI/GET_LK1_ADMISSIONCATAGORY",
+        data: { 'PostedData': (JsonArg) },
+        beforeSend: function () {
+            startLoading();
+        },
+        success: function (data) {
+            var s = '<option  value="-1">Select an option</option>';
+            for (var i = 0; i < data.length; i++) {
+                s += '<option  value="' + data[i].Id + '">' + data[i].Description + '' + '</option>';
+            }
+            $("#DropDownListAdmissionCatagory").html(s);
+        },
+        complete: function () {
+            stopLoading();
+        },
+    });
+}
+function PopulateLK_Religion_List() {
+    var JsonArg = {
+    }
+    $.ajax({
+        type: "POST",
+        url: BasePath + "/AStudent/MEnrollmentUI/GET_LK1_RELIGION",
+        data: { 'PostedData': (JsonArg) },
+        beforeSend: function () {
+            startLoading();
+        },
+        success: function (data) {
+            var s = '<option  value="-1">Select an option</option>';
+            for (var i = 0; i < data.length; i++) {
+                s += '<option  value="' + data[i].Id + '">' + data[i].Description + '' + '</option>';
+            }
+            $("#DropDownListReligion").html(s);
+        },
+        complete: function () {
+            stopLoading();
+        },
+    });
+}
+function PopulateLK_Country_List() {
+    var JsonArg = {
+    }
+    $.ajax({
+        type: "POST",
+        url: BasePath + "/AStudent/MEnrollmentUI/GET_LK1_COUNTRY",
+        data: { 'PostedData': (JsonArg) },
+        beforeSend: function () {
+            startLoading();
+        },
+        success: function (data) {
+            var s = '<option  value="-1">Select an option</option>';
+            for (var i = 0; i < data.length; i++) {
+                s += '<option  value="' + data[i].Id + '">' + data[i].Description + '' + '</option>';
+            }
+            $("#DropDownListCountry").html(s);
+        },
+        complete: function () {
+            stopLoading();
+        },
+    });
+}
+function PopulateLK_Occupation_List() {
+    var JsonArg = {
+    }
+    $.ajax({
+        type: "POST",
+        url: BasePath + "/AStudent/MEnrollmentUI/GET_LK1_OCCUPATION",
+        data: { 'PostedData': (JsonArg) },
+        beforeSend: function () {
+            startLoading();
+        },
+        success: function (data) {
+            var s = '<option  value="-1">Select an option</option>';
+            for (var i = 0; i < data.length; i++) {
+                s += '<option  value="' + data[i].Id + '">' + data[i].Description + '' + '</option>';
+            }
+            $("#DropDownListOccupation").html(s);
+        },
+        complete: function () {
+            stopLoading();
+        },
+    });
+}
+
+
 
 // VALIDATE INPUT FIELDS
 function ValidateInputFields() {
@@ -291,3 +528,31 @@ function InsertData(OperationType) {
     });
 }
 
+
+//-----------LOAD ENTERY RECORD :: IF ALREAR EXIST
+function CHECK_FEESTRUCTURE_FOR_CLASS() {
+    var SessionId = $('#DropDownListSession :selected').val();
+    var ClassId = $('#DropDownListClass :selected').val();
+    var JsonArg = {
+        SessionId: SessionId,
+        ClassId: ClassId,
+    }
+
+    $.ajax({
+        type: "POST",
+        url: BasePath + "/AStudent/MEnrollmentUI/CHECK_FEESTRUCTURE_FOR_CLASS",
+        data: { 'PostedData': (JsonArg) },
+        beforeSend: function () {
+            startLoading();
+        },
+        success: function (data) {
+            if ((data.length < 0) || (data.length == 0) || (data == undefined)) {
+                GetMessageBox("No Fee Found For Selected Class", 500);
+                return;
+            }
+        },
+        complete: function () {
+            stopLoading();
+        },
+    });
+}

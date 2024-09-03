@@ -128,11 +128,10 @@ function ChangeCase() {
 //-----------ALL DROPDOWN LIST
 function PopulateLK_FeeCatagory_List() {
     var JsonArg = {
-        ActionCondition: PARAMETER.LookUpCondition.GET_LK1_FEECATAGORY,
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/AAccounts/MFeeUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/AAccounts/MFeeUI/GET_LK1_FEECATAGORY",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -151,11 +150,10 @@ function PopulateLK_FeeCatagory_List() {
 }
 function PopulateLK_ChargingMethod_List() {
     var JsonArg = {
-        ActionCondition: PARAMETER.LookUpCondition.GET_LK1_CHARGINGMETHOD,
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/AAccounts/MFeeUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/AAccounts/MFeeUI/GET_LK1_CHARGINGMETHOD",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -174,13 +172,12 @@ function PopulateLK_ChargingMethod_List() {
 }
 function PopulateMT_Account_REV_List() {
     var JsonArg = {
-        ActionCondition: PARAMETER.SESCondition.GET_MT_STRUCTURECOAACCOUNT_BYPARAMETER,
         DB_IF_PARAM: PARAMETER.DB_IF_Condition.STRUCTURECOAACCOUNT_BY_GENERALCOMPANY,
         CoaCatagoryIds: FILTER.COA_ACCOUNTTYPE.SALES_REVENUES,
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/AAccounts/MFeeUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/AAccounts/MFeeUI/GET_MT_STRUCTURECOAACCOUNT_BYPARAMETER",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -199,14 +196,13 @@ function PopulateMT_Account_REV_List() {
 }
 function PopulateMT_Account_AST_List() {
     var JsonArg = {
-        ActionCondition: PARAMETER.SESCondition.GET_MT_STRUCTURECOAACCOUNT_BYPARAMETER,
         DB_IF_PARAM: PARAMETER.DB_IF_Condition.STRUCTURECOAACCOUNT_BY_GENERALCOMPANY,
         CoaCatagoryIds: FILTER.COA_ACCOUNTTYPE.ACCOUNTS_RECEIVABLE,
 
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/AAccounts/MFeeUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/AAccounts/MFeeUI/GET_MT_STRUCTURECOAACCOUNT_BYPARAMETER",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -225,14 +221,13 @@ function PopulateMT_Account_AST_List() {
 }
 function PopulateMT_Account_LIAB_List() {
     var JsonArg = {
-        ActionCondition: PARAMETER.SESCondition.GET_MT_STRUCTURECOAACCOUNT_BYPARAMETER,
         DB_IF_PARAM: PARAMETER.DB_IF_Condition.STRUCTURECOAACCOUNT_BY_GENERALCOMPANY,
         CoaCatagoryIds: FILTER.COA_ACCOUNTTYPE.CURRENT_LIABILITIES + "," + FILTER.COA_ACCOUNTTYPE.OTHER_CURRENT_LIABILITIES,
 
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/AAccounts/MFeeUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/AAccounts/MFeeUI/GET_MT_STRUCTURECOAACCOUNT_BYPARAMETER",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -251,14 +246,13 @@ function PopulateMT_Account_LIAB_List() {
 }
 function PopulateMT_Account_COS_List() {
     var JsonArg = {
-        ActionCondition: PARAMETER.SESCondition.GET_MT_STRUCTURECOAACCOUNT_BYPARAMETER,
         DB_IF_PARAM: PARAMETER.DB_IF_Condition.STRUCTURECOAACCOUNT_BY_GENERALCOMPANY,
         CoaCatagoryIds: FILTER.COA_ACCOUNTTYPE.COST_OF_SALES,
 
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/AAccounts/MFeeUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/AAccounts/MFeeUI/GET_MT_STRUCTURECOAACCOUNT_BYPARAMETER",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -500,12 +494,11 @@ $('#ButtonSubmitGetInfoForEdit').click(function (event) {
 });
 function GET_STRUCTUREFEETYPE_LISTBYPARAM() {
     var JsonArg = {
-        ActionCondition: PARAMETER.SESCondition.GET_MT_STRUCTUREFEETYPE_BYPARAMETER,
         DB_IF_PARAM: PARAMETER.DB_IF_Condition.STRUCTUREFEETYPE_LIST,
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/AAccounts/MFeeUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/AAccounts/MFeeUI/GET_MT_STRUCTUREFEETYPE_BYPARAMETER",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -527,11 +520,10 @@ function GET_STRUCTUREFEETYPE_DETAILBYID() {
 
     var JsonArg = {
         GuID: FeeTypeId,
-        ActionCondition: PARAMETER.SESCondition.GET_MT_STRUCTUREFEETYPE_DETAILBYID,
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/AAccounts/MFeeUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/AAccounts/MFeeUI/GET_MT_STRUCTUREFEETYPE_DETAILBYID",
         dataType: 'json',
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {

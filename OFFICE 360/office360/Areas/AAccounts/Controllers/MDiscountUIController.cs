@@ -62,22 +62,19 @@ namespace office360.Areas.AAccounts.Controllers
         #endregion
 
         #region POPULATE DROP DOWN LIST
-        public ActionResult GET_DATA_BY_PARAMETER(_SqlParameters PostedData)
-        {
-            List<_SqlParameters> DATA = null;
 
-            switch (PostedData.ActionCondition)
-            {
-                case nameof(SESActionCondition.GET_MT_STRUCTUREDISCOUNTTYPE_BYPARAMETER):
-                    DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.GET_MT_STRUCTUREDISCOUNTTYPE_BYPARAM(PostedData).ToList();
-                    break;
-                case nameof(SESActionCondition.GET_MT_STRUCTUREDISCOUNTTYPE_DETAILBYID):
-                    DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.GET_MT_STRUCTUREDISCOUNTTYPE_INFO_BY_GUID(PostedData).ToList();
-                    break;
-                    #endregion
-            }
+        public ActionResult GET_MT_STRUCTUREDISCOUNTTYPE_BYPARAMETER(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.GET_MT_STRUCTUREDISCOUNTTYPE_BYPARAM(PostedData).ToList();
             return Json(DATA, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult GET_MT_STRUCTUREDISCOUNTTYPE_DETAILBYID(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.GET_MT_STRUCTUREDISCOUNTTYPE_INFO_BY_GUID(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion
 
         #region FUNCTION TO PASS DATA TO HELPER
         [HttpPost]

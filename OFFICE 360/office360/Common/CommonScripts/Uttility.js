@@ -1,4 +1,22 @@
-﻿$.fn.RequiredTextBoxInputGroup = function () {
+﻿//------------ BEFORE DOM LOADS
+$(function () {
+
+    //------------DROP DOWN :: SELECT2
+    $('.select2').select2();
+    $('.js-basic-single').select2();
+    $('.js-basic-multiple').select2();
+    $(".bs-select-1").val()
+
+    //------------MASKING :: DYNAMIC FIELD
+
+    $('.PhoneNumber').inputmask(ApplicableMasking.PhoneNumber);
+    $('.MobileNumber').inputmask(ApplicableMasking.MobileNumber);
+    $('.EmailAddress').inputmask(ApplicableMasking.EmailAddress);
+    $('.CNICNumber').inputmask(ApplicableMasking.CNICNumber);
+});
+
+//------------ VALIDATION METHOD :: WITH MESSAGE
+$.fn.RequiredTextBoxInputGroup = function () {
     $(this).removeClass('is-invalid is-valid');
     $(this).css('border', ''); // Reset the border
     var labelText = '';
@@ -26,14 +44,6 @@
         return true;
     }
 };
-
-
-
-
-// DataTables column definition
-
-
-
 $.fn.RequiredDropdown = function () {
     // Remove any existing validation messages and icons
     $(this).removeClass('is-invalid is-valid');
@@ -77,12 +87,7 @@ $.fn.RequiredDropdown = function () {
     }
 };
 
-
-
-function GetHRAreaButton( title, url, text) {
-    return '<a title = "' + title + '" class="view text-primary btn btn-lg"  href = "' + url + '" ><i class="fa fa-print" aria-hidden="true"></i></a >';
-}
-
+//------------ UTTILITY BUTTON :: DATA TABLE
 function GetStatus(Status) {
     var Badge = ""; // Initialize Badge variable to an empty string
     switch (Status) {
@@ -199,9 +204,6 @@ function GetStatus(Status) {
     var Label = '<td> <span class="badge badge-' + BadgeColor + '">' + Display + '</span></td>';
     return Label;
 }
-//function GetViewbtn(title, url, icon) {
-//    return '<a title="' + title + '" class="view text-primary btn btn-lg" href="'+url+ '"><i class="fa fa-'+icon+'" aria-hidden="true"></i></a>';
-//}
 function GetViewbtn(url, title, text) {
     return "<td class='center'><a onclick=" + url + "  title='Click here to View " + title + "' class='btn btn-sm view'><i class='far fa-eye'></i> " + '' + "</a></td>";
 }
@@ -211,6 +213,60 @@ function GetEditbtn(url, title, text) {
 function GetDeletebtn(url, title, text) {
     return "<td class='center'><a onclick=" + url + "  title='Click here to Delete " + title + "' class='btn btn-sm delete'><i class='far fa-trash-alt'></i> " + '' + "</a></td>";
 }
+function GetCheckBox_row(Id) {
+    return '<td><div class="form-group"><div class="checkbox checbox-switch switch-success"><label><input type="checkbox" Id="IsChecked' + Id + '" /><span></span></label></div></div></td>';
+}
+function GetTextBox(Id) {
+    debugger
+    var inputElement = document.createElement('input');
+    inputElement.type = 'text';
+    inputElement.className = 'form-control date_masking';
+    inputElement.placeholder = 'Please Enter End Date Here!';
+    inputElement.id = Id;
+
+    return inputElement; // Return the inputElement, not DatePicker
+}
+function calculateSumOfColumn(TableId, ColumnIndex) {
+    var TotalSum = 0;
+    $('#' + TableId + ' tbody tr').each(function () {
+        var value = $(this).find('td').eq(ColumnIndex).find('input').val();
+        TotalSum += parseFloat(value) || 0;
+    });
+    return TotalSum;
+}
+var sum = calculateSumOfColumn('myTable', 5);
+console.log(sum);
+function PopulateDTGroupByList(DataTableId, ListCondition, HTMLAttribute) {
+    var Table = $('#' + DataTableId).DataTable();
+    var DATA = [];
+
+    Table.columns().every(function () {
+        var column = this;
+        var header = $(column.header());
+
+        if (header.hasClass(ListCondition)) {
+            DATA.push({
+                Description: header.text().trim(),
+                Id: column.index()
+            });
+        }
+    });
+    if (HTMLAttribute) {
+        var dropdown = $('#' + HTMLAttribute);
+        dropdown.empty();
+        dropdown.append('<option value="-1">Select an option</option>');
+
+        DATA.forEach(function (header) {
+            dropdown.append('<option value="' + header.Id + '">' + header.Description + '</option>');
+        });
+    }
+}
+function AppendTableFooterTotals(TableId, ColumnSpan, TableDivId, Header) {
+    var Footer = $('#' + TableId).append('<tfoot  disabled="disabled"><tr><th>' + Header + '</th><td class="Headings"  colspan="' + ColumnSpan + '"></td><td id="' + TableDivId + '"></td><td colspan="6"></td></tr></tfoot>');
+    return Footer;
+}
+
+//------------ BLOB OBJECT RESPONSER
 function OpenReport(response, status, xhr) {
     var filename = "";
     var disposition = xhr.getResponseHeader('Content-Disposition');
@@ -252,27 +308,30 @@ function OpenReport(response, status, xhr) {
     }
 }
 
-$(function () {   
-    $('.select2').select2();
-    $('.js-basic-single').select2();
-        $('.js-basic-multiple').select2();
-        $(".bs-select-1").val()
-   
-});
-
-$("#logoutLink").click(function (e) {
-    e.preventDefault(); 
-    $.ajax({
-        type: "POST",
-        url: BasePath+'/Home/Logout',
-        dataType: "json",
-        success: function () {
+//------------ UI ELEMENTS
+function stopLoading() {
+    setTimeout(function () {
+        $.unblockUI();
+    }, 1000);
+}
+function startLoading() {
+    $.blockUI({
+        message: 'Loading Please Wait',
+        overlayCSS: {
+            backgroundColor: '#1b2024',
+            opacity: 0.8,
+            zIndex: 1200,
+            cursor: 'wait'
         },
-
-        error: function () {
+        css: {
+            border: 0,
+            color: '#fff',
+            zIndex: 1201,
+            padding: 0,
+            backgroundColor: 'transparent'
         }
     });
-});
+}
 function GetMessageBox(message, status) {
     const messageContainer = $('#messageContainer');
     let alertClass, iconClass;
@@ -305,29 +364,6 @@ function GetMessageBox(message, status) {
 
    // messageContainer.html(alertHtml).fadeIn('slow').delay(7000).fadeOut();
 }
-function stopLoading() {
-    setTimeout(function () {
-        $.unblockUI();
-    }, 1000);
-}
-function startLoading() {
-    $.blockUI({
-        message: 'Loading Please Wait',
-        overlayCSS: {
-            backgroundColor: '#1b2024',
-            opacity: 0.8,
-            zIndex: 1200,
-            cursor: 'wait'
-        },
-        css: {
-            border: 0,
-            color: '#fff',
-            zIndex: 1201,
-            padding: 0,
-            backgroundColor: 'transparent'
-        }
-    });
-}
 function ErrorMessage(Message) {
     $.blockUI({
         message: Message,
@@ -348,105 +384,24 @@ function ErrorMessage(Message) {
         }
     });
 }
-function GetCheckBox_row(Id) {
-    return '<td><div class="form-group"><div class="checkbox checbox-switch switch-success"><label><input type="checkbox" Id="IsChecked' + Id +'" /><span></span></label></div></div></td>';
-}
-    function GetTextBox(Id) {
-    debugger
-    var inputElement = document.createElement('input');
-    inputElement.type = 'text';
-    inputElement.className = 'form-control date_masking';
-    inputElement.placeholder = 'Please Enter End Date Here!';
-    inputElement.id = Id;
 
-    return inputElement; // Return the inputElement, not DatePicker
-}
-//function _InlineDate() {
-//    $('.date_masking').datepicker({
-//        format: 'dd/mm/yyyy',
-//        todayHighlight: true,
-//        autoclose: true,
-//        orientation: "bottom"
-//    }).datepicker("setDate", 'now');
-/*}*/
-
-function calculateSumOfColumn(TableId, ColumnIndex) {
-    var TotalSum = 0;
-    $('#' + TableId + ' tbody tr').each(function () {
-        var value = $(this).find('td').eq(ColumnIndex).find('input').val();
-        TotalSum += parseFloat(value) || 0; // The "|| 0" ensures that NaN is treated as 0
-    });
-    return TotalSum;
-}
-
-// Usage example:
-var sum = calculateSumOfColumn('myTable', 5); // Replace 'myTable' with your table ID and 5 with your column index
-console.log(sum); // Outputs the sum to the console
 
 function ParseData(dotNetDate) {
     if (!dotNetDate) {
-        return ''; // Return an empty string if the date is null or undefined
+        return '';
     }
-
-    // Extract the timestamp from the format /Date(1673463600000)/
     var timestamp = parseInt(dotNetDate.substr(6));
-
-    // Create a new Date object using the extracted timestamp
     var date = new Date(timestamp);
-
-    // Define an array of month names
     var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-    // Format the date as 13-Jan-2023
-    var day = ("0" + date.getDate()).slice(-2); // Add leading 0 if necessary
-    var month = months[date.getMonth()]; // Get the month name
+    var day = ("0" + date.getDate()).slice(-2);
+    var month = months[date.getMonth()]; 
     var year = date.getFullYear();
-
     return day + '-' + month + '-' + year;
 }
 function GetDecimalValue(number) {
     return number.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
-function PopulateDTGroupByList(DataTableId, ListCondition,HTMLAttribute) {
-    var Table = $('#' + DataTableId).DataTable();
-    var DATA = [];
-
-    Table.columns().every(function () {
-        var column = this;
-        var header = $(column.header());
-
-        if (header.hasClass(ListCondition)) {
-            DATA.push({
-                Description: header.text().trim(),
-                Id: column.index() // Adjust index if needed
-            });
-        }
-    });
-    if (HTMLAttribute) {
-        var dropdown = $('#' + HTMLAttribute);
-        dropdown.empty();
-        dropdown.append('<option value="-1">Select an option</option>');
-
-        DATA.forEach(function (header) {
-            dropdown.append('<option value="' + header.Id + '">' + header.Description + '</option>');
-        });
-    }
-}
-function AppendTableFooterTotals(TableId, ColumnSpan, TableDivId, Header) {
-    var Footer = $('#' + TableId).append('<tfoot  disabled="disabled"><tr><th>' + Header + '</th><td class="Headings"  colspan="' + ColumnSpan + '"></td><td id="' + TableDivId + '"></td><td colspan="6"></td></tr></tfoot>');
-    return Footer;
-}
-
-var fullInitDefaults = {
-
-};
-
-function initializeFullInitTables() {
-    $('.fullInit').each(function () {
-        var tableSettings = $.extend(true, {}, fullInitDefaults, $(this).data('settings'));
-        $(this).DataTable(tableSettings);
-    });
-}
+//------------ DATE PICKER
 var DatePickerRange = flatpickr(document.getElementsByClassName('DatePickerRange'), {
     mode: "range",
     dateFormat: "Y-m-d",

@@ -21,6 +21,7 @@ namespace office360.Areas.AStudent.Controllers
         SESEntities db = new SESEntities();
         int? StatusCode = 0;
         int? _Exe = 0;
+        #region RENDER VIEW
         [UsersSessionCheck]
         [CompanySessionCheck]
         public ActionResult CreateNewEnrollment(_SqlParameters PostedData)
@@ -42,60 +43,99 @@ namespace office360.Areas.AStudent.Controllers
             }
 
         }
-        public ActionResult GetDataIntoListByParameter(_SqlParameters PostedData)
+        #endregion
+        public ActionResult GET_MT_GENERALBRANCH_BYPARAMETER(_SqlParameters PostedData)
         {
-            List<_SqlParameters> DATA = null;
-
-            switch (PostedData.ActionCondition)
-            {
-
-            }
+            var DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_GENERALBRANCH_BYPARAM(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_MT_APPSESSION_BYPARAMETER(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_APPSESSION_BYPARAM(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_MT_APPSESSIONDETAIL_BYPARAMETER(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_APPSESSIONDETAIL_BYPARAM(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_MT_APPCLASS_BYPARAMETER(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_APPCLASS_BYPARAM(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_LK1_RELIGION(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_Religion(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_LK1_COUNTRY(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_Country(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_LK1_OCCUPATION(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_Occupation(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_LK1_ADMISSIONCATAGORY(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_AdmissionCatagory(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_MT_ACCFEESTRUCTURE_BYPARAMETER(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.GET_MT_ACCFEESTRUCTURE_BYPARAM(PostedData).ToList();
+            return Json(DATA, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GET_MT_ACCFEESTRUCTUREDETAIL_BYPARAMETER(_SqlParameters PostedData)
+        {
+            var DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.GET_MT_ACCFEESTRUCTUREDETAIL_BYPARAM(PostedData).ToList();
             return Json(DATA, JsonRequestBehavior.AllowGet);
         }
 
-        #region POPULATE LIST FROM DATABASE
-        public ActionResult PopulateGenderList(_SqlParameters PostedData)
+        public ActionResult GET_DATA_BY_PARAMETER(_SqlParameters PostedData)
         {
-            var data = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_Gender(PostedData);
-            return Json(data, JsonRequestBehavior.AllowGet);
+            List<_SqlParameters> DATA = null;
+
+            //switch (PostedData.ActionCondition)
+            //{
+            //    case nameof(SESActionCondition.GET_MT_GENERALBRANCH_BYPARAMETER):
+            //        DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_GENERALBRANCH_BYPARAM(PostedData).ToList();
+            //        break;
+            //    case nameof(SESActionCondition.GET_MT_APPSESSION_BYPARAMETER):
+            //        DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_APPSESSION_BYPARAM(PostedData).ToList();
+            //        break;
+            //    case nameof(SESActionCondition.GET_MT_APPSESSIONDETAIL_BYPARAMETER):
+            //        DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_APPSESSIONDETAIL_BYPARAM(PostedData).ToList();
+            //        break;
+            //    case nameof(SESActionCondition.GET_MT_APPCLASS_BYPARAMETER):
+            //        DATA = Common.DataBaseProcedures.ACompany.GetDataFromSP.GET_MT_APPCLASS_BYPARAM(PostedData).ToList();
+            //        break;
+            //    case nameof(LookUpActionCondition.GET_LK1_RELIGION):
+            //        DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_Religion(PostedData).ToList();
+            //        break;
+            //    case nameof(LookUpActionCondition.GET_LK1_COUNTRY):
+            //        DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_Country(PostedData).ToList();
+            //        break;
+            //    case nameof(LookUpActionCondition.GET_LK1_OCCUPATION):
+            //        DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_Occupation(PostedData).ToList();
+            //        break;
+            //    case nameof(LookUpActionCondition.GET_LK1_ADMISSIONCATAGORY):
+            //        DATA = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_AdmissionCatagory(PostedData).ToList();
+            //        break;
+
+            //}
+            return Json(DATA, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult PopulateMartialStatusList(_SqlParameters PostedData)
+        #region CHECK DUPLICATE
+        public ActionResult CHECK_FEESTRUCTURE_FOR_CLASS(_SqlParameters PostedData)
         {
-            var data = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_MartialStatus(PostedData);
-            return Json(data, JsonRequestBehavior.AllowGet);
+            var DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.ISEXIST_FEESTRUCTURE_FOR_CLASS(PostedData);
+            return Json(DATA, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult PopulateReligionList(_SqlParameters PostedData)
-        {
-            var data = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_Religion(PostedData);
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
-        public ActionResult PopulateNationalityList(_SqlParameters PostedData)
-        {
-            var data = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_Country(PostedData);
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
-        public ActionResult PopulateEducationLevelList(_SqlParameters PostedData)
-        {
-            // PostedData.ListCondition = DBListCondition..STUDYLEVEL_BY_BRANCH_JOIN_SETTINGS.ToSafeString();
-            var data = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_StudyLevel(PostedData);
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
-        public ActionResult PopulateRelationshipsList(_SqlParameters PostedData)
-        {
-            var data = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_Relationship(PostedData);
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
-        public ActionResult PopulateOccupationList(_SqlParameters PostedData)
-        {
-            var data = Common.DataBaseProcedures.Common.GetDataFromDB.GET_LK1_Occupation(PostedData);
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
-        //[HttpPost]
-        //public JsonResult GetAllowedAppClasses(_SqlParameters PostedData)
-        //{
-        //    var data = Common.DataBaseProcedures.Common.GetDataFromDB.PopulateAppClassListByParamter(PostedData);
-        //    return Json(data, JsonRequestBehavior.AllowGet);
-        //}
+
         #endregion
 
         #region INSERT DATA INTO DATABASE 

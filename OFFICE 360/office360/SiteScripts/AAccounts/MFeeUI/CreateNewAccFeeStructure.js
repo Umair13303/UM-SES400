@@ -225,6 +225,11 @@ function ChangeCase() {
         PopulateMT_AppClass_ListByParam();
     });
 
+    $('#DropDownListClass').change(function (event) {
+        event.preventDefault();
+        CHECK_FEESTRUCTURE_FOR_CLASS();
+    });
+
     $('#DropDownListWHTaxPolicy').change(function (event) {
         event.preventDefault();
         WH_Percentage = $('#DropDownListWHTaxPolicy :selected').attr('data-Percentage');
@@ -254,12 +259,11 @@ function ChangeCase() {
 //-----------ALL DROPDOWN LIST
 function PopulateMT_GeneralBranch_ListByParam() {
     var JsonArg = {
-        ActionCondition: PARAMETER.SESCondition.GET_MT_GENERALBRANCH_BYPARAMETER,
         DB_IF_PARAM: PARAMETER.DB_IF_Condition.BRANCH_BY_USER_ALLOWEDBRANCHIDS,
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/AAccounts/MFeeUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/AAccounts/MFeeUI/GET_MT_GENERALBRANCH_BYPARAMETER",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -285,15 +289,13 @@ function PopulateMT_GeneralBranch_ListByParam() {
 }
 function PopulateMT_AppSession_ListByParam() {
     var CampusId = $('#DropDownListCampus :selected').val();
-    alert(CampusId)
     var JsonArg = {
-        ActionCondition: PARAMETER.SESCondition.GET_MT_APPSESSION_BYPARAMETER,
         DB_IF_PARAM: PARAMETER.DB_IF_Condition.APPSESSION_BY_GENERALBRANCH,
         CampusId: CampusId,
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/AAccounts/MFeeUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/AAccounts/MFeeUI/GET_MT_APPSESSION_BYPARAMETER",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -320,14 +322,13 @@ function PopulateMT_AppClass_ListByParam() {
     var ClassIds = $('#DropDownListSession :selected').attr('data-ClassIds');
 
     var JsonArg = {
-        ActionCondition: PARAMETER.SESCondition.GET_MT_APPCLASS_BYPARAMETER,
         DB_IF_PARAM: PARAMETER.DB_IF_Condition.APPCLASS_BY_APPSESSION,
         CampusId: CampusId,
         ClassIds: ClassIds,
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/AAccounts/MFeeUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/AAccounts/MFeeUI/GET_MT_APPCLASS_BYPARAMETER",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -348,12 +349,11 @@ function PopulateMT_AppClass_ListByParam() {
 };
 function PopulateLK_WHTaxPolicy_List() {
     var JsonArg = {
-        ActionCondition: PARAMETER.LookUpCondition.GET_LK1_WHTAXPOLICY_BYPARAMTER,
         DB_IF_PARAM: PARAMETER.DB_IF_Condition.WHTAXPOLICY_LIST,
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/AAccounts/MFeeUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/AAccounts/MFeeUI/GET_LK1_WHTAXPOLICY_BYPARAMTER",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -377,12 +377,11 @@ function PopulateLK_WHTaxPolicy_List() {
 }
 function PopulateMT_StructureFeeType_ListByParam() {
     var JsonArg = {
-        ActionCondition: PARAMETER.SESCondition.GET_MT_STRUCTUREFEETYPE_BYPARAMETER,
         DB_IF_PARAM: PARAMETER.DB_IF_Condition.STRUCTUREFEETYPE_BY_ACADEMICFEE,
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/AAccounts/MFeeUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/AAccounts/MFeeUI/GET_MT_STRUCTUREFEETYPE_BYPARAMETER",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -405,13 +404,12 @@ function PopulateMT_StructureFeeType_ListByParam() {
 }
 function PopulateMT_Account_REV_List() {
     var JsonArg = {
-        ActionCondition: PARAMETER.SESCondition.GET_MT_STRUCTURECOAACCOUNT_BYPARAMETER,
         DB_IF_PARAM: PARAMETER.DB_IF_Condition.STRUCTURECOAACCOUNT_BY_GENERALCOMPANY,
         CoaCatagoryIds: FILTER.COA_ACCOUNTTYPE.SALES_REVENUES,
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/AAccounts/MFeeUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/AAccounts/MFeeUI/GET_MT_STRUCTURECOAACCOUNT_BYPARAMETER",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -430,14 +428,13 @@ function PopulateMT_Account_REV_List() {
 }
 function PopulateMT_Account_AST_List() {
     var JsonArg = {
-        ActionCondition: PARAMETER.SESCondition.GET_MT_STRUCTURECOAACCOUNT_BYPARAMETER,
         DB_IF_PARAM: PARAMETER.DB_IF_Condition.STRUCTURECOAACCOUNT_BY_GENERALCOMPANY,
         CoaCatagoryIds: FILTER.COA_ACCOUNTTYPE.ACCOUNTS_RECEIVABLE,
 
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/AAccounts/MFeeUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/AAccounts/MFeeUI/GET_MT_STRUCTURECOAACCOUNT_BYPARAMETER",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -456,14 +453,13 @@ function PopulateMT_Account_AST_List() {
 }
 function PopulateMT_Account_LIAB_List() {
     var JsonArg = {
-        ActionCondition: PARAMETER.SESCondition.GET_MT_STRUCTURECOAACCOUNT_BYPARAMETER,
         DB_IF_PARAM: PARAMETER.DB_IF_Condition.STRUCTURECOAACCOUNT_BY_GENERALCOMPANY,
         CoaCatagoryIds: FILTER.COA_ACCOUNTTYPE.CURRENT_LIABILITIES + "," + FILTER.COA_ACCOUNTTYPE.OTHER_CURRENT_LIABILITIES,
 
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/AAccounts/MFeeUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/AAccounts/MFeeUI/GET_MT_STRUCTURECOAACCOUNT_BYPARAMETER",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -482,14 +478,13 @@ function PopulateMT_Account_LIAB_List() {
 }
 function PopulateMT_Account_COS_List() {
     var JsonArg = {
-        ActionCondition: PARAMETER.SESCondition.GET_MT_STRUCTURECOAACCOUNT_BYPARAMETER,
         DB_IF_PARAM: PARAMETER.DB_IF_Condition.STRUCTURECOAACCOUNT_BY_GENERALCOMPANY,
         CoaCatagoryIds: FILTER.COA_ACCOUNTTYPE.COST_OF_SALES,
 
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/AAccounts/MFeeUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/AAccounts/MFeeUI/GET_MT_STRUCTURECOAACCOUNT_BYPARAMETER",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -636,11 +631,10 @@ function GET_STRUCTUREFEETYPE_DETAILBYID() {
 
         var JsonArg = {
             GuID: FeeTypeId,
-            ActionCondition: PARAMETER.SESCondition.GET_MT_STRUCTUREFEETYPE_DETAILBYID,
         }
         $.ajax({
             type: "POST",
-            url: BasePath + "/AAccounts/MFeeUI/GET_DATA_BY_PARAMETER",
+            url: BasePath + "/AAccounts/MFeeUI/GET_MT_STRUCTUREFEETYPE_DETAILBYID",
             dataType: 'json',
             data: { 'PostedData': (JsonArg) },
             beforeSend: function () {
@@ -710,16 +704,14 @@ $('#ButtonSubmitGetInfoForEdit').click(function () {
 });
 function GET_ACCFEESTRUCTURE_LISTBYPARAM() {
     var DB_Condition = PARAMETER.DB_IF_Condition.ACCFEESTRUCTURE_BY_GENERALBRANCH
-
     var CampusId = $('#DropDownListCampus :selected').val() ?? BranchId;
     var JsonArg = {
         CampusId: CampusId,
-        ActionCondition: PARAMETER.SESCondition.GET_MT_ACCFEESTRUCTURE_BYPARAMETER,
         DB_IF_PARAM: DB_Condition,
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/AAccounts/MFeeUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/AAccounts/MFeeUI/GET_MT_ACCFEESTRUCTURE_BYPARAMETER",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -748,11 +740,10 @@ function GET_ACCFEESTRUCTURE_DETAILBYID() {
         var JsonArg = {
             CampusId: CampusId,
             GuID: FeeStructureId,
-            ActionCondition: PARAMETER.SESCondition.GET_MT_ACCFEESTRUCTURE_DETAILBYID,
         }
         $.ajax({
             type: "POST",
-            url: BasePath + "/AAccounts/MFeeUI/GET_DATA_BY_PARAMETER",
+            url: BasePath + "/AAccounts/MFeeUI/GET_MT_ACCFEESTRUCTURE_DETAILBYID",
             dataType: 'json',
             data: { 'PostedData': (JsonArg) },
             beforeSend: function () {
@@ -763,7 +754,7 @@ function GET_ACCFEESTRUCTURE_DETAILBYID() {
                 $('#DropDownListSession').val(data[0].SessionId).change();
                 setTimeout(function () {
                     $('#DropDownListClass').val(data[0].ClassId).change().prop('disabled', true);
-                }, 800);
+                }, 2000);
                 $('#DropDownListWHTaxPolicy').val(data[0].WHTaxPolicyId).change();
 
                 $('#HiddenFieldFeeStructureGuID').val(data[0].GuID);
@@ -780,11 +771,10 @@ function GET_ACCFEESTRUCTUREDETAIL_DETAILBYID() {
     if (FeeStructureId != null && FeeStructureId != undefined && FeeStructureId != "" && FeeStructureId != "-1") {
         var JsonArg = {
             Id: FeeStructureId,
-            ActionCondition: PARAMETER.SESCondition.GET_MT_ACCFEESTRUCTUREDETAIL_DETAILBYID,
         }
         $.ajax({
             type: "POST",
-            url: BasePath + "/AAccounts/MFeeUI/GET_DATA_BY_PARAMETER",
+            url: BasePath + "/AAccounts/MFeeUI/GET_MT_ACCFEESTRUCTUREDETAIL_DETAILBYID",
             data: { 'PostedData': (JsonArg) },
             beforeSend: function () {
                 startLoading();
@@ -816,4 +806,33 @@ function GET_ACCFEESTRUCTUREDETAIL_DETAILBYID() {
         });
 
     }
+}
+
+
+//-----------LOAD ENTERY RECORD :: IF ALREAR EXIST
+function CHECK_FEESTRUCTURE_FOR_CLASS() {
+    var SessionId = $('#DropDownListSession :selected').val();
+    var ClassId = $('#DropDownListClass :selected').val();
+    var JsonArg = {
+        SessionId: SessionId,
+        ClassId: ClassId,
+    }
+
+    $.ajax({
+        type: "POST",
+        url: BasePath + "/AAccounts/MFeeUI/CHECK_FEESTRUCTURE_FOR_CLASS",
+        data: { 'PostedData': (JsonArg) },
+        beforeSend: function () {
+            startLoading();
+        },
+        success: function (data) {
+            if (data.length > 0) {
+                GetMessageBox("Fee Structure Already Exist.... In-Active Fee Structure From List To Proceed",500);
+                return;
+            }
+        },
+        complete: function () {
+            stopLoading();
+        },
+    });
 }

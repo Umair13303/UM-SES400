@@ -89,10 +89,7 @@
                 <div class="row mb-0">
                     <div class="col-sm-12 col-md-5">
                         <div class="form-group">
-                            <label for="DropDownListFeeType" class="col-form-label">
-                                Fee Type
-                                <i class="far fa-search-a" aria-hidden="true"></i>
-                            </label>
+                           
                             @Html.Label("Fee Type", new { @class = "col-form-label", @for = "DropDownListFeeType" })
                             @Html.DropDownList("DropDownListFeeType", Enumerable.Empty<SelectListItem>(), new { @class = "form-control select2", @data_toggle = "select2", id = "DropDownListFeeType" })
                         </div>

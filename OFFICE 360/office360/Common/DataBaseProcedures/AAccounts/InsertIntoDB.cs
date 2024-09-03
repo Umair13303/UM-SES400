@@ -121,13 +121,7 @@ namespace office360.Common.DataBaseProcedures.AAccounts
                         var ClassName = db.AppClass.Where(x => x.Id == PostedData.ClassId).Select(x => new _SqlParameters { Code = x.Code }).FirstOrDefault();
                         #endregion
                         #region COUNT CHECK FEE STRUCTURE CLASS WISE
-                        var FeeStructureCount = db.AccFeeStructure.Where(x =>
-                                                                        
-                                                                         x.Status == true
-                                                                        && x.SessionId == PostedData.SessionId
-                                                                        && x.ClassId == PostedData.ClassId
-                                                                        && x.BranchId == PostedData.CampusId
-                                                                        && x.CompanyId == Session_Manager.CompanyId).Select(x => new _SqlParameters { Id = x.Id }).ToList();
+                        var FeeStructureCount= AAccounts.GetDataFromSP.ISEXIST_FEESTRUCTURE_FOR_CLASS(PostedData);
                         #endregion
 
                         switch (PostedData.OperationType)

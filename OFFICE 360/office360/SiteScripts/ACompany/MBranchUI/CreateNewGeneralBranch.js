@@ -1,4 +1,5 @@
-﻿var OperationType = "";
+﻿
+var OperationType = "";
 var DB_OperationType = $('#HiddenFieldDB_OperationType').val();
 var IsFieldClear = false;
 
@@ -69,11 +70,10 @@ function ChangeCase() {
 //-----------ALL DROPDOWN LIST
 function PopulateLK_CampusType_List() {
     var JsonArg = {
-        ActionCondition: PARAMETER.LookUpCondition.GET_LK1_CAMPUSTYPE,
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/ACompany/MBranchUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/ACompany/MBranchUI/GET_LK1_CAMPUSTYPE",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -92,11 +92,10 @@ function PopulateLK_CampusType_List() {
 }
 function PopulateLK_OrganizationType_List() {
     var JsonArg = {
-        ActionCondition: PARAMETER.LookUpCondition.GET_LK1_ORGANIZATIONTYPE,
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/ACompany/MBranchUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/ACompany/MBranchUI/GET_LK1_ORGANIZATIONTYPE",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -116,11 +115,10 @@ function PopulateLK_OrganizationType_List() {
 }
 function PopulateLK_Country_List() {
     var JsonArg = {
-        ActionCondition: PARAMETER.LookUpCondition.GET_LK1_COUNTRY,
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/ACompany/MBranchUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/ACompany/MBranchUI/GET_LK1_COUNTRY",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -141,12 +139,11 @@ function PopulateLK_City_ListByParam() {
     var CountryId = $("#DropDownListCountry :selected").val();
     var JsonArg = {
         CountryId: CountryId,
-        ActionCondition: PARAMETER.LookUpCondition.GET_LK1_CITY_BYPARAMETER,
     }
     $.ajax({
 
         type: "POST",
-        url: BasePath + "/ACompany/MBranchUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/ACompany/MBranchUI/GET_LK1_CITY_BYPARAMETER",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -166,11 +163,10 @@ function PopulateLK_City_ListByParam() {
 }
 function PopulateLK_PolicyPeriod_List() {
     var JsonArg = {
-        ActionCondition: PARAMETER.LookUpCondition.GET_LK1_POLICYPERIOD,
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/ACompany/MBranchUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/ACompany/MBranchUI/GET_LK1_POLICYPERIOD",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -189,12 +185,11 @@ function PopulateLK_PolicyPeriod_List() {
 }
 function PopulateLK_ChallanMethod_List() {
     var JsonArg = {
-        ActionCondition: PARAMETER.LookUpCondition.GET_LK1_CHALLANMETHOD_BYPARAMTER,
         DB_IF_PARAM: PARAMETER.DB_IF_Condition.CHALLANMETHOD_LIST,
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/ACompany/MBranchUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/ACompany/MBranchUI/GET_LK1_CHALLANMETHOD_BYPARAMTER",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -213,11 +208,10 @@ function PopulateLK_ChallanMethod_List() {
 }
 function PopulateLK_RollCallSystem_List() {
     var JsonArg = {
-        ActionCondition: PARAMETER.LookUpCondition.GET_LK1_ROLLCALLSYSTEM,
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/ACompany/MBranchUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/ACompany/MBranchUI/GET_LK1_ROLLCALLSYSTEM",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -236,11 +230,10 @@ function PopulateLK_RollCallSystem_List() {
 }
 function PopulateLK_BillingMethod_List() {
     var JsonArg = {
-        ActionCondition: PARAMETER.LookUpCondition.GET_LK1_BILLINGMETHOD,
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/ACompany/MBranchUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/ACompany/MBranchUI/GET_LK1_BILLINGMETHOD",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -259,12 +252,11 @@ function PopulateLK_BillingMethod_List() {
 }
 function PopulateLK_StudyLevel_List() {
     var JsonArg = {
-        ActionCondition: PARAMETER.LookUpCondition.GET_LK1_STUDYLEVEL_BYPARAMTER,
         DB_IF_PARAM: PARAMETER.DB_IF_Condition.STUDYLEVEL_LIST,
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/ACompany/MBranchUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/ACompany/MBranchUI/GET_LK1_STUDYLEVEL_BYPARAMTER",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -283,12 +275,11 @@ function PopulateLK_StudyLevel_List() {
 }
 function PopulateLK_StudyGroup_List() {
     var JsonArg = {
-        ActionCondition: PARAMETER.LookUpCondition.GET_LK1_STUDYGROUP_BYPARAMTER,
         DB_IF_PARAM: PARAMETER.DB_IF_Condition.STUDYGROUP_LIST,
     }
     $.ajax({
         type: "POST",
-        url: BasePath + "/ACompany/MBranchUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/ACompany/MBranchUI/GET_LK1_STUDYGROUP_BYPARAMTER",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -466,13 +457,12 @@ $('#ButtonSubmitGetInfoForEdit').click(function () {
 });
 function GET_GENERALBRACH_LISTBYPARAM() {
     var JsonArg = {
-        ActionCondition: PARAMETER.SESCondition.GET_MT_GENERALBRANCH_BYPARAMETER,
         DB_IF_PARAM: PARAMETER.DB_IF_Condition.BRANCH_BY_USER_ALLOWEDBRANCHIDS,
     }
     $.ajax({
 
         type: "POST",
-        url: BasePath + "/ACompany/MBranchUI/GET_DATA_BY_PARAMETER",
+        url: BasePath + "/ACompany/MBranchUI/GET_MT_GENERALBRANCH_BYPARAMETER",
         data: { 'PostedData': (JsonArg) },
         beforeSend: function () {
             startLoading();
@@ -503,11 +493,10 @@ function GET_GENERALBRANCH_DETAILBYID() {
 
         var JsonArg = {
             Id: CampusId,
-            ActionCondition: PARAMETER.SESCondition.GET_MT_GENERALBRANCH_DETAILBYID,
         }
         $.ajax({
             type: "POST",
-            url: BasePath + "/ACompany/MBranchUI/GET_DATA_BY_PARAMETER",
+            url: BasePath + "/ACompany/MBranchUI/GET_MT_GENERALBRANCH_DETAILBYID",
             dataType: 'json',
             data: { 'PostedData': (JsonArg) },
             beforeSend: function () {

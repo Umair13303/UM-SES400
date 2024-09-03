@@ -13,6 +13,7 @@ using static office360.Models.General.DocumentStatus;
 using static office360.Models.General.HttpStatus;
 using static office360.Models.General.DBListCondition;
 using DocumentStatus = office360.Models.General.DocumentStatus;
+using System.Data.Entity.Infrastructure;
 
 namespace office360.Common.DataBaseProcedures.ACompany
 {
@@ -129,7 +130,6 @@ namespace office360.Common.DataBaseProcedures.ACompany
                             PostedData.GuID = Uttility.fn_GetHashGuid();
                         }
                         #endregion
-
                         #region OUTPUT VARIABLES
                         var ResponseParameter = new ObjectParameter("Response", typeof(string));
                         #endregion
@@ -137,6 +137,7 @@ namespace office360.Common.DataBaseProcedures.ACompany
                         var data = db.AppClass_UpSert(
                                                     PostedData.OperationType,
                                                     PostedData.GuID,
+                                                    PostedData.CampusId,
                                                     PostedData.Description,
                                                     PostedData.StudyLevelId,
                                                     PostedData.StudyGroupId,
@@ -180,7 +181,7 @@ namespace office360.Common.DataBaseProcedures.ACompany
                 }
             }
         }
-        public static int? Update_Insert_AppSession(_SqlParameters PostedData)
+        public static int? Update_Insert_AppSession(_SqlParameters PostedData, List<_SqlParameters> PostedDataDetail)
         {
             using (var db = new SESEntities())
             {
@@ -199,15 +200,12 @@ namespace office360.Common.DataBaseProcedures.ACompany
                                 PostedData.GuID = Uttility.fn_GetHashGuid();
                             }
                             #endregion
-                            #region VARIABLES
-                            DateTime? EffectiveFrom = PostedData.SessionStartDate;
-                            DateTime? ExpiredOn = PostedData.SessionEndDate;
-                            #endregion
+
                             #region OUTPUT VARIABLES
-                            var ResponseParameter = new ObjectParameter("Response", typeof(string));
+                            var ResponseParameter = new ObjectParameter("Response", typeof(int));
                             #endregion
-                            #region EXECUTION OF STORE PROCEDURE AppSession_Insert
-                            var data = db.AppSession_UpSert(
+                            #region EXECUTION OF STORE PROCEDURE AppSession_UpSert
+                            var AppSession = db.AppSession_UpSert(
                                                 PostedData.OperationType,
                                                 PostedData.GuID,
                                                 PostedData.Description,
@@ -226,20 +224,50 @@ namespace office360.Common.DataBaseProcedures.ACompany
                                                 Session_Manager.BranchId,
                                                 Session_Manager.CompanyId,
                                                 ResponseParameter
-                                );
-                            int? ParentSessionId = ResponseParameter.Value.ToInt();
-
-
-                            int? SelectedCampusChallanSetting = db.GeneralBranchSetting.Where(x => x.CampusId == PostedData.CampusId.ToInt()).Select(x => x.ChallanMethodId).FirstOrDefault();
-                            int? AllowedChallanNumberForSelectedCampus = db.ChallanMethod.Where(x => x.Id == SelectedCampusChallanSetting).Select(x => x.ChallanNo).FirstOrDefault();
-                            int? SessionPeriodDays = (((DateTime)PostedData.SessionEndDate - (DateTime)PostedData.SessionStartDate).Days);
-                            int? NumberOfDaysForSessionDetailPeriod = (AllowedChallanNumberForSelectedCampus > 0)? (SessionPeriodDays / AllowedChallanNumberForSelectedCampus): 0;
-
+                                                );
                             #endregion
+                            int? AppSessionId = db.AppSession.Where(x => x.GuID == PostedData.GuID).Select(x => x.Id).FirstOrDefault();
+                            #region CONVERTING LIST TO DATA TABLE
+                            List<AppSessionDetail> PostedDataDetail_ = PostedDataDetail.Select(X => new AppSessionDetail
+                            {
+                                Id = 0,
+                                GuID = Uttility.fn_GetHashGuid(),
+                                AppSessionId = AppSessionId,
+                                Description = X.Description,
+                                PeriodStartOn = X.PeriodStartOn,
+                                PeriodEndOn = X.PeriodEndOn,
+                                Status = true,
+                            }).ToList();
+                            DataTable AppSessionDetail_BULK_TT = PostedDataDetail_.ToDataTable();
+                            #endregion
+                            #region EXECUTION OF STORE PROCEDURE BULKOperation_AppSessionDetail
+                            var operationTypeParam = new SqlParameter("@DB_OperationType", SqlDbType.NVarChar, -1)
+                            {
+                                Value = PostedData.OperationType
+                            };
 
+                            var responseParameter = new SqlParameter("@ResponseParameter", SqlDbType.Int)
+                            {
+                                Direction = ParameterDirection.Output
+                            };
 
+                            var appSessionDetailParam = new SqlParameter("@AppSessionDetail", SqlDbType.Structured)
+                            {
+                                TypeName = "dbo.AppSessionDetail_BULK_TT",
+                                Value = AppSessionDetail_BULK_TT
+                            };
+
+                            db.Database.ExecuteSqlCommand(
+                                "EXEC BULKOperation_AppSessionDetail @DB_OperationType, @ResponseParameter OUTPUT, @AppSessionDetail",
+                                operationTypeParam,
+                                responseParameter,
+                                appSessionDetailParam
+                            );
+                            var responseValue = (int)responseParameter.Value;
+                            #endregion
                             #region RESPONSE VALUES IN VARIABLE
                             Response = (int)ResponseParameter.Value;
+                            Response = responseValue;
                             #endregion
                             #region TRANSACTION HANDLING DETAIL
                             if (Response == (int?)HttpResponses.CODE_SUCCESS)

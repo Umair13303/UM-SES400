@@ -11,6 +11,7 @@ namespace office360.Common.DataBaseProcedures.ACompany
 {
     public class GetDataFromSP
     {
+        #region GET DATA INTO DROP DOWN LIST
         public static List<_SqlParameters> GET_MT_GENERALCOMPANY_BYPARAM(_SqlParameters PostedData)
         {
             using (SESEntities db = new SESEntities())
@@ -51,42 +52,6 @@ namespace office360.Common.DataBaseProcedures.ACompany
                 return DATA;
             }
         }
-        public static List<_SqlParameters> GET_MT_GENERALBRANCH_INFO_BY_GUID(_SqlParameters PostedData)
-        {
-            List<_SqlParameters> DATA = new List<_SqlParameters>();
-
-            using (SESEntities db = new SESEntities())
-            {
-                DATA = ((List<_SqlParameters>)
-                       (from GB in db.GeneralBranch
-                        where GB.Id ==PostedData.Id
-                                               select new _SqlParameters
-                                               {
-                                                   Id = GB.Id,
-                                                   GuID = GB.GuID,
-                                                   Code = GB.Code,
-                                                   Description = GB.Description,
-                                                   CampusTypeId = GB.CampusTypeId,
-                                                   OrganizationTypeId = GB.OrganizationTypeId,
-                                                   CountryId = GB.CountryId,
-                                                   CityId = GB.CityId,
-                                                   Address = GB.Address,
-                                                   ContactNo = GB.ContactNo,
-                                                   EmailAddress = GB.EmailAddress,
-                                                   NTNNo = GB.NTNNo,
-                                                   Remarks = GB.Remarks,
-                                                   RollCallSystemId = db.GeneralBranchSetting.Where(GBS => GBS.CampusId == GB.Id).Select(GBS => GBS.RollCallSystemId).FirstOrDefault(),
-                                                   BillingMethodId = db.GeneralBranchSetting.Where(GBS => GBS.CampusId == GB.Id).Select(GBS => GBS.BillingMethodId).FirstOrDefault(),
-                                                   StudyLevelIds = db.GeneralBranchSetting.Where(GBS => GBS.CampusId == GB.Id).Select(GBS => GBS.StudyLevelIds).FirstOrDefault(),
-                                                   StudyGroupIds = db.GeneralBranchSetting.Where(GBS => GBS.CampusId == GB.Id).Select(GBS => GBS.StudyGroupIds).FirstOrDefault(),
-                                                   PolicyPeriodId = db.GeneralBranchSetting.Where(GBS => GBS.CampusId == GB.Id).Select(GBS => GBS.PolicyPeriodId).FirstOrDefault(),
-                                                   ChallanMethodId = db.GeneralBranchSetting.Where(GBS => GBS.CampusId == GB.Id).Select(GBS => GBS.ChallanMethodId).FirstOrDefault()
-
-                                               }).ToList());
-
-                return DATA;
-            }
-        }
         public static List<_SqlParameters> GET_MT_APPCLASS_BYPARAM(_SqlParameters PostedData)
         {
             using (SESEntities db = new SESEntities())
@@ -97,9 +62,11 @@ namespace office360.Common.DataBaseProcedures.ACompany
                 DATA = db.AppClass_GetListByParam(
                                                     PostedData.DB_IF_PARAM,
                                                     Session_Manager.CompanyId,
-                                                    PostedData.CampusId,
+                                                    Session_Manager.BranchId,
                                                     PostedData.SessionId,
-                                                    PostedData.ClassIds.ToSafeString()
+                                                    PostedData.ClassIds.ToSafeString(),
+                                                    PostedData.CampusId
+
                                                     )
                     .Select(x => new _SqlParameters
                     {
@@ -117,25 +84,48 @@ namespace office360.Common.DataBaseProcedures.ACompany
             using (SESEntities db = new SESEntities())
             {
                 List<_SqlParameters> DATA = new List<_SqlParameters>();
-                switch ((PostedData.DB_IF_PARAM))
-                {
-                    case nameof(DBListCondition.DB_IF_Condition.APPSESSION_BY_GENERALBRANCH):
-                        DATA = db.AppSession
-                            .Where(x => x.CompanyId == Session_Manager.CompanyId && x.CampusId == PostedData.CampusId
-                                     && x.Status == true
-                                     && x.DocumentStatus != (int?)Models.General.DocumentStatus.DocStatus.Cancelled_ADMISSION
-                                  )
-                            .Select(x => new _SqlParameters
-                            {
-                                Id = x.Id,
-                                Description = x.Description + " [ " + x.SessionStartOn + " - " + x.SessionEndOn + " ]",
-                                ClassIds = x.ClassIds
-                            }).ToList();
-                        break;
-                }
+
+
+                DATA = db.AppSession_GetListByParam(
+                                                    PostedData.DB_IF_PARAM,
+                                                    Session_Manager.CompanyId,
+                                                    Session_Manager.BranchId,
+                                                    PostedData.CampusId
+                                                    )
+                    .Select(x => new _SqlParameters
+                    {
+                        Id = x.Id,
+                        GuID = x.GuID,
+                        Description = x.Description,
+                        ClassIds = x.ClassIds,
+                    }).ToList();
                 return DATA;
             }
         }
+        public static List<_SqlParameters> GET_MT_APPSESSIONDETAIL_BYPARAM(_SqlParameters PostedData)
+        {
+            using (SESEntities db = new SESEntities())
+            {
+                List<_SqlParameters> DATA = new List<_SqlParameters>();
+
+
+                DATA = db.AppSessionDetail_GetListByParam(
+                                                    PostedData.SessionId
+                                                    )
+                    .Select(x => new _SqlParameters
+                    {
+                        Id = x.Id,
+                        GuID = x.GuID,
+                        Description = x.Description,
+                        PeriodStartOn = x.PeriodStartOn,
+                        PeriodEndOn = x.PeriodEndOn,
+                    }).ToList();
+                return DATA;
+            }
+        }
+        #endregion
+
+        #region GET LIST BY SEARCH QUERY
         public static List<GeneralBranch_GetListBySearch_Result> GET_MT_GENERALBRANCH_LIST_SEARCHPARAM(_SqlParameters PostedData)
         {
             List<GeneralBranch_GetListBySearch_Result> List = new List<GeneralBranch_GetListBySearch_Result>();
@@ -151,6 +141,46 @@ namespace office360.Common.DataBaseProcedures.ACompany
             return List;
 
         }
+        #endregion
+
+        #region GET DETAIL OF DOCUMENT BY ID INT
+        public static List<_SqlParameters> GET_MT_GENERALBRANCH_INFO_BY_GUID(_SqlParameters PostedData)
+        {
+            List<_SqlParameters> DATA = new List<_SqlParameters>();
+
+            using (SESEntities db = new SESEntities())
+            {
+                DATA = ((List<_SqlParameters>)
+                       (from GB in db.GeneralBranch
+                        where GB.Id == PostedData.Id
+                        select new _SqlParameters
+                        {
+                            Id = GB.Id,
+                            GuID = GB.GuID,
+                            Code = GB.Code,
+                            Description = GB.Description,
+                            CampusTypeId = GB.CampusTypeId,
+                            OrganizationTypeId = GB.OrganizationTypeId,
+                            CountryId = GB.CountryId,
+                            CityId = GB.CityId,
+                            Address = GB.Address,
+                            ContactNo = GB.ContactNo,
+                            EmailAddress = GB.EmailAddress,
+                            NTNNo = GB.NTNNo,
+                            Remarks = GB.Remarks,
+                            RollCallSystemId = db.GeneralBranchSetting.Where(GBS => GBS.CampusId == GB.Id).Select(GBS => GBS.RollCallSystemId).FirstOrDefault(),
+                            BillingMethodId = db.GeneralBranchSetting.Where(GBS => GBS.CampusId == GB.Id).Select(GBS => GBS.BillingMethodId).FirstOrDefault(),
+                            StudyLevelIds = db.GeneralBranchSetting.Where(GBS => GBS.CampusId == GB.Id).Select(GBS => GBS.StudyLevelIds).FirstOrDefault(),
+                            StudyGroupIds = db.GeneralBranchSetting.Where(GBS => GBS.CampusId == GB.Id).Select(GBS => GBS.StudyGroupIds).FirstOrDefault(),
+                            PolicyPeriodId = db.GeneralBranchSetting.Where(GBS => GBS.CampusId == GB.Id).Select(GBS => GBS.PolicyPeriodId).FirstOrDefault(),
+                            ChallanMethodId = db.GeneralBranchSetting.Where(GBS => GBS.CampusId == GB.Id).Select(GBS => GBS.ChallanMethodId).FirstOrDefault()
+
+                        }).ToList());
+
+                return DATA;
+            }
+        }
+        #endregion
 
     }
 }
