@@ -101,6 +101,38 @@
           <Property Name="PeriodEndOn" Type="date" />
           <Property Name="Status" Type="bit" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'SES400.dbo.AppStudent' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="AppStudent">
+          <Property Name="Id" Type="int" />
+          <Property Name="GuID" Type="uniqueidentifier" />
+          <Property Name="Code" Type="nvarchar(max)" />
+          <Property Name="RegistrationCode" Type="nvarchar(max)" />
+          <Property Name="StudentName" Type="nvarchar(max)" />
+          <Property Name="StudentCNICNo" Type="nvarchar(max)" />
+          <Property Name="BirthDate" Type="date" />
+          <Property Name="ReligionId" Type="int" />
+          <Property Name="CountryId" Type="int" />
+          <Property Name="DomicileDisctrict" Type="nvarchar(max)" />
+          <Property Name="FatherName" Type="nvarchar(max)" />
+          <Property Name="FatherCNICNo" Type="nvarchar(max)" />
+          <Property Name="FatherOccupationId" Type="int" />
+          <Property Name="IsFatherAlive" Type="bit" />
+          <Property Name="GuardianName" Type="nvarchar(max)" />
+          <Property Name="GuardianCNICNo" Type="nvarchar(max)" />
+          <Property Name="ContactStudent" Type="nvarchar(max)" />
+          <Property Name="StudentEmail" Type="nvarchar(max)" />
+          <Property Name="ContactParent" Type="nvarchar(max)" />
+          <Property Name="ContactLandLine" Type="nvarchar(max)" />
+          <Property Name="ContactEmergency" Type="nvarchar(max)" />
+          <Property Name="Address" Type="nvarchar(max)" />
+          <Property Name="CampusId" Type="int" />
+          <Property Name="SessionId" Type="int" />
+          <Property Name="RegisteredPeriodId" Type="int" />
+          <Property Name="ClassId" Type="int" />
+          <Property Name="AdmissionCatagoryId" Type="int" />
+          <Property Name="ImagePath" Type="nvarchar(max)" />
+        </EntityType>-->
         <EntityType Name="GeneralBranch">
           <Key>
             <PropertyRef Name="Id" />
@@ -743,6 +775,10 @@ warning 6002: The table/view 'SES400.dbo.WorkingShift' does not have a primary k
           <Parameter Name="TableName" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="SetClause" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="WhereClause" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="fn_CalculateWithHoldingTax" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="decimal">
+          <Parameter Name="WHTaxPolicyId" Type="int" Mode="In" />
+          <Parameter Name="WH_TotalBillingAmount" Type="decimal" Mode="In" />
         </Function>
         <Function Name="fn_CodeFormat" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="nvarchar(max)">
           <Parameter Name="MaxCode" Type="bigint" Mode="In" />
@@ -2339,6 +2375,7 @@ warning 6002: The table/view 'SES400.dbo.WorkingShift' does not have a primary k
           <Property Type="Decimal" Name="SlabAmount" Nullable="true" Precision="18" Scale="4" />
           <Property Type="Decimal" Name="FixedCharges" Nullable="true" Precision="18" Scale="4" />
           <Property Type="Decimal" Name="Percentage" Nullable="true" Precision="18" Scale="4" />
+          <Property Type="Boolean" Name="IsOnExceedingAmount" Nullable="true" />
         </ComplexType>
         <ComplexType Name="StructureCOAAccount_GetListByParam_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3237,6 +3274,7 @@ warning 6002: The table/view 'SES400.dbo.WorkingShift' does not have a primary k
                 <ScalarProperty Name="SlabAmount" ColumnName="SlabAmount" />
                 <ScalarProperty Name="FixedCharges" ColumnName="FixedCharges" />
                 <ScalarProperty Name="Percentage" ColumnName="Percentage" />
+                <ScalarProperty Name="IsOnExceedingAmount" ColumnName="IsOnExceedingAmount" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

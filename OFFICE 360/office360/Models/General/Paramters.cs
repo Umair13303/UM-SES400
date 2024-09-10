@@ -14,6 +14,7 @@ namespace office360.Models.General
         public bool? IsSecurity { get; set; }
         public bool? Recurring { get; set; }
         public bool? Status { get; set; }
+        public bool? IsOnExceedingAmount { get; set; }
 
         public DateTime? DateofBirth { get; set; }
         public DateTime? ClassEndDate { get; set; }

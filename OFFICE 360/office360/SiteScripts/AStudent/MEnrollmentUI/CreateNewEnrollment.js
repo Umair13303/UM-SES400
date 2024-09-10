@@ -1,12 +1,13 @@
-﻿var OperationType = "";
+﻿
+var OperationType = "";
 var DB_OperationType = $('#HiddenFieldDB_OperationType').val();
 var IsFieldClear = false;
 
 var table = "";
 $(document).ready(function () {
-    InitDataTable();
     PopulateDropDownLists();
     ChangeCase();
+    InitDataTable();
 
 });
 
@@ -15,18 +16,29 @@ $(document).ready(function () {
 //-----------ALL DATA TABLE
 function InitDataTable() {
     table = $('#MainTableFeeChallanDetail').DataTable({
+        "oLanguage": {
+            "oPaginate": {
+                "sPrevious": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>',
+                "sNext": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>'
+            },
+            "sInfo": "Showing page _PAGE_ of _PAGES_",
+            "sSearch": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+            "sSearchPlaceholder": "Search...",
+            "sLengthMenu": "Results :  _MENU_"
+        },
         "responsive": true, "ordering": false,
         "processing": true, "pagination": false,
         "paging": false,
         "columns": [
-            { "title": "#", "orderable": false, },
-            { "title": "Description" },
-            { "title": "Amount (PKR)" },
-            { "title": "Discount" },
-            { "title": "Remaining" },
+            { "data": null,                 "title": "#", "orderable": false, },
+            { "data": "FeeName" ,           "title": "Description" },
+            { "data":"FeeAmount"    ,       "title": "Amount (PKR)" },
         ],
         "columnDefs": [
         ],
+    });
+    table.on('draw', function () {
+        CalcBoxDataTable();
     });
     table.on('order.dt search.dt', function () {
         table.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
@@ -34,15 +46,42 @@ function InitDataTable() {
         });
 
     }).draw();
+    AppendTableFooterTotals("MainTableFeeChallanDetail", "1", "TDTotalFeeExclusiveAmount", "Recievable Fee");
+
 }
+$('#ButtonSubmitGetInfoForEdit').click(function (event) {
+    event.preventDefault();
+
+    var IsValid = true; 
+    if (IsValid) {
+        try {
+            var SessionId = $('#DropDownListSession :selected').val();
+            var ClassId = $('#DropDownListClass :selected').val();
+            var JsonArg = {
+                DB_IF_PARAM: PARAMETER.DB_IF_Condition.ACCFEESTRUCTURE_GET_INFO_NEW_STUDENT,
+                SessionId: SessionId
+            };
+
+            if (ClassId && ClassId !== "-1") {
+                JsonArg.ClassId = ClassId; 
+            }
+
+            var queryString = $.param(JsonArg);
+            var url = `${BasePath}/AStudent/MEnrollmentUI/GET_MT_ACCFEESTRUCTUREDETAIL_BYPARAMETER?${queryString}`;
+            table.ajax.url(url).load();
+        } catch (err) {
+            GetMessageBox(err.message || 'An error occurred', 500);
+        }
+    }
+});
+
+
 function GET_ACCFEESTRUCTUREDETAIL_DETAILBYID() {
-    var FeeStructureId = $('#DropDownListFeeStructure :selected').attr('data-Id');
     var SessionId = $('#DropDownListSession :selected').val();
     var ClassId = $('#DropDownListClass :selected').val();
-    if (FeeStructureId != null && FeeStructureId != undefined && FeeStructureId != "" && FeeStructureId != "-1") {
+    if (ClassId != null && ClassId != undefined && ClassId != "" && ClassId != "-1") {
         var JsonArg = {
             DB_IF_PARAM: PARAMETER.DB_IF_Condition.ACCFEESTRUCTURE_GET_INFO_NEW_STUDENT,
-            FeeStructureId: FeeStructureId,
             SessionId: SessionId,
             ClassId: ClassId,
         }
@@ -55,19 +94,19 @@ function GET_ACCFEESTRUCTUREDETAIL_DETAILBYID() {
             },
             success: function (data) {
                 table.clear().draw();
-
                 if (data.length > 0) {
                     for (var i in data) {
+                        
+                        
                         var row_data = [];
                         row_data[0] = '';
                         row_data[1] = data[i].FeeName;
-                        row_data[2] = data[i].FeeAmount;
-                        row_data[3] = "<input Id='TextBoxDiscount" + (i + 1) + "' type='text' class='form-control form-control-sm' disabled='' value='" + data[i].FeeAmount + "'/>";;
-                        row_data[4] = row_data[2] - row_data[2];
+                        row_data[2] = data[i].FeeAmount.toFixed(2);
 
                         table.row.add(row_data);
                     }
                     table.draw();
+
                 }
             },
             complete: function () {
@@ -76,6 +115,13 @@ function GET_ACCFEESTRUCTUREDETAIL_DETAILBYID() {
         });
 
     }
+}
+function CalcBoxDataTable() {
+    var TotalFeeExclusiveAmount = table.column(2).data().reduce(function (a, b) {
+        return parseFloat(a) + parseFloat(b);
+    }, 0);
+
+    $('#TDTotalFeeExclusiveAmount').text(TotalFeeExclusiveAmount.toFixed(2));
 }
 
 function PopulateDropDownLists() {
@@ -92,22 +138,13 @@ function ChangeCase() {
     $('#DropDownListCampus').change(function (event) {
         event.preventDefault();
         $('#DropDownListSession').val('-1').change();
-
-        var CampusId = $('#DropDownListCampus :selected').val();
-        if (CampusId != null && CampusId != undefined && CampusId != "" && CampusId != "-1") {
-            PopulateMT_AppSession_ListByParam();
-        }
-
+        PopulateMT_AppSession_ListByParam();
     });
     $('#DropDownListSession').change(function (event) {
         event.preventDefault();
         $('#DropDownListClass').val('-1').change();
-
-        var SessionId = $('#DropDownListSession :selected').val();
-        if (SessionId != null && SessionId != undefined && SessionId != "" && SessionId != "-1") {
-            PopulateMT_AppSessionDetail_ListByParam();
-            PopulateMT_AppClass_ListByParam();
-        }
+        PopulateMT_AppSessionDetail_ListByParam();
+        PopulateMT_AppClass_ListByParam();
     });
 
     $('#DropDownListClass').change(function (event) {
@@ -115,17 +152,11 @@ function ChangeCase() {
         var ClassId = $('#DropDownListClass :selected').val();
         if (ClassId != null && ClassId != undefined && ClassId != "" && ClassId != "-1") {
             CHECK_FEESTRUCTURE_FOR_CLASS();
-            PopulateMT_AccFeeStructure_ListByParam();
         }
+
     });
-    $('#DropDownListFeeStructure').change(function (event) {
-        event.preventDefault();
-        var FeeStructureId = $('#DropDownListFeeStructure :selected').val();
-        if (FeeStructureId != null && FeeStructureId != undefined && FeeStructureId != "" && FeeStructureId != "-1") {
-            GET_ACCFEESTRUCTUREDETAIL_DETAILBYID();
-        }
-    });
-   
+
+
 
 }
 //-----------ALL DROPDOWN LIST
@@ -164,7 +195,7 @@ function PopulateMT_GeneralBranch_ListByParam() {
 function PopulateMT_AppSession_ListByParam() {
     var CampusId = $('#DropDownListCampus :selected').val();
     var JsonArg = {
-        DB_IF_PARAM: PARAMETER.DB_IF_Condition.APPSESSION_BY_GENERALBRANCH,
+        DB_IF_PARAM: PARAMETER.DB_IF_Condition.APPSESSION_FOR_NEW_ADMISSION,
         CampusId: CampusId,
     }
     $.ajax({
@@ -444,11 +475,13 @@ function ClearInputFields() {
 // CLICK FUNCTION
 $('#ButtonSubmitDown').click(function (event) {
     event.preventDefault();
-    var IsValid = ValidateInputFields();
+  
+    var IsValid = true();
     if (IsValid) {
         try {
             var OperationType = 1;
-            InsertData(OperationType);
+            alert();
+            //InsertData(OperationType);
         }
         catch (err) {
             GetMessageBox(err, 500);
@@ -458,25 +491,11 @@ $('#ButtonSubmitDown').click(function (event) {
 });
 // INSERT FUNCTION
 function InsertData(OperationType) {
-    var FirstName = $('#TextBoxFirstName').val();
-    var LastName = $('#TextBoxLastName').val();
-    var DateofBirth = $('#TextBoxDateofBirth').val();
-    var CnicNo_FormBNo = $('#TextBoxCnicNo_FormBNo').val();
-    var GenderId = $('#DropDownListGender :selected').val();
-    var MartialStatusId = $('#DropDownListMartialStatus :selected').val();
-    var ReligionId = $('#DropDownListReligion :selected').val();
-    var NationalityId = $('#DropDownListNationality :selected').val();
-    var ResedenitalAddress = $('#TextBoxResedenitalAddress').val();
-    var MobileNumber = $('#TextBoxMobileNumber').val();
-    var EmailAddress = $('#TextBoxEmailAddress').val();
-    var ParentName = $('#TextBoxParentName').val();
-    var ParentNICNo = $('#TextBoxParentNICNo').val();
-    var ParentStudyLevelId = $('#DropDownListParentStudyLevel :selected').val();
-    var OccupationId = $('#DropDownListOccupation :selected').val();
-    var RelationshipId = $('#DropDownListRelationship :selected').val();
-    var MonthlyIncome = $('#TextBoxMonthlyIncome').val();
-    var ClassId = $('#DropDownListClass :selected').val();
-    var SessionId = $('#HiddenFieldSessionId').val();
+    var StudentName = $('#TextBoxStudentName').val();
+    var CNICNo = $('#TextBoxCNICNo').val();
+    var BirthDate = $('#TextBoxBirthDate').val();
+    var ReligionId = $('#DropDownListReligion').val();
+    var CountryId = $('#DropDownListCountry').val();
     HiddenFieldSessionId
 
     var JsonArg = {

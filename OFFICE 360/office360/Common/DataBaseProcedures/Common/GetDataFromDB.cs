@@ -249,9 +249,9 @@ namespace office360.Common.DataBaseProcedures.Common
         #endregion
 
         #region FUNCTION FOR :: GET DATA FROM LOOKUP/BY PARAMETER USING STORE PROCEDURE
-        public static List<_SqlParameters>  GET_LK1_StudyLevel(_SqlParameters PostedData)
+        public static List<LK_StudyLevel_GetListByParam_Result>  GET_LK1_StudyLevel(_SqlParameters PostedData)
         {
-            List<_SqlParameters> data = new List<_SqlParameters>();
+            List<LK_StudyLevel_GetListByParam_Result> data = new List<LK_StudyLevel_GetListByParam_Result>();
             using (var db = new SESEntities())
             {
                 data = db.LK_StudyLevel_GetListByParam(
@@ -259,18 +259,13 @@ namespace office360.Common.DataBaseProcedures.Common
                                                         Session_Manager.CompanyId,
                                                         PostedData.CampusId,
                                                         Session_Manager.StudyLevelIds    
-                                                      )
-                         .Select(x => new _SqlParameters
-                         {
-                             Id = x.Id,
-                             Description = x.Description,
-                         }).ToList();
+                                                      ).ToList();
             }
             return data;
         }
-        public static List<_SqlParameters>  GET_LK1_StudyGroup(_SqlParameters PostedData)
+        public static List<LK_StudyGroup_GetListByParam_Result>  GET_LK1_StudyGroup(_SqlParameters PostedData)
         {
-            List<_SqlParameters> DATA = new List<_SqlParameters>();
+            List<LK_StudyGroup_GetListByParam_Result> DATA = new List<LK_StudyGroup_GetListByParam_Result>();
             using (var db = new SESEntities())
             {
                 DATA = db.LK_StudyGroup_GetListByParam(
@@ -278,37 +273,25 @@ namespace office360.Common.DataBaseProcedures.Common
                                                         Session_Manager.CompanyId,
                                                         PostedData.CampusId,
                                                         Session_Manager.StudyGroupIds
-                                                      )
-                         .Select(x => new _SqlParameters
-                         {
-                             Id = x.Id,
-                             Description = x.Description,
-                         }).ToList();
+                                                      ).ToList();
             }
             return DATA;
         }
-        public static List<_SqlParameters>  GET_LK1_ChallanMethod(_SqlParameters PostedData)
+        public static List<LK_ChallanMethod_GetListByParam_Result>  GET_LK1_ChallanMethod(_SqlParameters PostedData)
         {
-            List<_SqlParameters> DATA = new List<_SqlParameters>();
+            List<LK_ChallanMethod_GetListByParam_Result> DATA = new List<LK_ChallanMethod_GetListByParam_Result>();
             using (var db = new SESEntities())
             {
                 DATA = db.LK_ChallanMethod_GetListByParam(
                                                         PostedData.DB_IF_PARAM,
-                                                        PostedData.Id
-                                                        )
-                         .Select(x => new _SqlParameters
-                         {
-                             Id = x.Id,  
-                             Description = x.Description,
-                             MonthsNo = x.MonthsNo,
-                             NumberOfChallan = x.ChallanNo,
-                         }).ToList();
+                                                        PostedData.Id).ToList();
+                         
             }
             return DATA;
         }
-        public static List<_SqlParameters>  GET_LK1_WHTaxPolicy(_SqlParameters PostedData)
+        public static List<LK_WHTaxPolicy_GetListByParam_Result>  GET_LK1_WHTaxPolicy(_SqlParameters PostedData)
         {
-            List<_SqlParameters> DATA = new List<_SqlParameters>();
+            List<LK_WHTaxPolicy_GetListByParam_Result> DATA = new List<LK_WHTaxPolicy_GetListByParam_Result>();
             using (var db = new SESEntities())
             {
                 DATA = db.LK_WHTaxPolicy_GetListByParam(
@@ -316,16 +299,7 @@ namespace office360.Common.DataBaseProcedures.Common
                                                         Session_Manager.CompanyId,
                                                         Session_Manager.BranchId,
                                                         PostedData.FeeStructureId,
-                                                        (int?)DocStatus.Active_FEE_STRUCTURE
-                                                        )
-                         .Select(x => new _SqlParameters
-                         {
-                             Id = x.Id,  
-                             Description = x.Description,
-                             Percentage = x.Percentage,
-                             SlabAmount = x.SlabAmount,
-                             FixedCharges = x.FixedCharges,
-                         }).ToList();
+                                                        (int?)DocStatus.Active_FEE_STRUCTURE).ToList();
             }
             return DATA;
         }

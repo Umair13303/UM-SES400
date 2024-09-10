@@ -21,7 +21,7 @@ function ChangeCase() {
 
 //-----------ALL DATA TABLE LIST
 function InitDateTable() {
-    var GroupColumn_P1 = 2;
+    var GroupColumn_P1 = 3;
     var GroupColumn_P2 = 3;
 
     table = $('#MainTableFeeStructure').DataTable({

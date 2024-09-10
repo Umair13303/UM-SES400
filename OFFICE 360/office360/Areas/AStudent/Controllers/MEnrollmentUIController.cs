@@ -92,7 +92,7 @@ namespace office360.Areas.AStudent.Controllers
         public ActionResult GET_MT_ACCFEESTRUCTUREDETAIL_BYPARAMETER(_SqlParameters PostedData)
         {
             var DATA = Common.DataBaseProcedures.AAccounts.GetDataFromSP.GET_MT_ACCFEESTRUCTUREDETAIL_BYPARAM(PostedData).ToList();
-            return Json(DATA, JsonRequestBehavior.AllowGet);
+            return Json(new { data=DATA}, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GET_DATA_BY_PARAMETER(_SqlParameters PostedData)

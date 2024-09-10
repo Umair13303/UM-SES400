@@ -78,7 +78,7 @@ $('#ButtonPlus').click(function (event) {
             var row_data = [];
             var FeeType = $('#DropDownListFeeType :selected').text();
             var FeeTypeId = $('#DropDownListFeeType :selected').val();
-            var Amount = $('#TextBoxAmount').val();
+            var Amount = parseFloat($('#TextBoxAmount').val()) || 0;
 
             if (FeeSettingIsSecurity == true && FeeSettingIsDiscount == true) {
                 AssetAccountId = $('#DropDownListAssetAccount :selected').val();
@@ -100,7 +100,7 @@ $('#ButtonPlus').click(function (event) {
             }
             row_data[0] = "";
             row_data[1] = FeeType;
-            row_data[2] = Amount;
+            row_data[2] = Amount.toFixed(2);
             row_data[3] = GetDeletebtn() + GetEditbtn();
             row_data[4] = FeeTypeId;
             row_data[5] = RevenueAccountId;
@@ -122,7 +122,7 @@ $('#ButtonPlus').click(function (event) {
             }
             IsAlreadyExist = false;
         }
-        catch {
+        catch (err){
             GetMessageBox(err, 500);
         }
     }
@@ -172,19 +172,30 @@ $('#MainTableFeeStructure tbody').on('click', '.edit', function (e) {
 
 });
 function CalcBoxDataTable() {
+
+
     var TotalFeeExclusiveAmount = table.column(2).data().reduce(function (a, b) {
         return parseFloat(a) + parseFloat(b);
     }, 0);
+   
 
     var TaxAmount = 0;
-    //  if (IsOnExceedingAmount == true) {
-    if (TotalFeeExclusiveAmount > WH_SlabAmount) {
-        var ExceedingAmount = parseFloat(TotalFeeExclusiveAmount - WH_SlabAmount);
-        TaxAmount = parseFloat(WH_FixedCharges + ((ExceedingAmount / 100) * WH_Percentage));
+    switch (WH_IsOnExceedingAmount) {
+        case true:
+            if (TotalFeeExclusiveAmount > WH_SlabAmount) {
+
+                var ExceedingAmount = parseFloat(TotalFeeExclusiveAmount - WH_SlabAmount);
+                TaxAmount = parseFloat(WH_FixedCharges + ((ExceedingAmount / 100) * WH_Percentage));
+            }
+            else {
+                TaxAmount = 0.00;
+            }
+            break;
+        default:
+            TaxAmount = parseFloat(WH_FixedCharges + ((TotalFeeExclusiveAmount / 100) * WH_Percentage));
+            break;
     }
-    if (TotalFeeExclusiveAmount > WH_SlabAmount) {
-        TaxAmount = parseFloat(WH_FixedCharges + ((TotalFeeExclusiveAmount / 100) * WH_Percentage));
-    }
+    
     var TotalFeeAmount = TaxAmount + TotalFeeExclusiveAmount;
 
     $('#TDTotalFeeExclusiveAmount').text(TotalFeeExclusiveAmount.toFixed(2));
@@ -232,10 +243,11 @@ function ChangeCase() {
 
     $('#DropDownListWHTaxPolicy').change(function (event) {
         event.preventDefault();
-        WH_Percentage = $('#DropDownListWHTaxPolicy :selected').attr('data-Percentage');
-        WH_SlabAmount = $('#DropDownListWHTaxPolicy :selected').attr('data-SlabAmount');
-        WH_FixedCharges = $('#DropDownListWHTaxPolicy :selected').attr('data-FixedCharges');
-        WH_IsOnExceedingAmount = $('#DropDownListWHTaxPolicy :selected').attr('data-IsOnExceedingAmount');
+        var Selected_WHTaxPolicyId  = $('#DropDownListWHTaxPolicy :selected');
+        WH_Percentage               = parseFloat(Selected_WHTaxPolicyId.attr('data-Percentage')) || 0;
+        WH_SlabAmount               = parseFloat(Selected_WHTaxPolicyId.attr('data-SlabAmount')) || 0;
+        WH_FixedCharges             = parseFloat(Selected_WHTaxPolicyId.attr('data-FixedCharges')) || 0;
+        WH_IsOnExceedingAmount = $('#DropDownListWHTaxPolicy :selected').attr('data-IsOnExceedingAmount') === 'true';
         CalcBoxDataTable();
     });
     $('#DropDownListFeeType').change(function (event) {
@@ -787,7 +799,7 @@ function GET_ACCFEESTRUCTUREDETAIL_DETAILBYID() {
                         var row_data = [];
                         row_data[0] = '';
                         row_data[1] = data[i].FeeName;
-                        row_data[2] = data[i].FeeAmount;
+                        row_data[2] = data[i].FeeAmount.toFixed(2);
                         row_data[3] = GetDeletebtn() + GetEditbtn();
                         row_data[4] = data[i].FeeTypeId;
                         row_data[5] = data[i].RevenueAccountId;

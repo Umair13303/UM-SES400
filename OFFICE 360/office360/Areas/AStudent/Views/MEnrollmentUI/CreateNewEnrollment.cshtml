@@ -38,10 +38,6 @@
         <div class="card-header">
             <nav class="nav nav-pills nav-fill">
                 <a class="nav-link tab-pills" href="#">
-                    <i class="fas fa-file-archive" style="margin-right: 8px;"></i>
-                    Admission Detail
-                </a>
-                <a class="nav-link tab-pills" href="#">
                     <i class="fas fa-user-cog" style="margin-right: 8px;"></i>
                     Student Detail
                 </a>
@@ -53,7 +49,10 @@
                     <i class="fas fa-cogs" style="margin-right: 8px;"></i>
                     Contact Detail
                 </a>
-                
+                <a class="nav-link tab-pills" href="#">
+                    <i class="fas fa-file-archive" style="margin-right: 8px;"></i>
+                    Admission Detail
+                </a>
                 <a class="nav-link tab-pills" href="#">
                     <i class="fas fa-print" style="margin-right: 8px;"></i>
                     Generate Challan
@@ -65,70 +64,26 @@
         <div class="card-body">
             <div class="card-body">
 
-                <div class="tab d-none">
-                    <div class="row mb-3">
-                        <div class="col-sm-12 col-md-6">
-                            <div class="form-group">
-                                @Html.Label("Registration No#", new { @class = "col-form-label", @for = "TextBoxRegistrationNo" })
-                                @Html.TextBox("TextBoxRegistrationNo", null, new { @class = "form-control form-control-sm", placeholder = "Please Enter Registration No Here!", @id = "TextBoxRegistrationNo" })
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-sm-12 col-md-8">
-                            <div class="form-group">
-                                @Html.Label("Campus", new { @class = "col-form-label", @for = "DropDownListCampus" })
-                                @Html.DropDownList("DropDownListCampus", Enumerable.Empty<SelectListItem>(), new { @class = "form-control select2", @data_toggle = "select2", id = "DropDownListCampus" })
-                            </div>
-                        </div>
-
-                        <div class="col-sm-12 col-md-6">
-                            <div class="form-group">
-                                @Html.Label("Session", new { @class = "col-form-label", @for = "DropDownListSession" })
-                                @Html.DropDownList("DropDownListSession", Enumerable.Empty<SelectListItem>(), new { @class = "form-control select2", @data_toggle = "select2", id = "DropDownListSession" })
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-6">
-                            <div class="form-group">
-                                @Html.Label("Registered Period", new { @class = "col-form-label", @for = "DropDownListRegisteredPeriod" })
-                                @Html.DropDownList("DropDownListRegisteredPeriod", Enumerable.Empty<SelectListItem>(), new { @class = "form-control select2", @data_toggle = "select2", id = "DropDownListRegisteredPeriod" })
-                            </div>
-                        </div>
-
-                        <div class="col-sm-12 col-md-6">
-                            <div class="form-group">
-                                @Html.Label("Class", new { @class = "col-form-label", @for = "DropDownListClass" })
-                                @Html.DropDownList("DropDownListClass", Enumerable.Empty<SelectListItem>(), new { @class = "form-control select2", @data_toggle = "select2", id = "DropDownListClass" })
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-6">
-                            <div class="form-group">
-                                @Html.Label("Admission Catagory", new { @class = "col-form-label", @for = "DropDownListAdmissionCatagory" })
-                                @Html.DropDownList("DropDownListAdmissionCatagory", Enumerable.Empty<SelectListItem>(), new { @class = "form-control select2", @data_toggle = "select2", id = "DropDownListAdmissionCatagory" })
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="tab d-none">
                     <div class="row mb-3">
                         <div class="col-sm-12 col-md-6">
                             <div class="form-group">
                                 @Html.Label("Student Name", new { @class = "col-form-label", @for = "TextBoxStudentName" })
-                                @Html.TextBox("TextBoxStudentName", null, new { @class = "form-control", placeholder = "Please Enter Student Name Here!", @id = "TextBoxStudentName" })
+                                @Html.TextBox("TextBoxStudentName", null, new { @class = "form-control required", placeholder = "Please Enter Student Name Here!", @id = "TextBoxStudentName" })
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <div class="form-group">
                                 @Html.Label("CNIC No", new { @class = "col-form-label", @for = "TextBoxCNICNo" })
-                                @Html.TextBox("TextBoxCNICNo", null, new { @class = "form-control CNICNumber", placeholder = "Please Enter CNIC No Here!", @id = "TextBoxCNICNo" })
+                                @Html.TextBox("TextBoxCNICNo", null, new { @class = "form-control CNICNumber required", placeholder = "Please Enter CNIC No Here!", @id = "TextBoxCNICNo" })
                             </div>
                         </div>
 
                         <div class="col-sm-12 col-md-6">
                             <div class="form-group">
                                 @Html.Label("Birth Date", new { @class = "col-form-label", @for = "TextBoxBirthDate" })
-                                @Html.TextBox("TextBoxBirthDate", null, new { @class = "form-control DatePickerSimple", placeholder = "Please Enter Birth Date Here!", @id = "TextBoxBirthDate" })
+                                @Html.TextBox("TextBoxBirthDate", null, new { @class = "form-control DatePickerSimple required", placeholder = "Please Enter Birth Date Here!", @id = "TextBoxBirthDate" })
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6">
@@ -250,31 +205,78 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="tab d-none">
                     <div class="row mb-3">
                         <div class="col-sm-12 col-md-6">
                             <div class="form-group">
-                                @Html.Label("Fee Structure", new { @class = "col-form-label", @for = "DropDownListFeeStructure" })
-                                @Html.DropDownList("DropDownListFeeStructure", Enumerable.Empty<SelectListItem>(), new { @class = "form-control select2", @data_toggle = "select2", id = "DropDownListFeeStructure" })
+                                @Html.Label("Registration No#", new { @class = "col-form-label", @for = "TextBoxRegistrationNo" })
+                                @Html.TextBox("TextBoxRegistrationNo", null, new { @class = "form-control form-control-sm", placeholder = "Please Enter Registration No Here!", @id = "TextBoxRegistrationNo" })
                             </div>
                         </div>
                     </div>
-                    
+                    <div class="row mb-3">
+                        <div class="col-sm-12 col-md-8">
+                            <div class="form-group">
+                                @Html.Label("Campus", new { @class = "col-form-label", @for = "DropDownListCampus" })
+                                @Html.DropDownList("DropDownListCampus", Enumerable.Empty<SelectListItem>(), new { @class = "form-control select2", @data_toggle = "select2", id = "DropDownListCampus" })
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                @Html.Label("Session", new { @class = "col-form-label", @for = "DropDownListSession" })
+                                @Html.DropDownList("DropDownListSession", Enumerable.Empty<SelectListItem>(), new { @class = "form-control select2", @data_toggle = "select2", id = "DropDownListSession" })
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                @Html.Label("Registered Period", new { @class = "col-form-label", @for = "DropDownListRegisteredPeriod" })
+                                @Html.DropDownList("DropDownListRegisteredPeriod", Enumerable.Empty<SelectListItem>(), new { @class = "form-control select2", @data_toggle = "select2", id = "DropDownListRegisteredPeriod" })
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                @Html.Label("Class", new { @class = "col-form-label", @for = "DropDownListClass" })
+                                @Html.DropDownList("DropDownListClass", Enumerable.Empty<SelectListItem>(), new { @class = "form-control select2", @data_toggle = "select2", id = "DropDownListClass" })
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                @Html.Label("Admission Catagory", new { @class = "col-form-label", @for = "DropDownListAdmissionCatagory" })
+                                @Html.DropDownList("DropDownListAdmissionCatagory", Enumerable.Empty<SelectListItem>(), new { @class = "form-control select2", @data_toggle = "select2", id = "DropDownListAdmissionCatagory" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="tab d-none">
+
+                    <button type="button" class="btn btn-info" id="ButtonSubmitGetInfoForEdit">
+                        <i class="fa fa-sync-alt"></i> Load Information
+                    </button>
                     <div class="bootstrap-admin-panel-content">
                         <table class="table table-bordered table-sm order-column stripe table-hover" style="width: 100%" id="MainTableFeeChallanDetail">
-                            <tbody id="MainTableFeeChallanDetail">
+                            <tbody id="TableBodyMainTableFeeChallanDetail">
                             </tbody>
                         </table>
                     </div>
+
                 </div>
             </div>
 
         </div>
-        <div class="card-footer text-end">
+        <div class="card-footer d-flex justify-content-between align-items-center">
             <div class="d-flex">
-                <button type="button" id="back_button" class="btn btn-link" onclick="back()">Back</button>
-                <button type="button" id="next_button" class="btn btn-primary ms-auto" onclick="next()">Next</button>
+                <input type="button" class="btn btn-link" id="back_button" onclick="back()" value="Back" />
+                <input type="button" class="btn btn-primary ms-2" id="next_button" onclick="next()" value="Next" />
+            </div>
+            <div id="DivDB_OperationButton" style="display:none">
+                <div class="d-flex align-items-center">
+                    <input type="button" class="btn btn-info" id="ButtonSubmitDown" value="Submit" />
+                    <i class="fa fa-arrow-up ms-2"></i>
+                </div>
             </div>
         </div>
     </div>

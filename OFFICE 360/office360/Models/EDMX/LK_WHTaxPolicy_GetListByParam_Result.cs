@@ -18,5 +18,6 @@ namespace office360.Models.EDMX
         public Nullable<decimal> SlabAmount { get; set; }
         public Nullable<decimal> FixedCharges { get; set; }
         public Nullable<decimal> Percentage { get; set; }
+        public Nullable<bool> IsOnExceedingAmount { get; set; }
     }
 }
