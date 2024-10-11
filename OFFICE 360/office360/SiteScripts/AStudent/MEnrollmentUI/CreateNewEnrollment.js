@@ -59,12 +59,11 @@ $('#ButtonSubmitGetInfoForEdit').click(function (event) {
             var ClassId = $('#DropDownListClass :selected').val();
             var JsonArg = {
                 DB_IF_PARAM: PARAMETER.DB_IF_Condition.ACCFEESTRUCTURE_GET_INFO_NEW_STUDENT,
-                SessionId: SessionId
+                SessionId: SessionId,
+                ClassId: ClassId
             };
 
-            if (ClassId && ClassId !== "-1") {
-                JsonArg.ClassId = ClassId; 
-            }
+
 
             var queryString = $.param(JsonArg);
             var url = `${BasePath}/AStudent/MEnrollmentUI/GET_MT_ACCFEESTRUCTUREDETAIL_BYPARAMETER?${queryString}`;

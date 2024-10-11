@@ -211,7 +211,7 @@ function UpSertDataIntoDB() {
 }
 function ClearInputFields() {
 
-    $('.form-control').not('#DropDownListClass').val('');
-    $('.select2').not('#DropDownListClass').val('-1').change();
+    $('.form-control').not('#DropDownListClass,#DropDownListCampus').val('');
+    $('.select2').not('#DropDownListClass,#DropDownListCampus').val('-1').change();
     $('form').removeClass('Is-Valid');
 }

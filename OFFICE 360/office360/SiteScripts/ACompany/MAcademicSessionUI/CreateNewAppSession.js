@@ -397,7 +397,7 @@ function GET_GENERALBRANCH_CHALLANSETTING(ChallanMethodId) {
             startLoading();
         },
         success: function (data) {
-            ChallanNumberForCampus = data[0].NumberOfChallan;
+            ChallanNumberForCampus = data[0].ChallanNo;
             InsertDataInto_SessionDetailTable();
         },
         complete: function () {

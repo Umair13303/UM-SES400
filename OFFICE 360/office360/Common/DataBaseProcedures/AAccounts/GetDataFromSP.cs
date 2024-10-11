@@ -64,7 +64,7 @@ namespace office360.Common.DataBaseProcedures.AAccounts
             return DATA;
         }
         public static List<AccFeeStructureDetail_GetListByParam_Result> GET_MT_ACCFEESTRUCTUREDETAIL_BYPARAM(_SqlParameters PostedData)
-         {
+        {
             List<AccFeeStructureDetail_GetListByParam_Result> DATA = new List<AccFeeStructureDetail_GetListByParam_Result>();
             using (var db = new SESEntities())
             {

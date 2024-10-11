@@ -306,10 +306,16 @@
     <Compile Include="Models\EDMX\AccFeeStructureDetail.cs">
       <DependentUpon>SESModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\EDMX\AccFeeStructureDetail_GetListByParam_Result.cs">
+      <DependentUpon>SESModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\EDMX\AccFeeStructure_GetListByParam_Result.cs">
       <DependentUpon>SESModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EDMX\AccFeeStructure_GetListBySearch_Result.cs">
+      <DependentUpon>SESModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EDMX\AdmissionCatagory.cs">
       <DependentUpon>SESModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EDMX\AppClass.cs">
@@ -319,6 +325,15 @@
       <DependentUpon>SESModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EDMX\AppSession.cs">
+      <DependentUpon>SESModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EDMX\AppSessionDetail.cs">
+      <DependentUpon>SESModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EDMX\AppSessionDetail_GetListByParam_Result.cs">
+      <DependentUpon>SESModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EDMX\AppSession_GetListByParam_Result.cs">
       <DependentUpon>SESModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EDMX\BillingMethod.cs">
@@ -480,6 +495,9 @@
     <Compile Include="Models\EDMX\StructureDiscountType_GetListByParam_Result.cs">
       <DependentUpon>SESModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\EDMX\StructureDiscountType_GetListBySearch_Result.cs">
+      <DependentUpon>SESModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\EDMX\StructureFeeType.cs">
       <DependentUpon>SESModel.tt</DependentUpon>
     </Compile>
@@ -504,6 +522,7 @@
     <Compile Include="Models\EDMX\WorkingShift.cs">
       <DependentUpon>SESModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\General\BULK_TTModel.cs" />
     <Compile Include="Models\General\Constants.cs" />
     <Compile Include="Models\General\DocumentStatus.cs" />
     <Compile Include="Models\General\ASPManagRoles.cs" />
@@ -805,6 +824,9 @@
       <DependentUpon>SESModel.edmx</DependentUpon>
       <LastGenOutput>SESModel.cs</LastGenOutput>
     </Content>
+    <Content Include="Packages\bootstrap-datepicker.js" />
+    <Content Include="Packages\bootstrap-daterangepicker.js" />
+    <Content Include="Packages\bootstrap-datetimepicker.js" />
     <Content Include="Packages\FontAwsome.js" />
     <Content Include="Packages\SweetAlert2.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
@@ -821,8 +843,8 @@
     <Content Include="Scripts\jquery.dataTables.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="SiteAssets\Uttility\Wizard_Stepper.js" />
     <Content Include="SiteAssets\Uttility\Uttility.css" />
+    <Content Include="SiteAssets\Uttility\Wizard_Stepper.js" />
     <Content Include="SiteScripts\AAccounts\MChallanUI\CreateNewAccFeeChallan.js" />
     <Content Include="SiteScripts\AAccounts\MDiscountUI\AccDiscountTypeList.js" />
     <Content Include="SiteScripts\AAccounts\MDiscountUI\CreateNewAccDiscountType.js" />
